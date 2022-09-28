@@ -24,31 +24,18 @@ export default class MainMenu extends Phaser.Scene
 	}
 
 
-
     create()
     {
-        //const menuFondo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'menuInicio');
+        const menuFondo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'menuInicio');
+        
 
-        // const buttonJugar = new Button(this, 750, 205, 'JUGAR', 80, () => this.scene.start('SelecFacc'), 0.67);
+
+        const buttonJugar = new Button(this, 750, 205, 'botonMarco', 'JUGAR', 80, () => this.scene.start('SeleccionFaccion'), 0.67);
         // const buttonAyuda = new Button(this, 756, 348, 'AYUDA', 70, () => this.scene.start('Ayuda'), 0.50);
         const botonCreditos = new Button(this, 760, 478, 'botonMarco', 'CREDITOS', 60, () => this.scene.start('Creditos'), 0.43);
         
-        
-      /*   const {width, height } = this.scale
+        const botonOpciones = new Button(this, 1210, 60, 'botonOpciones', '', 0, () => this.scene.start('Creditos'), 0.72);
 
-        const button = this.add. rectangle (width * 0.5, height * 0.55, 150, 75, 0xffffff )
-            .setInteractive()
-            .on (Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                this.scene.start('Creditos')
-
-            })
-
-
-
-        this.add.text(button.x, button.y, 'CREDITOS', { 
-            color: '#000000'
-        })
- */
 
     }
 }

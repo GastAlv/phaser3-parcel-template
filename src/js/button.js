@@ -1,4 +1,4 @@
-import Phaser from "phaser"
+//import Phaser from "phaser"
 
 
 export default class Button
@@ -6,7 +6,6 @@ export default class Button
     constructor(scene, x, y, texture, text, size, callback, scale)
     {
         this.container = scene.add.container(x, y)
-
         this.img = scene.add.image(0, 0, texture)
         .setInteractive({ useHandCursor: true })
         .setScale(scale)
@@ -16,8 +15,8 @@ export default class Button
         
         this.txt = scene.add.text(0, 0, text, {fontSize: size})
         .setOrigin(0.5)
-        .setStyle({fontFamily: 'asian'});
-
+        .setStyle({fontFamily: 'asian'})
+        
         this.container.add([this.img, this.txt])
     }
 }
@@ -36,11 +35,11 @@ function loadFont(name, url) {
     bAtaque.visible = false;
     bObEstats.visible = false;
     bObjeto.visible = false;
-
+    
     if(bAtaque.visible === true){
-    bAtaque.visible = false;;
+        bAtaque.visible = false;;
     };
 }; */
 
-loadFont("asian", "assets/fuentes/OPTIAsian.otf")
 
+loadFont("asian", "assets/fuentes/OPTIAsian.otf");

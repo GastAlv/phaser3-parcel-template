@@ -3,6 +3,9 @@ import Phaser from 'phaser'
 import Preloads from './scenes/Preloads'
 import MainMenu from './scenes/MainMenu'
 import Creditos from './scenes/Creditos'
+import SeleccionFaccion from './scenes/SeleccionFaccion'
+import SeleccionPersonaje from './scenes/SeleccionPersonaje'
+import Juego from './scenes/Juego'
 
 const config = {
 	type: Phaser.AUTO,
@@ -27,7 +30,7 @@ const config = {
 			debug: false,
 		}
 	},
-	scene: [Preloads, MainMenu, Creditos]
+	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, Juego ]
 }
 
 export default new Phaser.Game(config)
