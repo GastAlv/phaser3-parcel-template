@@ -17,8 +17,10 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionPersonaje', 'assets/images/seleccionPersonaje.png')
         this.load.image('escenarioB', 'assets/images/escenarioB.png')
 
-    
-        
+        //SPRITES
+        this.load.image('personajePeonSamurai', 'assets/images/spPeonSamurai.png')
+        this.load.image('personajePeonVikingo', 'assets/images/spPeonVikingo.png')
+        ,
 
         // Interfaz
         this.load.image('botonMarco', 'assets/interfaz/botonMarco.png');
@@ -30,7 +32,7 @@ export default class Preloads extends Phaser.Scene
     }
 
     create(){
-        this.scene.start('Juego');
+        this.scene.start('SeleccionPersonaje');
 
     } 
 

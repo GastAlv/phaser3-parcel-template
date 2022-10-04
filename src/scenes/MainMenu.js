@@ -35,7 +35,7 @@ export default class MainMenu extends Phaser.Scene
         const botonCreditos = new Button(this, 760, 478, 'botonMarco', 'CREDITOS', 60, () => this.scene.start('Creditos'), 0.43);
         
         const botonOpciones = new Button(this, 1210, 60, 'botonOpciones', '', 0, () => this.scene.start('Creditos'), 0.72);
-
+        
 
     }
 }
