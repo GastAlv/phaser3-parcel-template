@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import Poder from "./Poderes";
 
-export default class PersonajeUno
+export class Personaje
 {
     constructor(props){
         const {vida, tiempo, sprite, poderes = [], velocidad, defensa, id, estaVivo = true} = props
@@ -34,7 +34,7 @@ export default class PersonajeUno
             console.log('animacion de muerte')
             console.log('murio!.')
         }
-        console.log(this.vida)
+        // console.log(this.vida)
     }
 
     recibirCura(dano)
@@ -57,6 +57,16 @@ export default class PersonajeUno
     elegirPoder(index)
     {
         return this.poderes[index]
+    }
+    actualizarDatos(objeto){
+        this.vida = objeto.vida;
+        this.tiempo = objeto.tiempo;
+        this.sprite = objeto.sprite;
+        this.poderes = objeto.poderes;
+        this.velocidad = objeto.velocidad;
+        this.defensa = objeto.defensa
+        this.estaVivo = objeto.estaVivo
+        this.id = objeto.id
     }
 
 
