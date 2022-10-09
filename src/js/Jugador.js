@@ -34,7 +34,7 @@ export default class PersonajeUno
             console.log('animacion de muerte')
             console.log('murio!.')
         }
-        console.log(this.vida)
+        // console.log(this.vida)
     }
 
     recibirCura(dano)

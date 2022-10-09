@@ -1,11 +1,12 @@
 import Phaser from "phaser"
+import { sharedInstance as event } from "../scenes/EventCenter";
 
 
 // export class Button
 // {
-//     constructor(scene, x, y, texture, text, size, callback, scale)
+//     constructor(scene, x, y, texture, text, size, callback, scale, obj)
 //     {
-
+//         this.obj = obj
 //         this.activo = true;
 //         this.container = scene.add.container(x, y)
 //         this.img = scene.add.image(0, 0, texture)
@@ -52,7 +53,7 @@ function loadFont(name, url) {
 
 loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 
-export default class Button
+export class Button
 {
     constructor(scene, x, y, texture, text, size, callback, scale, objeto){
         
@@ -71,11 +72,13 @@ export default class Button
         .setStyle({fontFamily: 'asian'})
         
         this.container.add([this.img, this.txt])
-        
+
     }
     desactivarEntrada(){
         this.img.removeInteractive()
         this.img.setTint(0x000000)
 
     }
+
+    
 }

@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Button } from "../js/button";
 import Personaje from "../js/Jugador";
 import Poder from "../js/Poderes";
+import { sharedInstance as events } from './EventCenter'
 
 export default class Juego extends Phaser.Scene
 {
@@ -9,6 +10,7 @@ export default class Juego extends Phaser.Scene
     jugador2;
     jugadores = [];
     
+
     
     constructor(){
         super('Juego')
@@ -16,23 +18,21 @@ export default class Juego extends Phaser.Scene
 
     init(data)
     {
-        
-        console.log(this.jugadores)
         this.jugadores = data.personajes
-        console.log(this.jugadores)
+        this.arrayJugadores = data.arrayJugadores
+
         
     }  
     create() {
+        
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioB').setScale(1.135)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
-        // const [peonSamurai1] = this.jugadores;
 
-        // const [personaje1, personaje2] = data.personajes;
-        //this.personaje2 = this.jugadores[1]
-        const [personaje1, personaje2] = this.jugadores;
-        //const {personaje1,personaje2} = this.#jugadores
-        //console.log(this.personaje2)
-        //console.log(personaje1.vida,personaje2.sprite)
+        //const {personaje1, personaje2} = this.jugadores;
+        const personaje1 = this.jugadores[0]
+        const personaje2 = this.jugadores[1]
+        // personaje1 izquierda
+        // personaje2 derecha
         
         this.personaje1 = new Personaje({
             vida: personaje1.vida,
@@ -52,6 +52,7 @@ export default class Juego extends Phaser.Scene
             estaVivo: personaje2.estaVivo,
             id: personaje2.id
         })
+        
 
         const peonAtaqueRapido = new Poder({
             nombre: 'Ataque Rapido',
@@ -64,7 +65,7 @@ export default class Juego extends Phaser.Scene
             dano: 30,
             tipo: 'curacion'
         })
-        console.log(personaje1.id)
+        // console.log(personaje1.id)
         
         // vikingoPeon.poderes.push(vikingoAtaqueRapido, vikingoCuracion)
         //console.log('Poderes vikingo', this.vikingoPeon.poderes)
@@ -75,8 +76,11 @@ export default class Juego extends Phaser.Scene
         this.personaje1.agregarPoder(peonAtaqueRapido)
         this.personaje1.agregarPoder(peonCuracion)
         
-        new Button(this, 600, 600, 'botonVolver', '', 0,  () => {
-            this.personaje2.atacar(this.personaje2, 0, this.personaje1)}, 0.5)
+        new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
+            this.personaje2.atacar(this.personaje2, 0, this.personaje1), this.registry.events.emit('pepe', this.array2)}, 0.5)
+
+        new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
+            this.personaje1.atacar(this.personaje1, 0, this.personaje2), this.registry.events.emit('pepe', this.array2)}, 0.5)
 
         // console.log('Poderes vikingo', this.personaje2.poderes)
         // console.log(this.personaje2.poderes[1].dano)
@@ -102,21 +106,23 @@ export default class Juego extends Phaser.Scene
 
         // console.log(this.personaje1.poderes)
         // console.log(this.personaje2.elegirPoder(1));
+        this.personajesActuales = [this.personaje1, this.personaje2]
+        console.log(this.personajesActuales)
     }
 
     update()
     {
         if(this.personaje1.estaVivo === false){
-            const personajesActuales = [this.personaje1, this.personaje2]
-            // console.log(this.samuraiPeon)
-                
-                // this.registry.events.emit('estado', {personajesActuales})
-                console.log(this.personaje1.estaVivo, this.personaje2)
-
-                //emitir evento para q listo 1 y 2 se vuelvan false
-                this.registry.events.emit('actualizacion', this.personaje1.id, personajesActuales)
-                
-                this.scene.start('SeleccionPersonaje',{personajesActuales})
+           
+            //emitir evento para q listo 1 y 2 se vuelvan false
+            this.registry.events.emit('actualizacion', this.personaje1.id, this.personajesActuales, this.arrayJugadores)
+            this.scene.start('SeleccionPersonaje', this.arrayJugadores)
+            
+            
+        }
+        if(this.personaje2.estaVivo === false){
+            this.registry.events.emit('actualizacion', this.personaje2.id, this.personajesActuales, this.arrayJugadores)
+            this.scene.start('SeleccionPersonaje', this.arrayJugadores)
         }
     }
 }
