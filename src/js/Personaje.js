@@ -4,7 +4,11 @@ import Poder from "./Poderes";
 export class Personaje
 {
     constructor(props){
+<<<<<<< HEAD:src/js/Jugador.js
+        const {vida, tiempo, sprite, poderes = [], velocidad, defensa, id, tipo, estaVivo = true} = props
+=======
         const {vida, tiempo, sprite, poderes = [], velocidad, defensa, tipo, id, estaVivo = true} = props
+>>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402:src/js/Personaje.js
         this.vida = vida;
         this.tiempo = tiempo;
         this.sprite = sprite;

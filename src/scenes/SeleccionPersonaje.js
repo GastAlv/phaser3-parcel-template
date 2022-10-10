@@ -18,9 +18,13 @@ export default class SeleccionPersonaje extends Phaser.Scene
     per2;
     peleadores = [];
     personajesActuales = [];
+<<<<<<< HEAD
+    cofreMuerto = [];
+=======
     listMuertos = [];
     primerEscena = true
     
+>>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402
     
 
     actualizarPersonajes = false;
@@ -32,6 +36,72 @@ export default class SeleccionPersonaje extends Phaser.Scene
     init(data){
         this.actualizacionPersonajes = data.personaje
 
+<<<<<<< HEAD
+        // this.registry.events.on('pepe', (agua) => {
+        //     this.botella = agua
+        //     console.log(agua)
+        // })
+
+        this.arrayJugadores = data.arrayJugadores
+        console.log(this.arraydeJugadores)
+        
+        
+
+        //console.log(personaje1, personaje2)
+        //evento para colocar en false los listos cada vez que se vuelva a esta escena
+        this.registry.events.on('actualizacion', (personajeMuerto, estado, arrayJugadores)=> {
+            
+            this.arrayJugadores = arrayJugadores
+
+            this.peleadores = estado;
+           
+            // console.log('Esto son los peleadores del combate: ', this.peleadores)
+            this.actualizarPersonajes = true;
+            this.muerto = personajeMuerto
+
+            // console.log('AAAA: ', this.peleadores[0].estaVivo)
+            this.var = {};
+            const jugadorPalmo = this.peleadores.find((jugador)=>jugador.estaVivo === false)
+
+
+            
+            if(this.peleadores[0].estaVivo === false){
+                this.var =  this.peleadores.shift();
+                this.botonListo1 = this.botonListo2;
+                this.botonListo2 = this.botonListo1;
+                if(jugadorPalmo){
+                    this.peleadores = this.peleadores.filter((jugador) => jugador !== jugadorPalmo) 
+                    
+                }
+
+            } //else {
+            //     this.var = this.peleadores.pop();
+            //     this.botonListo1 = false;
+            //     this.botonListo2 = true;
+            //     if(jugadorPalmo){
+            //         this.peleadores = this.peleadores.filter((jugador) => jugador !== jugadorPalmo) 
+                    
+            //     }
+            // }
+            
+            this.filtro = this.arrayJugadores.find((personaje)=> personaje.id === this.var.id)
+            
+            
+
+            
+            const  index2 = this.arrayJugadores.indexOf(this.filtro)
+            this.arrayJugadores[index2] = this.var
+
+            this.cofreMuerto.push(this.var)
+            //console.log(index2)
+            // console.log( this.arrayJugadores[index2])
+            
+            // ARRAY JUGADORES SON TODOS LOS PERSONAJES DENTRO DEL ARRAY
+            this.arraydeJugadores = this.arrayJugadores.filter((jugador)=>jugador.estaVivo === true)
+            
+            
+            // console.log('ESTE ES EL GANADOR: ', this.peleadores)
+=======
         this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena)=> {
             this.primerEscena = false;
             this.actualizarPersonajes = true
@@ -43,6 +113,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
             })
+>>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402
 
             this.listMuertos.push(this.nuevoMuerto)
             
@@ -71,6 +142,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'momentoHisteria', dano: 0.5}],
             velocidad: 5,
             defensa: 5,
+            tipo: 'vikingo',
             estaVivo: true,
             tipo: 'vikingo',
             id: 1
@@ -82,6 +154,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'vikingo',
             estaVivo: true,
             tipo: 'vikingo',
             id: 2
@@ -92,6 +165,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'vikingo',
             estaVivo: true,
             tipo: 'vikingo',
             id: 3
@@ -108,6 +182,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             ],
             velocidad: 5,
             defensa: 5,
+            tipo: 'samurai',
             estaVivo: true,
             tipo: 'samurai',
             id: 11
@@ -118,6 +193,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'samurai',
             estaVivo: true,
             tipo: 'samurai',
             id: 22
@@ -128,6 +204,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'samurai',
             estaVivo: true,
             tipo: 'samurai',
             id: 33
@@ -179,6 +256,26 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 22 : this.botonCaballoSamurai,
                 33 : this.botonReinaSamurai,
             }
+<<<<<<< HEAD
+            for (let jugadorMuerto of this.cofreMuerto) {
+                if(jugadorMuerto.estaVivo === false){
+                    let boton = indice[jugadorMuerto.id]
+                    boton.desactivarEntrada()
+
+                }
+            }
+        
+
+
+
+            // const boton = indice[this.muerto]
+            // boton.desactivarEntrada()
+            // if(this.peleadores[0].estaVivo === false){
+            //     this.peleadores.shift()
+            // }else{
+            //     this.peleadores.pop()
+            // }
+=======
             for (let jugadorMuerto of this.listMuertos) {
                     let boton = indice[jugadorMuerto.id]
                     boton.desactivarEntrada()
@@ -190,6 +287,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                         this.botonListo2 = false;
                     }
                 }
+>>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402
         }
         //logica para cambiar la escena que inicia se crea un indice con una key que pertenece a cada escena/escenario, se le pasa el id que recibe el evento escucha en seleccion(esta misma escena),
         //se envio desde la escena del combate anterior hasta el evento
