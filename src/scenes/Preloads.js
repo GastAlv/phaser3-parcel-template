@@ -28,6 +28,7 @@ export default class Preloads extends Phaser.Scene
         this.load.image('personajeCaballoVikingo', 'assets/images/spCaballoVikingo.png')
         this.load.image('personajeReinaSamurai', 'assets/images/spReinaSamurai.png')
         this.load.image('personajeReinaVikingo', 'assets/images/spReinaVikingo.png')
+        
         ,
 
         // Interfaz
@@ -37,6 +38,19 @@ export default class Preloads extends Phaser.Scene
         this.load.image('botonListo', 'assets/interfaz/botonListo.png')
         this.load.image('interfaz', 'assets/interfaz/interfaz.png')
         this.load.image('botonAtaque', 'assets/interfaz/botonAtaque.png')
+
+        this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeAtaques.png', { frameWidth: 420, frameHeight: 430 });
+        
+        // this.load.spritesheet({
+        //     key: 'botonAtaque',
+        //     url: 'assets/interfaz/botonesDeAtaques.png',
+        //     frameConfig: {
+        //         frameWidth: 420,
+        //         frameHeight: 430,
+        //         startFrame: 0,
+        //         endFrame: 9
+        //     }
+        // });
 
 
     }

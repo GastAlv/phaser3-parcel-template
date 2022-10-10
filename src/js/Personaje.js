@@ -17,14 +17,14 @@ export class Personaje
         this.gano = null
        
     }
-    atacar(nombre, ataque, enemigo){
+    atacar(atacante, indexDelDano, enemigo){
 /*         console.log(enemigo)
         console.log('Daño: ' + dano) */
         // console.log(nombre.poderes[ataque].dano)
         // nombre.poderes[ataque].dano
         // console.log(`Ataco con: ${nombre}`)
-        enemigo.recibirDano(nombre.poderes[ataque].dano, this)
-        console.log(nombre.poderes[ataque].dano)
+        
+        enemigo.recibirDano(atacante.poderes[indexDelDano].dano, this)
     }
 
     recibirDano(dano){
@@ -49,7 +49,7 @@ export class Personaje
             return
         }        
         this.vida += dano;
-        console.log('animacion recibir cura');
+        // console.log('animacion recibir cura');
     }
 
     agregarPoder(keyPoder)
@@ -77,8 +77,8 @@ export class Personaje
     getGano(){
         return this.gano;
     }
-    doparHabilidad(index){
+    doparHabilidad(index, porcentaje){
         // this.poderes[index].dano += this.poderes[index].dano * porcentaje;
-        this.poderes[index].dano *=  0.5
+        this.poderes[index].dano +=  porcentaje
     }
 }

@@ -88,7 +88,7 @@ export default class BatallaPuente extends Phaser.Scene
         // this.personajeDeIzquierda.agregarPoder(peonCuracion)
         this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
         this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
-        console.log(this.personajeDeIzquierda.poderes)
+        // console.log(this.personajeDeIzquierda.poderes)
 
         
         
@@ -99,12 +99,12 @@ export default class BatallaPuente extends Phaser.Scene
         //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
 
         this.registry.events.on('ataca el samurai', ()=>{
-            this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 5, this.personajeDeDerecha)
-            console.log(this.personajeDeDerecha.poderes)
+            this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)
+            // console.log(this.personajeDeDerecha.poderes[0].dano)
         })
         this.registry.events.on('potencia ataque samurai', ()=>{
-            this.personajeDeDerecha.doparHabilidad(0)
-            console.log(this.personajeDeDerecha.poderes)
+            this.personajeDeIzquierda.doparHabilidad(0)
+            // console.log(this.personajeDeDerecha.poderes)
         })
 
         
@@ -113,7 +113,7 @@ export default class BatallaPuente extends Phaser.Scene
             this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)
         })
         this.registry.events.on('potencia ataque vikingo', ()=>{
-            this.personajeDeIzquierda.doparHabilidad(0)
+            this.personajeDeDerecha.doparHabilidad(0)
         })
         
         this.scene.moveAbove('BatallaPuente', 'Ui')

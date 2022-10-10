@@ -60,7 +60,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         console.log("estas en seleccion:)")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
-        
+        this.add.image(500, 500, 'botonesAtaque', 4);
         this.#vikingoPeon = new Personaje({
             vida: 100,
             sprite: 'personajePeonVikingo',
