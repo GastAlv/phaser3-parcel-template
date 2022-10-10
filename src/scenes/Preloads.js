@@ -35,6 +35,8 @@ export default class Preloads extends Phaser.Scene
         this.load.image('botonVolver', 'assets/interfaz/botonVolver.png');
         this.load.image('botonOpciones', 'assets/interfaz/botonOpciones.png')
         this.load.image('botonListo', 'assets/interfaz/botonListo.png')
+        this.load.image('interfaz', 'assets/interfaz/interfaz.png')
+        this.load.image('botonAtaque', 'assets/interfaz/botonAtaque.png')
 
 
     }

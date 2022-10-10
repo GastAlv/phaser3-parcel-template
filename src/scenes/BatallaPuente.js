@@ -27,6 +27,9 @@ export default class BatallaPuente extends Phaser.Scene
             return personaje.tipo === 'vikingo'
         })
 
+        
+        
+
 
     }  
     create() {
@@ -34,7 +37,7 @@ export default class BatallaPuente extends Phaser.Scene
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
-
+        
         
         
         this.personajeDeIzquierda = new Personaje({
@@ -57,31 +60,64 @@ export default class BatallaPuente extends Phaser.Scene
             tipo:  this.personajeDerecha.tipo,
             id:  this.personajeDerecha.id
         })
-        
 
-        const peonAtaqueRapido = new Poder({
-            nombre: 'Ataque Rapido',
-            dano: 60,
-            tipo: 'damage'
+        this.personajeizquierdapoder1 = new Poder({
+            nombre: this.personajeIzquierda.poderes[2].nombre,
+            dano:this.personajeIzquierda.poderes[2].dano
+        })
+        this.personajeizquierdapoder2 = new Poder({
+            nombre: this.personajeIzquierda.poderes[1].nombre,
+            dano:this.personajeIzquierda.poderes[1].dano
         })
 
-        const peonCuracion = new Poder({
-            nombre: 'Curacion',
-            dano: 30,
-            tipo: 'curacion'
-        })
-        this.personajeDeDerecha.agregarPoder(peonAtaqueRapido)
-        this.personajeDeDerecha.agregarPoder(peonCuracion)
+        // const peonAtaqueRapido = new Poder({
+        //     nombre: 'Ataque Rapido',
+        //     dano: 20,
+        //     tipo: 'damage'
+        // })
 
-        this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
-        this.personajeDeIzquierda.agregarPoder(peonCuracion)
+        // const peonCuracion = new Poder({
+        //     nombre: 'Curacion',
+        //     dano: 30,
+        //     tipo: 'curacion'
+        // })
+        // this.personajeDeDerecha.agregarPoder(peonAtaqueRapido)
+        // this.personajeDeDerecha.agregarPoder(peonCuracion)
+
+        // this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
+        // this.personajeDeIzquierda.agregarPoder(peonCuracion)
+        this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
+        this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
+        console.log(this.personajeDeIzquierda.poderes)
+
         
-        new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
-            this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)}, 0.5)
+        
+        // new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
+        //     this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)}, 0.5)
 
-        new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
-            this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
-          
+        // new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
+        //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
+
+        this.registry.events.on('ataca el samurai', ()=>{
+            this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 5, this.personajeDeDerecha)
+            console.log(this.personajeDeDerecha.poderes)
+        })
+        this.registry.events.on('potencia ataque samurai', ()=>{
+            this.personajeDeDerecha.doparHabilidad(0)
+            console.log(this.personajeDeDerecha.poderes)
+        })
+
+        
+
+        this.registry.events.on('ataca el vikingo', ()=>{
+            this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)
+        })
+        this.registry.events.on('potencia ataque vikingo', ()=>{
+            this.personajeDeIzquierda.doparHabilidad(0)
+        })
+        
+        this.scene.moveAbove('BatallaPuente', 'Ui')
+        this.scene.launch('Ui', this.personajes)
     }
 
     update()
@@ -93,6 +129,7 @@ export default class BatallaPuente extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')
+            this.scene.stop('Ui')
         }
         if(this.personajeDeDerecha.estaVivo === false){
             //GANO EL SAMURAI
@@ -101,6 +138,7 @@ export default class BatallaPuente extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')
+            this.scene.stop('Ui')
         }
     }
 }

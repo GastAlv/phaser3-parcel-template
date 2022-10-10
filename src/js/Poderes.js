@@ -3,11 +3,12 @@ import Phaser from "phaser";
 export default class Poder 
 {
     constructor(props) {
-        const { nombre, dano, tipo, poderes = []} = props;
+        const { nombre, dano, tipo, poderes = null, texture} = props;
         this.nombre = nombre;
         this.dano = dano;
         this.tipo = tipo;
         this.poderes = poderes
+        this.texture = texture
     }
     /* 
     elegirPoder(poder){

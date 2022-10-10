@@ -24,6 +24,7 @@ export class Personaje
         // nombre.poderes[ataque].dano
         // console.log(`Ataco con: ${nombre}`)
         enemigo.recibirDano(nombre.poderes[ataque].dano, this)
+        console.log(nombre.poderes[ataque].dano)
     }
 
     recibirDano(dano){
@@ -36,7 +37,7 @@ export class Personaje
             console.log('animacion de muerte')
             console.log('murio!.')
         }
-        // console.log(this.vida)
+        console.log(this.vida)
     }
 
     recibirCura(dano)
@@ -75,5 +76,9 @@ export class Personaje
     }
     getGano(){
         return this.gano;
+    }
+    doparHabilidad(index){
+        // this.poderes[index].dano += this.poderes[index].dano * porcentaje;
+        this.poderes[index].dano *=  0.5
     }
 }

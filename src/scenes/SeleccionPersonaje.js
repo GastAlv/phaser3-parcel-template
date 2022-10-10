@@ -51,6 +51,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 return personaje.estaVivo === true
             })
         });
+
+        
     }
 
     create() {
@@ -59,16 +61,20 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
         
-        this.#vikingoPeon = {
+        this.#vikingoPeon = new Personaje({
             vida: 100,
             sprite: 'personajePeonVikingo',
-            poderes: [],
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}],
             velocidad: 5,
             defensa: 5,
             estaVivo: true,
             tipo: 'vikingo',
             id: 1
-        };
+        });
 
         this.#vikingoCaballo = new Personaje({
             vida: 100,
@@ -94,7 +100,12 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.#samuraiPeon = new Personaje({
             vida: 100,
             sprite: 'personajePeonSamurai',
-            poderes: [],
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
             velocidad: 5,
             defensa: 5,
             estaVivo: true,
@@ -121,17 +132,6 @@ export default class SeleccionPersonaje extends Phaser.Scene
             tipo: 'samurai',
             id: 33
         });
-        // Manejador de eventos centralizados para comunicacion de componentes
-            // Importacion
-            //import { sharedInstance as events } from './EventCenter'
-            // Emisor de mensaje de difusion
-            // Recibe el nombre del mensaje y los valores de parametro
-            // events.emit('health-changed', this.health)
-            // Receptor de mensaje, por ejemplo escena de UI
-            // Recibe el nombre del mensaje y una funcion callback a ejecutar
-            // events.on('health-changed', this.handleHealthChanged, this)
-
-
         this.botonPeonVikingo = new Button(this, 731, 542, 'personajePeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon)
 
         this.botonCaballoVikingo = new Button(this, 840, 542, 'personajeCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo)
@@ -141,6 +141,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         
         this.botonCaballoSamurai = new Button(this, 440, 542, 'personajeCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
         this.botonReinaSamurai = new Button(this, 300, 542, 'personajeReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
+        
     }
     update(){
 
@@ -167,18 +168,6 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 case 4 : this.scene.start("BatallaBosque", objeto)
                 break
             }
-            // if (this.cambiarEscena === true){
-                
-            //     // const indiceDeEscenas = {
-            //     //     // 1 : this.scene.start("BatallaCastillo", objeto),
-            //     //     2 : this.scene.start("BatallaCiudad", objeto),
-            //     //     3 : this.scene.start("BatallaPuente", objeto),
-            //     //     4 : this.scene.start("BatallaBosque", objeto),
-            //     //     // 5 : this.scene.start("BatallaCosta", objeto),
-            //     // }
-            //     // return indiceDeEscenas[this.siguienteEscena]
-            // }
-            
         }
 
         if(this.actualizarPersonajes === true){

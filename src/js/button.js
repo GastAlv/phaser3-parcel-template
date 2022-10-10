@@ -55,7 +55,7 @@ loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 
 export class Button
 {
-    constructor(scene, x, y, texture, text, size, callback, scale, objeto){
+    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null){
         
         this.obj = objeto
         this.scale = scale;
