@@ -26,12 +26,14 @@ export default class Juego extends Phaser.Scene
     }  
     create() {
         
-        // this.escenarioBosque  = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioB').setScale(1.135)
-        this.escenarioPuente  = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
-        // this.escenarioCiudad  = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
+        this.escenarioBosque  = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioB').setScale(1.135)
+
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
 
-        
+
+
+
+
         //const {personaje1, personaje2} = this.jugadores;
         const personaje1 = this.jugadores[0]
         const personaje2 = this.jugadores[1]

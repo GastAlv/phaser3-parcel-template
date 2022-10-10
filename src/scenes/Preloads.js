@@ -17,7 +17,11 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionpersonajes', 'assets/images/seleccionpersonaje.png')
         this.load.image('pta', 'assets/images/SeleccionPjback.png')
 
-        this.load.image('escenarioB', 'assets/images/escenarioB.png')
+        
+        //ESCENARIO
+        this.load.image('escenarioB', 'assets/images/escenarioB.png');
+        this.load.image('escenarioPuente', 'assets/images/escenarioPuente.png');
+        this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png')
 
         //SPRITES
         this.load.image('personajePeonSamurai', 'assets/images/spPeonSamurai.png')

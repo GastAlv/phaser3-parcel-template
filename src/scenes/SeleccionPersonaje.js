@@ -17,8 +17,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
     per2;
     peleadores = [];
     personajesActuales = [];
-    cofreM = [];
-    events = events;
+    cofreMuerto = [];
     
 
     actualizarPersonajes = false;
@@ -34,7 +33,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         // })
 
         this.arrayJugadores = data.arrayJugadores
-
+        console.log(this.arraydeJugadores)
         
         
 
@@ -53,6 +52,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             // console.log('AAAA: ', this.peleadores[0].estaVivo)
             this.var = {};
             const jugadorPalmo = this.peleadores.find((jugador)=>jugador.estaVivo === false)
+
 
             
             if(this.peleadores[0].estaVivo === false){
@@ -81,9 +81,12 @@ export default class SeleccionPersonaje extends Phaser.Scene
             
             const  index2 = this.arrayJugadores.indexOf(this.filtro)
             this.arrayJugadores[index2] = this.var
-            this.cofreM.push(this.arrayJugadores[index2])
+
+            this.cofreMuerto.push(this.var)
             //console.log(index2)
             // console.log( this.arrayJugadores[index2])
+            
+            // ARRAY JUGADORES SON TODOS LOS PERSONAJES DENTRO DEL ARRAY
             this.arraydeJugadores = this.arrayJugadores.filter((jugador)=>jugador.estaVivo === true)
             
             
@@ -106,6 +109,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 5,
             defensa: 5,
+            tipo: 'vikingo',
             estaVivo: true,
             id: 1
         };
@@ -115,6 +119,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'vikingo',
             estaVivo: true,
             id: 2
         };
@@ -124,6 +129,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'vikingo',
             estaVivo: true,
             id: 3
         };
@@ -134,6 +140,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 5,
             defensa: 5,
+            tipo: 'samurai',
             estaVivo: true,
             id: 11
         };
@@ -143,6 +150,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'samurai',
             estaVivo: true,
             id: 22
         };
@@ -152,6 +160,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             poderes: [],
             velocidad: 8,
             defensa: 7,
+            tipo: 'samurai',
             estaVivo: true,
             id: 33
         };
@@ -217,12 +226,17 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 22 : this.botonCaballoSamurai,
                 33 : this.botonReinaSamurai,
             }
-            for (let jugadorMuerto of this.cofreM) {
+            for (let jugadorMuerto of this.cofreMuerto) {
                 if(jugadorMuerto.estaVivo === false){
                     let boton = indice[jugadorMuerto.id]
                     boton.desactivarEntrada()
+
                 }
             }
+        
+
+
+
             // const boton = indice[this.muerto]
             // boton.desactivarEntrada()
             // if(this.peleadores[0].estaVivo === false){
