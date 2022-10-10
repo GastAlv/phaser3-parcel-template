@@ -4,7 +4,7 @@ import Poder from "./Poderes";
 export class Personaje
 {
     constructor(props){
-        const {vida, tiempo, sprite, poderes = [], velocidad, defensa, id, estaVivo = true} = props
+        const {vida, tiempo, sprite, poderes = [], velocidad, defensa, tipo, id, estaVivo = true} = props
         this.vida = vida;
         this.tiempo = tiempo;
         this.sprite = sprite;
@@ -12,7 +12,9 @@ export class Personaje
         this.velocidad = velocidad;
         this.defensa = defensa
         this.estaVivo = estaVivo
+        this.tipo = tipo
         this.id = id
+        this.gano = null
        
     }
     atacar(nombre, ataque, enemigo){
@@ -68,7 +70,10 @@ export class Personaje
         this.estaVivo = objeto.estaVivo
         this.id = objeto.id
     }
-
-
-
+    setGano(valor){
+        this.gano = valor;
+    }
+    getGano(){
+        return this.gano;
+    }
 }

@@ -5,7 +5,9 @@ import MainMenu from './scenes/MainMenu'
 import Creditos from './scenes/Creditos'
 import SeleccionFaccion from './scenes/SeleccionFaccion'
 import SeleccionPersonaje from './scenes/SeleccionPersonaje'
-import Juego from './scenes/Juego'
+import BatallaPuente from './scenes/BatallaPuente'
+import BatallaBosque from './scenes/BatallaBosque'
+import BatallaCiudad from './scenes/BatallaCiudad'
 
 const config = {
 	type: Phaser.AUTO,
@@ -30,7 +32,7 @@ const config = {
 			debug: false,
 		}
 	},
-	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, Juego ]
+	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, BatallaPuente, BatallaBosque, BatallaCiudad ]
 }
 
 export default new Phaser.Game(config)

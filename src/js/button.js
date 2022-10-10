@@ -74,8 +74,6 @@ export class Button
         
         this.container.add([this.img, this.txt])
 
-
-
     }
     desactivarEntrada(){
         this.img.removeInteractive()
@@ -84,12 +82,4 @@ export class Button
     }
 
     
-}
-export class BotonEventos extends Button{
-    constructor(scene, x, y, texture, text, size, callback, scale, objeto, nombredEvento){
-    super(scene, x, y, texture, text, size, callback, scale, objeto);
-    this.nombre = nombredEvento
-    super.img.on('pointerdown', ()=> callback(), event.emit(this.nombre, super.obj))
-    
-}
 }
