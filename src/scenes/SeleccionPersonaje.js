@@ -60,15 +60,17 @@ export default class SeleccionPersonaje extends Phaser.Scene
         console.log("estas en seleccion:)")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
-        this.add.image(500, 500, 'botonesAtaque', 1)
+        // this.add.image(500, 500, 'botonesAtaque', 2)
         this.#vikingoPeon = new Personaje({
             vida: 100,
             sprite: 'personajePeonVikingo',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10, indeSprite: 0},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}],
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 5,
             defensa: 5,
             tipo: 'vikingo',
@@ -109,6 +111,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 5,
             defensa: 5,
             tipo: 'samurai',
