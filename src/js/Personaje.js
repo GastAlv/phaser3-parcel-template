@@ -1,10 +1,14 @@
 import Phaser from "phaser";
 import Poder from "./Poderes";
 
-export default class PersonajeUno
+export class Personaje
 {
     constructor(props){
+<<<<<<< HEAD:src/js/Jugador.js
         const {vida, tiempo, sprite, poderes = [], velocidad, defensa, id, tipo, estaVivo = true} = props
+=======
+        const {vida, tiempo, sprite, poderes = [], velocidad, defensa, tipo, id, estaVivo = true} = props
+>>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402:src/js/Personaje.js
         this.vida = vida;
         this.tiempo = tiempo;
         this.sprite = sprite;
@@ -14,6 +18,7 @@ export default class PersonajeUno
         this.estaVivo = estaVivo
         this.tipo = tipo
         this.id = id
+        this.gano = null
        
     }
     atacar(nombre, ataque, enemigo){
@@ -59,7 +64,20 @@ export default class PersonajeUno
     {
         return this.poderes[index]
     }
-
-
-
+    actualizarDatos(objeto){
+        this.vida = objeto.vida;
+        this.tiempo = objeto.tiempo;
+        this.sprite = objeto.sprite;
+        this.poderes = objeto.poderes;
+        this.velocidad = objeto.velocidad;
+        this.defensa = objeto.defensa
+        this.estaVivo = objeto.estaVivo
+        this.id = objeto.id
+    }
+    setGano(valor){
+        this.gano = valor;
+    }
+    getGano(){
+        return this.gano;
+    }
 }

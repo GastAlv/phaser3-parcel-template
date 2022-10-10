@@ -58,6 +58,7 @@ export class Button
     constructor(scene, x, y, texture, text, size, callback, scale, objeto){
         
         this.obj = objeto
+        this.scale = scale;
         this.activo = true;
         this.container = scene.add.container(x, y)
         this.img = scene.add.image(0, 0, texture)
