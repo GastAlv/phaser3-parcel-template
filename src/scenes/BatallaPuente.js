@@ -35,21 +35,29 @@ export default class BatallaPuente extends Phaser.Scene
         
         
         this.personajeDeIzquierda = new Personaje({
+            scene: this,
+            x: this.personajeIzquierda.x,
+            y: this.personajeIzquierda.y,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
             velocidad: this.personajeIzquierda.velocidad,
             defensa: this.personajeIzquierda.defensa,
+            spriteSheet: this.personajeIzquierda.spriteSheet,
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
             id: this.personajeIzquierda.id
         });
         this.personajeDeDerecha = new Personaje({
+            scene: this,
+            x: this.personajeDerecha.x,
+            y: this.personajeDerecha.y,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,
             velocidad:  this.personajeDerecha.velocidad,
             defensa:  this.personajeDerecha.defensa,
+            spriteSheet: this.personajeIzquierda.spriteSheet,
             estaVivo:  this.personajeDerecha.estaVivo,
             tipo:  this.personajeDerecha.tipo,
             id:  this.personajeDerecha.id
@@ -97,7 +105,12 @@ export default class BatallaPuente extends Phaser.Scene
             // console.log(this.personajeDeDerecha.poderes[0].dano)
         })
         this.registry.events.on('potencia ataque samurai', ()=>{
-            this.personajeDeIzquierda.doparHabilidad(0)
+            this.personajeDeIzquierda.doparHabilidad(0, this.personajeDeIzquierda.poderes[2].dano)
+            // console.log(this.personajeDeDerecha.poderes)
+        })
+        this.registry.events.on('activa armadura samurai', ()=>{
+            this.personajeDeIzquierda.activarDefensa();
+            console.log('este aca es el boton')
             // console.log(this.personajeDeDerecha.poderes)
         })
 
@@ -107,12 +120,30 @@ export default class BatallaPuente extends Phaser.Scene
             this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)
         })
         this.registry.events.on('potencia ataque vikingo', ()=>{
-            this.personajeDeDerecha.doparHabilidad(0)
+            this.personajeDeDerecha.doparHabilidad(0, this.personajeDeDerecha.poderes[2].dano)
         })
-        
+        this.registry.events.on('activa armadura vikingo', ()=>{
+            this.personajeDeDerecha.activarDefensa();
+            console.log('este aca es el boton')
+
+
+        })
+
+        // this.personajeDeDerecha.animarAtaque('peonVikingoAtaque');
+        this.anims.create({
+            key: 'peonVikingoAtaque',
+            frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: 1
+        });
+
+        // this.image = this.add.image(500, 600, 'personajePeonVikingo', 0);
+        // image.anims.play('peonVikingoAtaque', true)
+        this.add.sprite(500, 200, 'personajePeonVikingo').play('peonVikingoAtaque');
+
         this.scene.moveAbove('BatallaPuente', 'Ui')
         this.scene.launch('Ui', this.personajes)
-        
+
     }
 
     update()

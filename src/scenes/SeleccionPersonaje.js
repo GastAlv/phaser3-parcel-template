@@ -61,7 +61,10 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
         // this.add.image(500, 500, 'botonesAtaque', 2)
-        this.#vikingoPeon = new Personaje({
+        this.#vikingoPeon = {
+            scene: this,
+            x: 550,
+            y: 350,
             vida: 100,
             sprite: 'personajePeonVikingo',
             poderes: [
@@ -72,37 +75,53 @@ export default class SeleccionPersonaje extends Phaser.Scene
             ],
             spriteSheet:'botonesAtaquePeon',
             velocidad: 5,
-            defensa: 5,
+            defensa: false,
             tipo: 'vikingo',
             estaVivo: true,
-            tipo: 'vikingo',
             id: 1
-        });
+        };
 
-        this.#vikingoCaballo = new Personaje({
+        this.#vikingoCaballo = {
+            scene: this,
+            x: 550,
+            y: 350,
             vida: 100,
             sprite: 'personajeCaballoVikingo',
-            poderes: [],
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
             velocidad: 8,
-            defensa: 7,
+            defensa: false,
             tipo: 'vikingo',
             estaVivo: true,
-            tipo: 'vikingo',
             id: 2
-        });
-        this.#vikingoReina = new Personaje({
+        };
+        this.#vikingoReina = {
+            scene: this,
+            x: 550,
+            y: 350,
             vida: 100,
-            sprite: 'personajeReinaVikingo',
-            poderes: [],
+            sprite: 'personajeReynaVikingo',
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
             velocidad: 8,
-            defensa: 7,
+            defensa: false,
             tipo: 'vikingo',
             estaVivo: true,
-            tipo: 'vikingo',
             id: 3
-        });
+        };
         
-        this.#samuraiPeon = new Personaje({
+        this.#samuraiPeon = {
+            scene: this,
+            x: 300,
+            y: 350,
             vida: 100,
             sprite: 'personajePeonSamurai',
             poderes: [
@@ -113,43 +132,56 @@ export default class SeleccionPersonaje extends Phaser.Scene
             ],
             spriteSheet:'botonesAtaquePeon',
             velocidad: 5,
-            defensa: 5,
+            defensa: false,
             tipo: 'samurai',
             estaVivo: true,
-            tipo: 'samurai',
             id: 11
-        });
-        this.#samuraiCaballo = new Personaje({
+        };
+        this.#samuraiCaballo = {
+            scene: this,
+            x: 300,
+            y: 350,
             vida: 100,
             sprite: 'personajeCaballoSamurai',
-            poderes: [],
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
             velocidad: 8,
-            defensa: 7,
+            defensa: false,
             tipo: 'samurai',
             estaVivo: true,
-            tipo: 'samurai',
             id: 22
-        });
-        this.#samuraiReina = new Personaje({
+        };
+        this.#samuraiReina = {
+            scene: this,
+            x: 300,
+            y: 350,
             vida: 100,
-            sprite: 'personajeReinaSamurai',
-            poderes: [],
+            sprite: 'personajeReynaSamurai',
+            poderes: [
+                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+                {nombre: 'gritoDeGuerra', dano: 0.2},
+                {nombre: 'momentoHisteria', dano: 0.5}
+            ],
             velocidad: 8,
-            defensa: 7,
+            defensa: false,
             tipo: 'samurai',
             estaVivo: true,
-            tipo: 'samurai',
             id: 33
-        });
-        this.botonPeonVikingo = new Button(this, 731, 542, 'personajePeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon)
+        };
+        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon)
 
-        this.botonCaballoVikingo = new Button(this, 840, 542, 'personajeCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo)
-        this.botonReinaVikingo = new Button(this, 975, 542, 'personajeReinaVikingo', '', 0, () => {this.peleadores.push(this.botonReinaVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoReina)
+        this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo)
+        this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.botonReinaVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoReina)
 
-        this.botonPeonSamurai = new Button(this, 540, 542, 'personajePeonSamurai', "", 0, () => {this.peleadores.push(this.botonPeonSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiPeon)
+        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.botonPeonSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiPeon)
         
-        this.botonCaballoSamurai = new Button(this, 440, 542, 'personajeCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
-        this.botonReinaSamurai = new Button(this, 300, 542, 'personajeReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
+        this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
+        this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
         
     }
     update(){

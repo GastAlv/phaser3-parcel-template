@@ -78,11 +78,11 @@ export class Button
 }
 
 export class BotonHabilidades  {
-    constructor(scene, x, y, texture, callback, scale, indexDeSprite){
+    constructor(scene, x, y, texture, callback, indexDeSprite){
         this.img = scene.add.image(x, y, texture, indexDeSprite)
         .setInteractive({ useHandCursor: true })
         .on("pointerdown", () => callback())
-        .on("pointerover", ()=> this.img.setScale(scale + 0.08))
-        .on("pointerout", ()=> this.img.setScale(scale))
+        .on("pointerover", ()=> this.img.setScale(1 + 0.08))
+        .on("pointerout", ()=> this.img.setScale(1))
     }
 }

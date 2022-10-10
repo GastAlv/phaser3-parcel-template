@@ -4,18 +4,21 @@ import Poder from "./Poderes";
 export class Personaje
 {
     constructor(props){
-        const {vida, tiempo, sprite, poderes = [], velocidad, defensa, tipo, id, estaVivo = true} = props
+        const {scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true} = props
         this.vida = vida;
         this.tiempo = tiempo;
         this.sprite = sprite;
         this.poderes = poderes;
         this.velocidad = velocidad;
-        this.defensa = defensa
-        this.estaVivo = estaVivo
-        this.tipo = tipo
-        this.id = id
-        this.gano = null
-       
+        this.spriteSheet = spriteSheet
+        this.defensa = defensa;
+        this.tipo = tipo;
+        this.id = id;
+        this.estaVivo = estaVivo;
+        this.gano = null;
+        this.defensa = false
+        this.img = scene.add.image(x, y, this.sprite, 0)
+
     }
     atacar(atacante, indexDelDano, enemigo){
 /*         console.log(enemigo)
@@ -24,12 +27,28 @@ export class Personaje
         // nombre.poderes[ataque].dano
         // console.log(`Ataco con: ${nombre}`)
         
-        enemigo.recibirDano(atacante.poderes[indexDelDano].dano, this)
+        enemigo.recibirDano(atacante.poderes[indexDelDano].dano, enemigo.poderes[3].dano, this)
     }
 
-    recibirDano(dano){
-        this.vida -= dano;
-        console.log('animacion recibir daño')
+    animarAtaque(key)
+    {
+        this.img.anims.play(key, true);
+    }
+
+    recibirDano(dano, porcentaje){
+        
+        if(this.defensa === true)
+        {
+            this.vida -= (dano * (1 - porcentaje))
+            this.defensa = false
+
+        } else {
+            
+            this.vida -= dano;
+            console.log('animacion recibir daño')
+        }
+
+
         if(this.vida <= 0)
         {
             this.estaVivo = false;
@@ -79,6 +98,16 @@ export class Personaje
     }
     doparHabilidad(index, porcentaje){
         // this.poderes[index].dano += this.poderes[index].dano * porcentaje;
-        this.poderes[index].dano +=  porcentaje
+        this.poderes[index].dano +=  this.poderes[index].dano * porcentaje
+        console.log('Este es el daño potenciado: ' + this.poderes[index].dano)
     }
+
+    activarDefensa()
+    {
+        // this.defensa = this.defensa + (this.poderes[index].dano * porcentaje)
+        this.defensa = true
+    }
+
+
+
 }
