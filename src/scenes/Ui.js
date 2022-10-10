@@ -7,7 +7,7 @@ export default class Ui extends Phaser.Scene
 	{
 		super({key :'Ui'})
 	}
-    init(){
+    init(data){
         this.jugadores = data
 
         this.personajeIzquierda = this.jugadores.find((personaje)=>{
@@ -24,7 +24,7 @@ export default class Ui extends Phaser.Scene
     create()
     {
         
-        this.add.image( this.cameras.main.centerX , this.cameras.main.centerY/ this.num, 'interfaz')
+        this.add.image( this.cameras.main.centerX , this.cameras.main.centerY/ 1, 'interfaz')
 
         new Button(this, 180, 525, 'botonesAtaque', 0, 'ATAQUE RAPIDO', 40, ()=>{this.registry.events.emit('ataca el samurai')}, 1.2)
         new Button(this, 480, 525, 'botonesAtaque', 1,'ATAQUE RAPIDO', 40, ()=>{this.registry.events.emit('ataca el samurai2')}, 1.2)
