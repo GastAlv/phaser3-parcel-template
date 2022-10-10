@@ -55,13 +55,13 @@ loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 
 export class Button
 {
-    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null){
+    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null, indexImagen = null){
         
         this.obj = objeto
         this.scale = scale;
         this.activo = true;
         this.container = scene.add.container(x, y)
-        this.img = scene.add.image(0, 0, texture)
+        this.img = scene.add.image(0, 0, texture, indexImagen)
         .setInteractive({ useHandCursor: true })
         .setScale(scale)
         .on("pointerdown", () => callback())

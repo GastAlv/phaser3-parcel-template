@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import { Button } from "../js/button";
 import { Personaje } from "../js/Personaje";
 import Poder from "../js/Poderes";
-import { sharedInstance as events } from './EventCenter'
 
 export default class BatallaPuente extends Phaser.Scene
 {
@@ -26,11 +25,6 @@ export default class BatallaPuente extends Phaser.Scene
         this.personajeDerecha = this.personajes.find((personaje)=>{
             return personaje.tipo === 'vikingo'
         })
-
-        
-        
-
-
     }  
     create() {
         console.log("estas en puente")
@@ -118,6 +112,7 @@ export default class BatallaPuente extends Phaser.Scene
         
         this.scene.moveAbove('BatallaPuente', 'Ui')
         this.scene.launch('Ui', this.personajes)
+        
     }
 
     update()

@@ -17,17 +17,9 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionpersonajes', 'assets/images/seleccionpersonaje.png')
         this.load.image('pta', 'assets/images/SeleccionPjback.png')
 
-<<<<<<< HEAD
-        
-        //ESCENARIO
-        this.load.image('escenarioB', 'assets/images/escenarioB.png');
-        this.load.image('escenarioPuente', 'assets/images/escenarioPuente.png');
-        this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png')
-=======
         this.load.image('escenarioBosque', 'assets/images/escenarioBosque.png')
         this.load.image('escenarioPuente', 'assets/images/escenarioPuente.png');
         this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png');
->>>>>>> cdabd37f79fe3829be4bb13a683e1ff1df856402
 
         //SPRITES
         this.load.image('personajePeonSamurai', 'assets/images/spPeonSamurai.png')
@@ -36,8 +28,6 @@ export default class Preloads extends Phaser.Scene
         this.load.image('personajeCaballoVikingo', 'assets/images/spCaballoVikingo.png')
         this.load.image('personajeReinaSamurai', 'assets/images/spReinaSamurai.png')
         this.load.image('personajeReinaVikingo', 'assets/images/spReinaVikingo.png')
-        
-        ,
 
         // Interfaz
         this.load.image('botonMarco', 'assets/interfaz/botonMarco.png');
@@ -47,8 +37,8 @@ export default class Preloads extends Phaser.Scene
         this.load.image('interfaz', 'assets/interfaz/interfaz.png')
         this.load.image('botonAtaque', 'assets/interfaz/botonAtaque.png')
 
-        this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeAtaques.png', { frameWidth: 420, frameHeight: 430 });
-        
+        //this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeAtaques.png', { frameWidth: 420, frameHeight: 430 });
+        this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 100, frameHeight: 100});
         // this.load.spritesheet({
         //     key: 'botonAtaque',
         //     url: 'assets/interfaz/botonesDeAtaques.png',
