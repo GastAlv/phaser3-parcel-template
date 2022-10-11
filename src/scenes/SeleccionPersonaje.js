@@ -2,7 +2,7 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
 import { sharedInstance as events } from './EventCenter'
-import { Personaje } from "../js/Personaje";
+import { convertirClase } from "../js/Personaje";
 
 export default class SeleccionPersonaje extends Phaser.Scene
 {
@@ -31,44 +31,40 @@ export default class SeleccionPersonaje extends Phaser.Scene
     }
     init(data){
         this.actualizacionPersonajes = data.personaje
-
         this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena)=> {
             this.primerEscena = false;
             this.actualizarPersonajes = true
             this.cambiarEscena = true
             this.siguienteEscena = idSiguienteEscena
-            
 
             // lista para filtrar al personaje muerto
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
             })
-
             this.listMuertos.push(this.nuevoMuerto)
-            
             // lista para filtrar al personaje vivo
             this.peleadores = personajes.filter((personaje)=>{
                 return personaje.estaVivo === true
             })
-        });
+            console.log(this.peleadores)
+            // this.peleadores = [new SistemaClaseObjeto({clase:this.peleadores})]
+            this.peleadores = [convertirClase(this.peleadores)]
 
-        
+            console.log(this.peleadores)
+        });
     }
 
     create() {
-    
+
         console.log("estas en seleccion:)")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
         // this.add.image(500, 500, 'botonesAtaque', 2)
         this.#vikingoPeon = {
-            scene: this,
-            x: 550,
-            y: 350,
             vida: 100,
             sprite: 'personajePeonVikingo',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10, indeSprite: 0},
+                {nombre: 'peonVikingoAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
@@ -82,17 +78,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
         };
 
         this.#vikingoCaballo = {
-            scene: this,
-            x: 550,
-            y: 350,
             vida: 100,
             sprite: 'personajeCaballoVikingo',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'caballoVikingoAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 8,
             defensa: false,
             tipo: 'vikingo',
@@ -100,17 +94,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
             id: 2
         };
         this.#vikingoReina = {
-            scene: this,
-            x: 550,
-            y: 350,
             vida: 100,
             sprite: 'personajeReynaVikingo',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'reynaVikingoAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 8,
             defensa: false,
             tipo: 'vikingo',
@@ -119,13 +111,10 @@ export default class SeleccionPersonaje extends Phaser.Scene
         };
         
         this.#samuraiPeon = {
-            scene: this,
-            x: 300,
-            y: 350,
             vida: 100,
             sprite: 'personajePeonSamurai',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'peonSamuraiAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
@@ -138,17 +127,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
             id: 11
         };
         this.#samuraiCaballo = {
-            scene: this,
-            x: 300,
-            y: 350,
             vida: 100,
             sprite: 'personajeCaballoSamurai',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'caballoSamuraiAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 8,
             defensa: false,
             tipo: 'samurai',
@@ -156,17 +143,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
             id: 22
         };
         this.#samuraiReina = {
-            scene: this,
-            x: 300,
-            y: 350,
             vida: 100,
             sprite: 'personajeReynaSamurai',
             poderes: [
-                {nombre: 'ataqueRapido', dano: 20, velocidad: 10},
+                {nombre: 'reynaSamuraiAtaque', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
+            spriteSheet:'botonesAtaquePeon',
             velocidad: 8,
             defensa: false,
             tipo: 'samurai',
@@ -182,9 +167,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
         
         this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
         this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
-        
     }
-    update(){
+    update(){ 
 
         if(this.botonListo1 && this.botonListo2 === true)
         {

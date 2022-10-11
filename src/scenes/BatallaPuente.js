@@ -36,8 +36,8 @@ export default class BatallaPuente extends Phaser.Scene
         
         this.personajeDeIzquierda = new Personaje({
             scene: this,
-            x: this.personajeIzquierda.x,
-            y: this.personajeIzquierda.y,
+            x: 450,
+            y: 270,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
@@ -50,8 +50,8 @@ export default class BatallaPuente extends Phaser.Scene
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
-            x: this.personajeDerecha.x,
-            y: this.personajeDerecha.y,
+            x: 750,
+            y: 275,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,
@@ -63,14 +63,14 @@ export default class BatallaPuente extends Phaser.Scene
             id:  this.personajeDerecha.id
         })
 
-        this.personajeizquierdapoder1 = new Poder({
-            nombre: this.personajeIzquierda.poderes[2].nombre,
-            dano:this.personajeIzquierda.poderes[2].dano
-        })
-        this.personajeizquierdapoder2 = new Poder({
-            nombre: this.personajeIzquierda.poderes[1].nombre,
-            dano:this.personajeIzquierda.poderes[1].dano
-        })
+        // this.personajeizquierdapoder1 = new Poder({
+        //     nombre: this.personajeIzquierda.poderes[2].nombre,
+        //     dano:this.personajeIzquierda.poderes[2].dano
+        // })
+        // this.personajeizquierdapoder2 = new Poder({
+        //     nombre: this.personajeIzquierda.poderes[1].nombre,
+        //     dano:this.personajeIzquierda.poderes[1].dano
+        // })
 
         // const peonAtaqueRapido = new Poder({
         //     nombre: 'Ataque Rapido',
@@ -88,8 +88,8 @@ export default class BatallaPuente extends Phaser.Scene
 
         // this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
         // this.personajeDeIzquierda.agregarPoder(peonCuracion)
-        this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
-        this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
+        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
+        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
         // console.log(this.personajeDeIzquierda.poderes)
 
         
@@ -101,7 +101,8 @@ export default class BatallaPuente extends Phaser.Scene
         //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
 
         this.registry.events.on('ataca el samurai', ()=>{
-            this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)
+            this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
+            // console.log(this.registry.events.emit('actualiza Vida Vikingo', this.personajeDeDerecha.vida))
             // console.log(this.personajeDeDerecha.poderes[0].dano)
         })
         this.registry.events.on('potencia ataque samurai', ()=>{
@@ -117,7 +118,8 @@ export default class BatallaPuente extends Phaser.Scene
         
 
         this.registry.events.on('ataca el vikingo', ()=>{
-            this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)
+            // this.registry.events.emit('actualiza Vida Samurai', this.personajeDeIzquierda.vida)
+            this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
         })
         this.registry.events.on('potencia ataque vikingo', ()=>{
             this.personajeDeDerecha.doparHabilidad(0, this.personajeDeDerecha.poderes[2].dano)
@@ -125,21 +127,21 @@ export default class BatallaPuente extends Phaser.Scene
         this.registry.events.on('activa armadura vikingo', ()=>{
             this.personajeDeDerecha.activarDefensa();
             console.log('este aca es el boton')
-
-
         })
+        // this.personajeDeDerecha.animarAtaque('peonSamuraiAtaque')
+
 
         // this.personajeDeDerecha.animarAtaque('peonVikingoAtaque');
-        this.anims.create({
-            key: 'peonVikingoAtaque',
-            frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
-            frameRate: 10,
-            repeat: 1
-        });
+        // this.anims.create({
+        //     key: 'peonVikingoAtaque',
+        //     frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
+        //     frameRate: 10,
+        //     repeat: 1
+        // });
 
         // this.image = this.add.image(500, 600, 'personajePeonVikingo', 0);
         // image.anims.play('peonVikingoAtaque', true)
-        this.add.sprite(500, 200, 'personajePeonVikingo').play('peonVikingoAtaque');
+        // this.add.sprite(500, 200, 'personajePeonVikingo').play('peonVikingoAtaque');
 
         this.scene.moveAbove('BatallaPuente', 'Ui')
         this.scene.launch('Ui', this.personajes)

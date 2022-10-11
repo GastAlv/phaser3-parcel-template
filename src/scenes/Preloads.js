@@ -55,59 +55,56 @@ export default class Preloads extends Phaser.Scene
         this.load.spritesheet('personajeReynaSamurai', 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 286, frameHeight: 177}); 
 
         this.load.spritesheet('personajeReynaVikingo', 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 1280, frameHeight: 720});
-        
-        this.anims.create({
-            key: 'peonSamuraiAtaque',
-            frames: this.anims.generateFrameNumbers('personajePeonSamurai', { start: 0, end: 7 }),
-            frameRate: 10,
-            repeat: 1
-        });
-        // this.anims.create({
-        //     key: 'peonVikingoAtaque',
-        //     frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
-        //     frameRate: 10,
-        //     repeat: 1
-        // });
-        this.anims.create({
-            key: 'reynaSamuraiAtaque',
-            frames: this.anims.generateFrameNumbers('personajeReynaSamurai', { start: 0, end: 6 }),
-            frameRate: 10,
-            repeat: 1
-        });
-        this.anims.create({
-            key: 'reynaVikingoAtaque',
-            frames: this.anims.generateFrameNumbers('personajeReynaVikingo', { start: 0, end: 4 }),
-            frameRate: 10,
-            repeat: 1
-        });
-        this.anims.create({
-            key: 'caballoVikingoAtaque',
-            frames: this.anims.generateFrameNumbers('personajeCaballoVikingo', { start: 0, end: 5 }),
-            frameRate: 10,
-            repeat: 1
-        });
-        this.anims.create({
-            key: 'caballoSamuraiAtaque',
-            frames: this.anims.generateFrameNumbers('personajeCaballoSamurai', { start: 0, end: 6 }),
-            frameRate: 10,
-            repeat: 1
-        });
-
-        // this.load.spritesheet({
-        //     key: 'botonAtaque',
-        //     url: 'assets/interfaz/botonesDeAtaques.png',
-        //     frameConfig: {
-        //         frameWidth: 420,
-        //         frameHeight: 430,
-        //         startFrame: 0,
-        //         endFrame: 9
-        //     }
-        // });
-
-
     }
 
     create(){
+        this.anims.create({
+            key: 'peonSamuraiAtaque',
+            frames: this.anims.generateFrameNames('personajePeonSamurai',{frames:[0,1,2,3, 4, 5, 6, 7, 0]}),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'peonVikingoAtaque',
+            frames: this.anims.generateFrameNumbers('personajePeonVikingo', { frames:[0,1,2,3, 4, 5,0] }),
+            frameRate: 8,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'reynaSamuraiAtaque',
+            frames: this.anims.generateFrameNumbers('personajeReynaSamurai', { frames:[0,1,2,3, 4, 5, 6, 0] }),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'reynaVikingoAtaque',
+            frames: this.anims.generateFrameNumbers('personajeReynaVikingo', { frames:[0,1,2,3, 4, 0] }),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'caballoVikingoAtaque',
+            frames: this.anims.generateFrameNumbers('personajeCaballoVikingo', { frames:[0,1,2,3, 4, 5, 0] }),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'caballoSamuraiAtaque',
+            frames: this.anims.generateFrameNumbers('personajeCaballoSamurai', { frames:[0,1,2,3, 4, 5, 6, 0] }),
+            frameRate: 10,
+            repeat: 0
+        });
+
+        this.load.spritesheet({
+            key: 'botonAtaque',
+            url: 'assets/interfaz/botonesDeAtaques.png',
+            frameConfig: {
+                frameWidth: 420,
+                frameHeight: 430,
+                startFrame: 0,
+                endFrame: 9
+            }
+        });
         this.scene.start('SeleccionPersonaje');
 
     } 
