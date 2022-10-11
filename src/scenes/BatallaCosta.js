@@ -2,9 +2,8 @@ import Phaser from "phaser";
 import { Button } from "../js/button";
 import { Personaje } from "../js/Personaje";
 import Poder from "../js/Poderes";
-import { sharedInstance as events } from './EventCenter'
 
-export default class BatallaCiudad extends Phaser.Scene
+export default class BatallaCosta extends Phaser.Scene
 {
     jugador1;
     jugador2;
@@ -13,7 +12,7 @@ export default class BatallaCiudad extends Phaser.Scene
 
     
     constructor(){
-        super('BatallaCiudad')
+        super('BatallaCosta')
     }
 
     init(data)
@@ -28,16 +27,17 @@ export default class BatallaCiudad extends Phaser.Scene
         })
     }  
     create() {
-        console.log("estas en ciudad")
-        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        console.log("estas en puente")
 
+        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCosta').setScale(1.135)
+        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        
         
         
         this.personajeDeIzquierda = new Personaje({
             scene: this,
-            x: 450,
-            y: 270,
+            x: this.personajeIzquierda.x,
+            y: this.personajeIzquierda.y,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
@@ -50,8 +50,8 @@ export default class BatallaCiudad extends Phaser.Scene
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
-            x: this.personajeDerecha.x,
-            y: this.personajeDerecha.y,
+            x: 750,
+            y: 275,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,
@@ -62,11 +62,19 @@ export default class BatallaCiudad extends Phaser.Scene
             tipo:  this.personajeDerecha.tipo,
             id:  this.personajeDerecha.id
         })
-        
+
+        // this.personajeizquierdapoder1 = new Poder({
+        //     nombre: this.personajeIzquierda.poderes[2].nombre,
+        //     dano:this.personajeIzquierda.poderes[2].dano
+        // })
+        // this.personajeizquierdapoder2 = new Poder({
+        //     nombre: this.personajeIzquierda.poderes[1].nombre,
+        //     dano:this.personajeIzquierda.poderes[1].dano
+        // })
 
         // const peonAtaqueRapido = new Poder({
         //     nombre: 'Ataque Rapido',
-        //     dano: 60,
+        //     dano: 20,
         //     tipo: 'damage'
         // })
 
@@ -80,6 +88,11 @@ export default class BatallaCiudad extends Phaser.Scene
 
         // this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
         // this.personajeDeIzquierda.agregarPoder(peonCuracion)
+        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
+        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
+        // console.log(this.personajeDeIzquierda.poderes)
+
+        
         
         // new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
         //     this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)}, 0.5)
@@ -87,9 +100,9 @@ export default class BatallaCiudad extends Phaser.Scene
         // new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
         //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
 
-        //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
         this.registry.events.on('ataca el samurai', ()=>{
             this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
+            // console.log(this.registry.events.emit('actualiza Vida Vikingo', this.personajeDeDerecha.vida))
             // console.log(this.personajeDeDerecha.poderes[0].dano)
         })
         this.registry.events.on('potencia ataque samurai', ()=>{
@@ -105,6 +118,7 @@ export default class BatallaCiudad extends Phaser.Scene
         
 
         this.registry.events.on('ataca el vikingo', ()=>{
+            // this.registry.events.emit('actualiza Vida Samurai', this.personajeDeIzquierda.vida)
             this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
         })
         this.registry.events.on('potencia ataque vikingo', ()=>{
@@ -114,7 +128,22 @@ export default class BatallaCiudad extends Phaser.Scene
             this.personajeDeDerecha.activarDefensa();
             console.log('este aca es el boton')
         })
-        this.scene.moveAbove('BatallaCiudad', 'Ui')
+        // this.personajeDeDerecha.animarAtaque('peonSamuraiAtaque')
+
+
+        // this.personajeDeDerecha.animarAtaque('peonVikingoAtaque');
+        // this.anims.create({
+        //     key: 'peonVikingoAtaque',
+        //     frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
+        //     frameRate: 10,
+        //     repeat: 1
+        // });
+
+        // this.image = this.add.image(500, 600, 'personajePeonVikingo', 0);
+        // image.anims.play('peonVikingoAtaque', true)
+        // this.add.sprite(500, 200, 'personajePeonVikingo').play('peonVikingoAtaque');
+
+        this.scene.moveAbove('BatallaCosta', 'Ui')
         this.scene.launch('Ui', this.personajes)
 
     }
@@ -123,7 +152,7 @@ export default class BatallaCiudad extends Phaser.Scene
     {
         if(this.personajeDeIzquierda.estaVivo === false){
             //GANO EL VIKINGO
-            let idSiguienteEscena = 1
+            let idSiguienteEscena = 4
             this.personajeDeDerecha.setGano(true)
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
@@ -132,11 +161,11 @@ export default class BatallaCiudad extends Phaser.Scene
         }
         if(this.personajeDeDerecha.estaVivo === false){
             //GANO EL SAMURAI
-            let idSiguienteEscena = 3
+            // let idSiguienteEscena = 4
             this.personajeDeIzquierda.setGano(true)
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
-            this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.start('SeleccionPersonaje')
+            // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
+            this.scene.start('VictoriaSamurai')
             this.scene.stop('Ui')
         }
     }

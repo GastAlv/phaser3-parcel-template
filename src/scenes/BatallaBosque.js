@@ -57,8 +57,8 @@ export default class BatallaBosque extends Phaser.Scene
         // this.personajeDeIzquierda.img.anims.play(this.personajeDeIzquierda.poderes[0].nombre);
         this.personajeDeDerecha = new Personaje({
             scene: this,
-            x: this.personajeDerecha.x,
-            y: this.personajeDerecha.y,
+            x: 750,
+            y: 275,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,

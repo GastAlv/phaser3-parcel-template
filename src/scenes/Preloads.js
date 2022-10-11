@@ -20,6 +20,11 @@ export default class Preloads extends Phaser.Scene
         this.load.image('escenarioBosque', 'assets/images/escenarioBosque.png')
         this.load.image('escenarioPuente', 'assets/images/escenarioPuente.png');
         this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png');
+        this.load.image('escenarioCosta', 'assets/images/escenarioCosta.png');
+        this.load.image('escenarioCastillo', 'assets/images/escenarioCastillo.png');
+
+        this.load.image('victoriaVikingo', 'assets/images/victoriaVikingo.png');
+        this.load.image('victoriaSamurai', 'assets/images/victoriaSamurai.png');
 
         //SPRITES
         this.load.image('seleccionPeonSamurai', 'assets/images/spPeonSamurai.png')
@@ -43,18 +48,23 @@ export default class Preloads extends Phaser.Scene
         this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaque2', 'assets/interfaz/botonesDeHabilidades2.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaquePeon', 'assets/interfaz/botonesDeHabilidadesPeon.png', { frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('botonesAtaqueCaballo', 'assets/interfaz/botonesDeHabilidadesCaballo.png', { frameWidth: 100, frameHeight: 100});
+        this.load.spritesheet('botonesAtaqueReyna', 'assets/interfaz/botonesDeHabilidadesReyna.png', { frameWidth: 100, frameHeight: 100});
 
-        this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 333, frameHeight: 195}); 
 
-        this.load.spritesheet('personajePeonSamurai', 'assets/spriteSheet/peonSamuraiSheet.png', { frameWidth: 277, frameHeight: 195}); 
+        //SPRITE SHEET DE PERSONAJES Y ANIMACIONES
 
-        this.load.spritesheet('personajeCaballoSamurai', 'assets/spriteSheet/caballoSamuraiSheet.png', { frameWidth: 318, frameHeight: 317}); 
+        this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 164, frameHeight: 140}); 
 
-        this.load.spritesheet('personajeCaballoVikingo', 'assets/spriteSheet/caballoVikingoSheet.png', { frameWidth: 235, frameHeight: 132}); 
+        this.load.spritesheet('personajePeonSamurai', 'assets/spriteSheet/peonSamuraiSheet.png', { frameWidth: 147, frameHeight: 140}); 
 
-        this.load.spritesheet('personajeReynaSamurai', 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 286, frameHeight: 177}); 
+        this.load.spritesheet('personajeCaballoSamurai', 'assets/spriteSheet/caballoSamuraiSheet.png', { frameWidth: 140, frameHeight: 140}); 
 
-        this.load.spritesheet('personajeReynaVikingo', 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 1280, frameHeight: 720});
+        this.load.spritesheet('personajeCaballoVikingo', 'assets/spriteSheet/caballoVikingoSheet.png', { frameWidth: 226, frameHeight: 140}); 
+
+        this.load.spritesheet('personajeReynaSamurai', 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 178, frameHeight: 140}); 
+
+        this.load.spritesheet('personajeReynaVikingo', 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 183, frameHeight: 140});
     }
 
     create(){

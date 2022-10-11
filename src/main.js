@@ -8,6 +8,11 @@ import SeleccionPersonaje from './scenes/SeleccionPersonaje'
 import BatallaPuente from './scenes/BatallaPuente'
 import BatallaBosque from './scenes/BatallaBosque'
 import BatallaCiudad from './scenes/BatallaCiudad'
+import BatallaCastillo from './scenes/BatallaCastillo'
+import BatallaCosta from './scenes/BatallaCosta'
+import VictoriaSamurai from './scenes/VictoriaSamurai'
+import VictoriaVikingo from './scenes/VictoriaVikingo'
+
 import Ui from './scenes/Ui'
 
 const config = {
@@ -33,7 +38,7 @@ const config = {
 			debug: false,
 		}
 	},
-	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, Ui, BatallaPuente, BatallaBosque, BatallaCiudad ]
+	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, Ui, BatallaPuente, BatallaBosque, BatallaCiudad, BatallaCastillo, BatallaCosta, VictoriaSamurai, VictoriaVikingo ]
 }
 
 export default new Phaser.Game(config)

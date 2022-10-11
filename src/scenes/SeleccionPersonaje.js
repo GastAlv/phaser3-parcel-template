@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import { Button } from "../js/button";
 import { sharedInstance as events } from './EventCenter'
 import { convertirClase } from "../js/Personaje";
+import VictoriaSamurai from "./VictoriaSamurai";
 
 export default class SeleccionPersonaje extends Phaser.Scene
 {
@@ -42,13 +43,26 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 return personaje.estaVivo === false
             })
             this.listMuertos.push(this.nuevoMuerto)
+
             // lista para filtrar al personaje vivo
+
             this.peleadores = personajes.filter((personaje)=>{
                 return personaje.estaVivo === true
             })
             console.log(this.peleadores)
             // this.peleadores = [new SistemaClaseObjeto({clase:this.peleadores})]
             this.peleadores = [convertirClase(this.peleadores)]
+
+            if(this.listMuertos.length === 5)
+            {
+                if(this.peleadores[0].tipo === 'samurai')
+                {
+                    this.scene.start('VictoriaSamurai')
+                } else {
+                    this.scene.start('VictoriaVikingo')
+                }                               
+
+            }
 
             console.log(this.peleadores)
         });
@@ -86,7 +100,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
-            spriteSheet:'botonesAtaquePeon',
+            spriteSheet:'botonesAtaqueCaballo',
             velocidad: 8,
             defensa: false,
             tipo: 'vikingo',
@@ -102,7 +116,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
-            spriteSheet:'botonesAtaquePeon',
+            spriteSheet:'botonesAtaqueReyna',
             velocidad: 8,
             defensa: false,
             tipo: 'vikingo',
@@ -135,7 +149,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
-            spriteSheet:'botonesAtaquePeon',
+            spriteSheet:'botonesAtaqueCaballo',
             velocidad: 8,
             defensa: false,
             tipo: 'samurai',
@@ -151,7 +165,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
             ],
-            spriteSheet:'botonesAtaquePeon',
+            spriteSheet:'botonesAtaqueReyna',
             velocidad: 8,
             defensa: false,
             tipo: 'samurai',
@@ -186,11 +200,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
             }
 
             switch(this.siguienteEscena){
+                case 1 : this.scene.start('BatallaCastillo', objeto)
+                break
                 case 2 : this.scene.start("BatallaCiudad", objeto)
                 break
                 case 3 : this.scene.start("BatallaPuente", objeto)
                 break
                 case 4 : this.scene.start("BatallaBosque", objeto)
+                break
+                case 5 : this.scene.start('BatallaCosta', objeto)
                 break
             }
         }

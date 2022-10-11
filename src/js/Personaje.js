@@ -23,7 +23,8 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
-        this.img = this
+        this.img = this;
+        this.img.setScale(2)
         console.log(scene.constructor.name)
 
     }
