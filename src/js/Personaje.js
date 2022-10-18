@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Poder from "./Poderes";
 import { sharedInstance } from "../scenes/EventCenter";
+import { Constraint } from "matter";
 
 export class Personaje extends Phaser.Physics.Arcade.Sprite
 {
@@ -141,17 +142,76 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
 }
 export function convertirClase(clase){
         return {
-        x: clase[0].img.x,
-        y: clase[0].img.y,
-        vida: clase[0].vida,
-        sprite: clase[0].sprite,
-        poderes: clase[0].poderes,
-        spriteSheet: clase[0].spriteSheet,
-        velocidad: clase[0].velocidad,
-        defensa: clase[0].defensa,
-        tipo: clase[0].tipo,
-        estaVivo: clase[0].estaVivo,
-        id: clase[0].id}
+        x: clase.img.x,
+        y: clase.img.y,
+        vida: clase.vida,
+        sprite: clase.sprite,
+        poderes: clase.poderes,
+        spriteSheet: clase.spriteSheet,
+        velocidad: clase.velocidad,
+        defensa: clase.defensa,
+        tipo: clase.tipo,
+        estaVivo: clase.estaVivo,
+        id: clase.id}
     }
+
+    /*el objeto llega desde el combate. el array =THIS.PELEADORES tiene todos los objetos de seleccion de personaje * HAY Q DEFINIR
+    TODOS LOS OBJETOS EN EL INIT O ANTES DE Q HAGAMOS LA VALIDACION ES DECIR DENTRO DEL EVENTO ESCUCHA IGUAL*/
+    export function filtrarElJugadorVivoYPushearElObjeto(objeto, array){
+        if(objeto.sprite === 'personajePeonVikingo'){
+            return array.push(this.array[0])
+        }else if(objeto.sprite === 'personajeCaballoVikingo'){
+            return array.push(this.array[1])
+        }else if(objeto.sprite === 'personajeReynaVikingo'){
+            return array.push(this.array[2])
+        }else if(objeto.sprite === 'personajePeonSamurai'){
+            return array.push(this.array[3])
+        }else if(objeto.sprite === 'personajeCaballoSamurai'){
+            return array.push(this.array[4])
+        }else if(objeto.sprite === 'personajeReynaSamurai'){
+            return array.push(this.array[5])
+        }
+    }
+
+    let peonVikingo={
+        vida: 100,
+        sprite: 'personajePeonVikingo',
+        poderes: [
+            {nombre: 'ataqueRapidoPeonVikingo', dano: 20, velocidad: 10},
+            {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
+            {nombre: 'gritoDeGuerra', dano: 0.2},
+            {nombre: 'momentoHisteria', dano: 0.5}
+        ],
+        spriteSheet:'botonesAtaquePeon',
+        velocidad: 5,
+        defensa: false,
+        tipo: 'vikingo',
+        estaVivo: true,
+        id: 1
+    }
+    export class datosPersonaje{
+        constructor(props){
+            const{vida, sprite, poderes, spriteSheet, velocidad, defensa, tipo, estaVivo, id}= props
+            this.vida = vida;
+            this.sprite = sprite;
+            this.poderes = poderes,
+            this.spriteSheet = spriteSheet;
+            this.velocidad = velocidad;
+            this.defensa = defensa;
+            this.tipo = tipo;
+            this.estaVivo = estaVivo;
+            this.id = id;
+        }
+        actualizarComponente(componente, componenteNueva){
+            componente = componenteNueva
+        }
+        /* ejepmlo de uso con la vida actualizada que llega desde los combates
+        actualizarComponente(this.vida, this.personaje.vida){
+
+        }*/
+    }
+
+    //sharedInstance.emit()
+    export{peonVikingo}
 
 

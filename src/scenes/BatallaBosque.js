@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { Personaje } from "../js/Personaje";
-import Poder from "../js/Poderes";
-import { sharedInstance as events } from './EventCenter'
+import { convertirClase,Personaje } from "../js/Personaje";
+// import Poder from "../js/Poderes";
+// import { sharedInstance as events } from './EventCenter'
 
 export default class BatallaBosque extends Phaser.Scene
 {
@@ -20,8 +20,8 @@ export default class BatallaBosque extends Phaser.Scene
     {
         this.personajes = data.personajes
         
-        console.log(this.personajes[0] instanceof Object)
-        console.log(this.personajes[1] instanceof Object)
+        // console.log(this.personajes[0] instanceof Object)
+        // console.log(this.personajes[1] instanceof Object)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
             return personaje.tipo === 'samurai'
@@ -29,6 +29,7 @@ export default class BatallaBosque extends Phaser.Scene
         this.personajeDerecha = this.personajes.find((personaje)=>{
             return personaje.tipo === 'vikingo'
         })
+        console.log(this.personajeIzquierda)
         // console.log(this.personajeDerecha.poderes)
 
         
@@ -93,9 +94,7 @@ export default class BatallaBosque extends Phaser.Scene
 
         // new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
         //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
-        this.scene.moveAbove('BatallaBosque', 'Ui')
-        this.scene.launch('Ui', this.personajes)
-
+        
         //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
         this.registry.events.on('ataca el samurai', ()=>{
             this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
@@ -111,9 +110,9 @@ export default class BatallaBosque extends Phaser.Scene
             // console.log(this.personajeDeDerecha.poderes)
         })
         // console.log(this.personajeDeIzquierda.sprite)
-
         
-
+        
+        
         this.registry.events.on('ataca el vikingo', ()=>{
             this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
         })
@@ -125,7 +124,9 @@ export default class BatallaBosque extends Phaser.Scene
             console.log('este aca es el boton')
         })
         console.log(this.personajeDeIzquierda.poderes[0].nombre)
-
+        
+        this.scene.moveAbove('BatallaBosque', 'Ui')
+        this.scene.launch('Ui', this.personajes)
 
     }
 
@@ -135,7 +136,8 @@ export default class BatallaBosque extends Phaser.Scene
             //GANO EL VIKINGO
             let idSiguienteEscena = 3
             this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha];
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')
@@ -145,7 +147,8 @@ export default class BatallaBosque extends Phaser.Scene
             //GANO EL SAMURAI
             let idSiguienteEscena = 5
             this.personajeDeIzquierda.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')

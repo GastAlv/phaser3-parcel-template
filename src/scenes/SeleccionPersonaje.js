@@ -1,9 +1,9 @@
 
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { sharedInstance as events } from './EventCenter'
-import { convertirClase } from "../js/Personaje";
-import VictoriaSamurai from "./VictoriaSamurai";
+// import { convertirClase } from "../js/Personaje";
+// import { sharedInstance } from "./EventCenter";
+// import { peonVikingo } from "../js/Personaje";
 
 export default class SeleccionPersonaje extends Phaser.Scene
 {
@@ -20,7 +20,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
     peleadores = [];
     personajesActuales = [];
     listMuertos = [];
-    primerEscena = true
+    primerEscena = true;
     
     
 
@@ -31,6 +31,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         super('SeleccionPersonaje')
     }
     init(data){
+        // console.log(peonVikingo)
         this.actualizacionPersonajes = data.personaje
         this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena)=> {
             this.primerEscena = false;
@@ -46,24 +47,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
 
             // lista para filtrar al personaje vivo
 
-            this.peleadores = personajes.filter((personaje)=>{
-                return personaje.estaVivo === true
-            })
-            console.log(this.peleadores)
-            // this.peleadores = [new SistemaClaseObjeto({clase:this.peleadores})]
-            this.peleadores = [convertirClase(this.peleadores)]
-
-            if(this.listMuertos.length === 5)
-            {
-                if(this.peleadores[0].tipo === 'samurai')
-                {
-                    this.scene.start('VictoriaSamurai')
-                } else {
-                    this.scene.start('VictoriaVikingo')
-                }                               
-
-            }
-
+            this.idVivo = personajes.filter((personaje)=>{return personaje.estaVivo === true})
+            this.peleadores = this.arrayCompleto.filter((personaje)=>{return personaje.id === this.idVivo[0].id});
             console.log(this.peleadores)
         });
     }
@@ -78,7 +63,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             vida: 100,
             sprite: 'personajePeonVikingo',
             poderes: [
-                {nombre: 'peonVikingoAtaque', dano: 20, velocidad: 10},
+                {nombre: 'ataqueRapidoPeonVikingo', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
@@ -90,7 +75,6 @@ export default class SeleccionPersonaje extends Phaser.Scene
             estaVivo: true,
             id: 1
         };
-
         this.#vikingoCaballo = {
             vida: 100,
             sprite: 'personajeCaballoVikingo',
@@ -128,7 +112,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             vida: 100,
             sprite: 'personajePeonSamurai',
             poderes: [
-                {nombre: 'peonSamuraiAtaque', dano: 20, velocidad: 10},
+                {nombre: 'ataqueRapidoPeonSamurai', dano: 20, velocidad: 10},
                 {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
                 {nombre: 'gritoDeGuerra', dano: 0.2},
                 {nombre: 'momentoHisteria', dano: 0.5}
@@ -181,9 +165,12 @@ export default class SeleccionPersonaje extends Phaser.Scene
         
         this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
         this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
-    }
-    update(){ 
 
+
+        this.arrayCompleto = [this.#vikingoPeon, this.#vikingoCaballo, this.#vikingoReina, this.#samuraiPeon, this.#samuraiCaballo, this.#samuraiReina];
+
+    }
+    update(){
         if(this.botonListo1 && this.botonListo2 === true)
         {
             this.botonListo1 = false
@@ -234,9 +221,20 @@ export default class SeleccionPersonaje extends Phaser.Scene
                     }
                 }
         }
+        if(this.listMuertos.length === 5)
+            {
+                if(this.peleadores[0].tipo === 'samurai')
+                {
+                    this.scene.start('VictoriaSamurai')
+                } else {
+                    this.scene.start('VictoriaVikingo')
+                }                               
+
+            }
         //logica para cambiar la escena que inicia se crea un indice con una key que pertenece a cada escena/escenario, se le pasa el id que recibe el evento escucha en seleccion(esta misma escena),
         //se envio desde la escena del combate anterior hasta el evento
            
     }
+    
 }
 

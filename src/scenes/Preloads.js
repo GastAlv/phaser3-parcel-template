@@ -20,11 +20,6 @@ export default class Preloads extends Phaser.Scene
         this.load.image('escenarioBosque', 'assets/images/escenarioBosque.png')
         this.load.image('escenarioPuente', 'assets/images/escenarioPuente.png');
         this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png');
-        this.load.image('escenarioCosta', 'assets/images/escenarioCosta.png');
-        this.load.image('escenarioCastillo', 'assets/images/escenarioCastillo.png');
-
-        this.load.image('victoriaVikingo', 'assets/images/victoriaVikingo.png');
-        this.load.image('victoriaSamurai', 'assets/images/victoriaSamurai.png');
 
         //SPRITES
         this.load.image('seleccionPeonSamurai', 'assets/images/spPeonSamurai.png')
@@ -42,17 +37,21 @@ export default class Preloads extends Phaser.Scene
         this.load.image('interfaz', 'assets/interfaz/interfaz.png')
         this.load.image('botonAtaque', 'assets/interfaz/botonAtaque.png')
 
+        this.load.image('block', 'assets/interfaz/cursor.png')
+
+
 
         // SPRITESHEET
         //this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeAtaques.png', { frameWidth: 420, frameHeight: 430 });
         this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaque2', 'assets/interfaz/botonesDeHabilidades2.png', { frameWidth: 100, frameHeight: 100});
+
         this.load.spritesheet('botonesAtaquePeon', 'assets/interfaz/botonesDeHabilidadesPeon.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaqueCaballo', 'assets/interfaz/botonesDeHabilidadesCaballo.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaqueReyna', 'assets/interfaz/botonesDeHabilidadesReyna.png', { frameWidth: 100, frameHeight: 100});
 
 
-        //SPRITE SHEET DE PERSONAJES Y ANIMACIONES
+
 
         this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 164, frameHeight: 140}); 
 
@@ -69,13 +68,13 @@ export default class Preloads extends Phaser.Scene
 
     create(){
         this.anims.create({
-            key: 'peonSamuraiAtaque',
+            key: 'ataqueRapidoPeonSamurai',
             frames: this.anims.generateFrameNames('personajePeonSamurai',{frames:[0,1,2,3, 4, 5, 6, 7, 0]}),
             frameRate: 10,
             repeat: 0
         });
         this.anims.create({
-            key: 'peonVikingoAtaque',
+            key: 'ataqueRapidoPeonVikingo',
             frames: this.anims.generateFrameNumbers('personajePeonVikingo', { frames:[0,1,2,3, 4, 5,0] }),
             frameRate: 8,
             repeat: 0

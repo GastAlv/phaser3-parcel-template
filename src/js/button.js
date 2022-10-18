@@ -77,12 +77,36 @@ export class Button
     }
 }
 
-export class BotonHabilidades  {
+export class BotonHabilidades extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, callback, indexDeSprite){
+        super(scene, x, y, texture, callback)
         this.img = scene.add.image(x, y, texture, indexDeSprite)
         .setInteractive({ useHandCursor: true })
         .on("pointerdown", () => callback())
         .on("pointerover", ()=> this.img.setScale(1 + 0.08))
         .on("pointerout", ()=> this.img.setScale(1))
     }
+    desactivarEntrada(){
+        this.img.disableInteractive()
+        this.img.setTint(0xFF0000)
+    }
+    activarEntrada(){
+        this.img.setInteractive({ useHandCursor: true })
+        this.img.clearTint()
+    }
 }
+// export class Temporizador extends Button{
+//     constructor(scene, x, y, texture, text, size, callback, scale, objeto = null){
+//         super(scene, x, y,text, size)
+
+//         this.texto = this.add.text(500,500, 'temporizador Samurai')
+//         this. = this.tiempo = this.add.text(690,500, this.numero)
+//     }
+// }
+
+// class ManagerTimeRanges{
+//     constructor(props){
+//         const {} = props
+
+//     }
+// }

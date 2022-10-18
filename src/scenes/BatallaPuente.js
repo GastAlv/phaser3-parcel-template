@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { Personaje } from "../js/Personaje";
-import Poder from "../js/Poderes";
+import { convertirClase, Personaje } from "../js/Personaje";
+// import Poder from "../js/Poderes";
 
 export default class BatallaPuente extends Phaser.Scene
 {
@@ -154,7 +154,8 @@ export default class BatallaPuente extends Phaser.Scene
             //GANO EL VIKINGO
             let idSiguienteEscena = 2
             this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
+            //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')
             this.scene.stop('Ui')
@@ -163,7 +164,8 @@ export default class BatallaPuente extends Phaser.Scene
             //GANO EL SAMURAI
             let idSiguienteEscena = 4
             this.personajeDeIzquierda.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.start('SeleccionPersonaje')
             this.scene.stop('Ui')

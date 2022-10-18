@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import Button from '../js/button';
+import {Button} from '../js/button';
 
 
 // Manejador de eventos centralizados para comunicacion de componentes
@@ -30,7 +30,7 @@ export default class VictoriaSamurai extends Phaser.Scene
         victoriaSamurai.setScale(1.25)
 
 
-        // const botonVolver = new Button(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
+        new Button(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
 
 
     }
