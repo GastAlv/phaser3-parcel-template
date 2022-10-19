@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+import { sharedInstance } from "../scenes/EventCenter";
 
 
 // export class Button
@@ -54,7 +55,7 @@ loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 
 export class Button
 {
-    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null){
+    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null, eventoHover = null, eventoOut = null){
         
         this.obj = objeto
         this.scale = scale;
@@ -64,8 +65,8 @@ export class Button
         .setInteractive({ useHandCursor: true })
         .setScale(scale)
         .on("pointerdown", () => callback())
-        .on("pointerover", ()=> this.img.setScale(scale - 0.02))
-        .on("pointerout", ()=> this.img.setScale(scale))
+        .on("pointerover", ()=> {this.img.setScale(scale - 0.02), sharedInstance.emit(eventoHover, texture)})
+        .on("pointerout", ()=> {this.img.setScale(scale), sharedInstance.emit(eventoOut)})
         this.txt = scene.add.text(0, 0, text, {fontSize: size})
         .setOrigin(0.5)
         .setStyle({fontFamily: 'asian'})

@@ -8,6 +8,9 @@ export default class Ui extends Phaser.Scene
     turnoDerecha;
     turnoIzquierda;
     block;
+    cursors;
+    buttons = [];
+	selectedButtonIndex = 0;
     
 	constructor()
 	{
@@ -25,6 +28,8 @@ export default class Ui extends Phaser.Scene
             return personaje.tipo === 'vikingo'
         });
         // console.log(this.personajeDerecha.poderes)
+        this.enterBase = this.input.keyboard;
+        this.enter = this.enterBase.addKey(13)
         
     }
     preload(){
@@ -56,8 +61,35 @@ export default class Ui extends Phaser.Scene
         this.botonIzquierda3  = new BotonHabilidades(this, 180, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('potencia ataque samurai'), this.registry.events.emit('temporizador derecha'), clearInterval(this.intervalo)}, 2);
 
         this.botonIzquierda4 = new BotonHabilidades(this, 300, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('activa armadura samurai'), this.registry.events.emit('temporizador derecha'), clearInterval(this.intervalo)}, 3);
-        
-    
+        this.buttons.push(this.botonIzquierda1)
+        this.buttons.push(this.botonIzquierda2)
+        this.buttons.push(this.botonIzquierda3)
+        this.buttons.push(this.botonIzquierda4)
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        this.botonIzquierda1.on('selected', () => {
+            this.registry.events.emit('ataca el samurai');
+            this.registry.events.emit('temporizador derecha');
+            clearInterval(this.intervalo);
+        })
+        this.botonIzquierda2.on('selected', () => {
+            this.registry.events.emit('ataca el samurai2')
+            this.registry.events.emit('temporizador derecha')
+            clearInterval(this.intervalo)
+        })
+        this.botonIzquierda3.on('selected', () => {
+            this.registry.events.emit('potencia ataque samurai')
+            this.registry.events.emit('temporizador derecha')
+            clearInterval(this.intervalo)
+        })
+        this.botonIzquierda4.on('selected', () => {
+            this.registry.events.emit('activa armadura samurai')
+            this.registry.events.emit('temporizador derecha')
+            clearInterval(this.intervalo)
+        })
 
         this.botonDerecha1  = new BotonHabilidades(this, 1100, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('ataca el vikingo'), this.registry.events.emit('temporizador izquierda'), clearInterval(this.intervalo)}, 4);
 
@@ -85,6 +117,7 @@ export default class Ui extends Phaser.Scene
             this.vidaBarIzquierda.width = vida * this.vidaIzquierdaWidht / 100;
         });
         //---------------------------------------------------------------------
+        this.buttonSelector = this.add.image(180, 525, 'block')//.setOrigin(0).body.allowGravity = false;
         //Eventos que Activan los temporizadores
         this.registry.events.on('temporizador izquierda',()=>{
             this.turnoDerecha = true;
@@ -108,9 +141,11 @@ export default class Ui extends Phaser.Scene
         //Evalu quien sigue
         this.registry.events.on('quien sigue',()=>{
             console.log('quien sigue');
-            (this.turnoDerecha) ? this.registry.events.emit('temporizador derecha') : this.registry.events.emit('temporizador izquierda');
+            if (this.turnoDerecha){
+                this.registry.events.emit('temporizador derecha')
+            }else {
+                this.registry.events.emit('temporizador izquierda');}
         });
-
         //Evalua quien empieza
         if (this.personajeDerecha.velocidad > this.personajeIzquierda.velocidad){
             this.turnoDerecha = true;
@@ -122,7 +157,12 @@ export default class Ui extends Phaser.Scene
             this.registry.events.emit('quien sigue')
         }
 
-        this.block = this.physics.add.image(180, 525, 'block').setOrigin(0).body.allowGravity = false;
+        this.selectButton(0)
+
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.botonIzquierda1.off('selected')
+            // ...
+        })
 
     }
 
@@ -138,25 +178,36 @@ export default class Ui extends Phaser.Scene
         this.graphics.clear();
         this.graphics.fillRectShape(this.vidaBarDerecha);
         this.graphics.fillRectShape(this.vidaBarIzquierda);
-
-        if (this.cursors.left.isDown)
-        {
-            this.block.setVelocityX(-100)
+        //controles con las flechitas
+        // const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
+		// const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down)
+        // const leftJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.left)
+		// const rightJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.right)
+		// const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space)
+        //controles con W-A-S-D
+		const upJustPressed = Phaser.Input.Keyboard.JustDown(this.keyW)
+		const downJustPressed = Phaser.Input.Keyboard.JustDown(this.keyS)
+        const leftJustPressed = Phaser.Input.Keyboard.JustDown(this.keyA)
+		const rightJustPressed = Phaser.Input.Keyboard.JustDown(this.keyD)
+		const enterJustPressed = Phaser.Input.Keyboard.JustDown(this.enter)
+		if (upJustPressed)
+		{
+			this.selectNextButton(-2)
+		}
+		else if (downJustPressed)
+		{
+			this.selectNextButton(2)
+		}
+		else if (enterJustPressed)
+		{
+			this.confirmSelection()
+		}
+        else if(leftJustPressed){
+            this.selectNextButton(-1)
         }
-        else if (this.cursors.right.isDown)
-        {
-            this.block.setVelocityX(100)
+        else if(rightJustPressed){
+            this.selectNextButton(1)
         }
-        if (this.cursors.up.isDown)
-        {
-            this.block.setVelocityY(-100)
-        }
-        else if (this.cursors.down.isDown)
-        {
-            this.block.setVelocityY(100)
-        }
-
-
     }
 
     Temporizador(){
@@ -196,5 +247,48 @@ export default class Ui extends Phaser.Scene
             this.botonDerecha4.activarEntrada()
         }
         
+    }
+    selectButton(index)
+    {
+        const currentButton = this.buttons[this.selectedButtonIndex]
+
+        // set the current selected button to a white tint
+        currentButton.setTint(0xffffff)
+
+        const button = this.buttons[index]
+
+        // set the newly selected button to a green tint
+        button.setTint(0x66ff7f)
+
+        // move the hand cursor to the right edge
+        this.buttonSelector.x = button.x + button.displayWidth * 0.5
+        this.buttonSelector.y = button.y + 10
+
+        // store the new selected index
+        this.selectedButtonIndex = index
+    }
+    selectNextButton(change = 1)
+    {
+        let index = this.selectedButtonIndex + change
+
+        // wrap the index to the front or end of array
+        if (index >= this.buttons.length)
+        {
+            index = 0
+        }
+        else if (index < 0)
+        {
+            index = this.buttons.length - 1
+        }
+
+        this.selectButton(index)
+    }
+    confirmSelection()
+    {
+        // get the currently selected button
+        const button = this.buttons[this.selectedButtonIndex]
+
+        // emit the 'selected' event
+        button.emit('selected')
     }
 }

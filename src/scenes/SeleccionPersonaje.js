@@ -1,6 +1,7 @@
 
 import Phaser from "phaser";
 import { Button } from "../js/button";
+import { sharedInstance } from "./EventCenter";
 // import { convertirClase } from "../js/Personaje";
 // import { sharedInstance } from "./EventCenter";
 // import { peonVikingo } from "../js/Personaje";
@@ -21,9 +22,9 @@ export default class SeleccionPersonaje extends Phaser.Scene
     personajesActuales = [];
     listMuertos = [];
     primerEscena = true;
-    
-    
 
+    zoomSeleccionDerecha;
+    zoomSeleccionIzquierda;
     actualizarPersonajes = false;
     muerto = 0;
 
@@ -156,21 +157,34 @@ export default class SeleccionPersonaje extends Phaser.Scene
             estaVivo: true,
             id: 33
         };
-        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon)
 
-        this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo)
-        this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.botonReinaVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoReina)
-
-        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.botonPeonSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiPeon)
+        this.zoomSeleccionIzquierda = this.add.image(400, 200, this.spriteI).setScale(2)
         
-        this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo)
-        this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina)
+        this.zoomSeleccionDerecha = this.add.image(900, 200, this.spriteD).setScale(2)
+
+        sharedInstance.on('zoom seleccion izquierda', (sprite)=>{
+            this.spriteI = (sprite + 'Zoom')
+        });
+        sharedInstance.on('zoom seleccion derecha', (sprite)=>{
+            this.spriteD = (sprite + 'Zoom')
+        });
+        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon, 'zoom seleccion derecha', 'resetear derecha')
+
+        this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo, 'zoom seleccion derecha', 'resetear derecha')
+        this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.botonReinaVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoReina, 'zoom seleccion derecha', 'resetear derecha')
+
+        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.botonPeonSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiPeon, 'zoom seleccion izquierda', 'resetear izquierda')
+        
+        this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo, 'zoom seleccion izquierda', 'resetear izquierda')
+        this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina, 'zoom seleccion izquierda', 'resetear izquierda')
 
 
         this.arrayCompleto = [this.#vikingoPeon, this.#vikingoCaballo, this.#vikingoReina, this.#samuraiPeon, this.#samuraiCaballo, this.#samuraiReina];
 
     }
     update(){
+        this.zoomSeleccionDerecha.setTexture(this.spriteD)
+        this.zoomSeleccionIzquierda.setTexture(this.spriteI)
         if(this.botonListo1 && this.botonListo2 === true)
         {
             this.botonListo1 = false

@@ -29,6 +29,13 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionReinaSamurai', 'assets/images/spReinaSamurai.png')
         this.load.image('seleccionReinaVikingo', 'assets/images/spReinaVikingo.png')
 
+        this.load.image('seleccionPeonSamuraiZoom', 'assets/interfaz/spzoomPeonSamurai.png')
+        this.load.image('seleccionPeonVikingoZoom', 'assets/interfaz/spzoomPeonVikingo.png')
+        this.load.image('seleccionCaballoSamuraiZoom', 'assets/interfaz/spzoomCaballoSamurai.png')
+        this.load.image('seleccionCaballoVikingoZoom', 'assets/interfaz/spzoomCaballoVikingo.png')
+        this.load.image('seleccionReinaSamuraiZoom', 'assets/interfaz/spzoomReinaSamurai.png')
+        this.load.image('seleccionReinaVikingoZoom', 'assets/interfaz/spzoomReinaVikingo.png')
+
         // Interfaz
         this.load.image('botonMarco', 'assets/interfaz/botonMarco.png');
         this.load.image('botonVolver', 'assets/interfaz/botonVolver.png');
