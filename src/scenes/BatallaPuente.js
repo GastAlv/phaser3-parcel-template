@@ -70,48 +70,39 @@ export default class BatallaPuente extends Phaser.Scene
             tipo:  this.personajeDerecha.tipo,
             id:  this.personajeDerecha.id
         })
-        console.log(this.personajeDeDerecha.vida)
+        this.personajeDeDerecha.poderes[0].dano = 1
+        console.log(this.personajeDeDerecha)
 
-        // this.poder1 = new Habilidades(this.personajeDeIzquierda, this.personajeDeIzquierda.sprite, this.personajeDeDerecha)
         
-        this.registry.events.on('ataca el samurai', ()=>{
-            // escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo)
-            (this.personajeDeIzquierda.poderes[0].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
-            (this.personajeDeIzquierda.poderes[0].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
-            (this.personajeDeIzquierda.poderes[0].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
-            (this.personajeDeIzquierda.poderes[0].tipo === 1)? this.personajeDeIzquierda.robarVida():null
+        this.registry.events.on('Samurai poder1', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha)
+            console.log(this.personajeDeIzquierda.poderes[0])
         })
-        this.registry.events.on('ataca el samurai2', ()=>{
-            (this.personajeDeIzquierda.poderes[1].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
-            (this.personajeDeIzquierda.poderes[1].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
-            (this.personajeDeIzquierda.poderes[1].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
-            (this.personajeDeIzquierda.poderes[1].tipo === 1)? this.personajeDeIzquierda.robarVida():null
+        this.registry.events.on('Samurai poder2', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[1].tipo, 1, this.personajeDeIzquierda, this.personajeDeDerecha)
+            console.log(this.personajeDeIzquierda.poderes[1])
         })
-        this.registry.events.on('potencia ataque samurai', ()=>{
-            (this.personajeDeIzquierda.poderes[2].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
-            (this.personajeDeIzquierda.poderes[2].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
-            (this.personajeDeIzquierda.poderes[2].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
-            (this.personajeDeIzquierda.poderes[2].tipo === 1)? this.personajeDeIzquierda.robarVida():null
+        this.registry.events.on('Samurai poder3', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[2].tipo, 2, this.personajeDeIzquierda, this.personajeDeDerecha)
+            console.log(this.personajeDeIzquierda.poderes[2])
         })
-        this.registry.events.on('activa armadura samurai', ()=>{
-            (this.personajeDeIzquierda.poderes[3].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
-            (this.personajeDeIzquierda.poderes[3].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
-            (this.personajeDeIzquierda.poderes[3].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
-            (this.personajeDeIzquierda.poderes[3].tipo === 1)? this.personajeDeIzquierda.robarVida():null
+        this.registry.events.on('Samurai poder4', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
+            console.log(this.personajeDeIzquierda.poderes[3])
         })
 
         
-        // this.poder2 = new Habilidades(this.personajeDeDerecha, this.personajeDeDerecha.sprite, this.personajeDeIzquierda)
-        
-        this.registry.events.on('ataca el vikingo', ()=>{
-            (this.personajeDeDerecha.poderes[0].tipo === 1)? this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda):null;
+        this.registry.events.on('Vikingo poder1', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
-        this.registry.events.on('ataca el vikingo2', ()=>{
-            (this.personajeDeDerecha.poderes[1].tipo === 2)? this.personajeDeDerecha.doparHabilidad(1, this.personajeDeDerecha.poderes[1].dano):null;
+        this.registry.events.on('Vikingo poder2', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[1].tipo, 1, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
-        this.registry.events.on('potencia ataque vikingo', ()=>{
+        this.registry.events.on('Vikingo poder3', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[2].tipo, 2, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
-        this.registry.events.on('activa armadura vikingo', ()=>{
+        this.registry.events.on('Vikingo poder4', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
 
         this.scene.moveAbove('BatallaPuente', 'Ui')
