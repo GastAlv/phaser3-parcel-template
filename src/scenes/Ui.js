@@ -11,6 +11,8 @@ export default class Ui extends Phaser.Scene
     cursors;
     buttons = [];
 	selectedButtonIndex = 0;
+    contar;
+    turnoAtacar = 0;
     
 	constructor()
 	{
@@ -22,10 +24,10 @@ export default class Ui extends Phaser.Scene
         this.jugadores = data;
         // console.log(this.jugadores)
         this.personajeIzquierda = this.jugadores.find((personaje)=>{
-            return personaje.tipo === 'samurai'
+            return personaje.tipo === 'Samurai'
         });
         this.personajeDerecha = this.jugadores.find((personaje)=>{
-            return personaje.tipo === 'vikingo'
+            return personaje.tipo === 'Vikingo'
         });
         // console.log(this.personajeDerecha.poderes)
         this.enterBase = this.input.keyboard;
@@ -103,30 +105,59 @@ export default class Ui extends Phaser.Scene
 
         //Cremos el Temporizadores
         this.tituloTemporizador = this.add.text(500,500, '')
-        this.tiempo = this.add.text(690,500, this.numero)   
+        this.tiempo = this.add.text(690,500, this.numero)
         //-------------------------------------------------
         //actualizan las barras de vida
         sharedInstance.on('actualiza Vida Vikingo', (vida)=>{
-            this.actualVidaDerecha = vida
+            this.actualVidaIzquierdaTexto = vida
             this.vidaBarDerecha.width = this.reglaDeTres(vida, this.vidaDerechaWidht);
             console.log(vida)
             console.log('llego el mensaje', vida)
         });
         sharedInstance.on('actualiza Vida Samurai', (vida)=>{
-            //this.actualVidaIzquierda = vida
+            this.actualVidaDerechaTexto = vida
             this.vidaBarIzquierda.width = vida * this.vidaIzquierdaWidht / 100;
         });
         //---------------------------------------------------------------------
-        this.buttonSelector = this.add.image(180, 525, 'block')//.setOrigin(0).body.allowGravity = false;
+        this.buttonSelector = this.add.image(180, 525, 'block').setScale(.25)//.setOrigin(0).body.allowGravity = false;
+
+
+        sharedInstance.on('turno vigente', (dano) => {
+            this.contar = true
+            this.dano = dano
+        })
+
         //Eventos que Activan los temporizadores
         this.registry.events.on('temporizador izquierda',()=>{
-            this.turnoDerecha = true;
-            this.turnoIzquierda = false;
-            this.jugadorActual = 'turno Samurai'
-            this.tituloTemporizador.setText(this.jugadorActual)
-            this.Temporizador()
-            this.desbloquearPad('izquierda')
-            this.bloquearPad('derecha')
+            //Este if suma el primer turno y avanza al siquiente turno para el enemigo ya que lo vuelve true
+            if(this.contar){
+                this.turnoAtacar++;
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
+            }
+            //Este if realiza el ataque cuando pasaron 2 turnos
+            if(this.turnoAtacar === 2){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
+                sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
+            }
+            //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
+            if(this.turnoAtacar === 3){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
+                this.turnoAtacar = 0;
+                this.contar = null
+            }
+            //Este if es el combate normal
+            if(this.contar !== true){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
+                this.jugadorActual = 'turno Samurai'
+                this.tituloTemporizador.setText(this.jugadorActual)
+                this.Temporizador()
+                this.desbloquearPad('izquierda')
+                this.bloquearPad('derecha')
+            }
         });
         this.registry.events.on('temporizador derecha', ()=>{
             this.turnoDerecha = false;
@@ -144,7 +175,8 @@ export default class Ui extends Phaser.Scene
             if (this.turnoDerecha){
                 this.registry.events.emit('temporizador derecha')
             }else {
-                this.registry.events.emit('temporizador izquierda');}
+                this.registry.events.emit('temporizador izquierda');
+                }
         });
         //Evalua quien empieza
         if (this.personajeDerecha.velocidad > this.personajeIzquierda.velocidad){
@@ -156,28 +188,31 @@ export default class Ui extends Phaser.Scene
             this.turnoIzquierda = true;
             this.registry.events.emit('quien sigue')
         }
-
         this.selectButton(0)
 
-        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            this.botonIzquierda1.off('selected')
-            // ...
-        })
-
+        //Vida que se actualiza
+        this.textoVidaDerecha = this.add.text(200, 50, `${this.personajeDerecha.vida}`)
+        this.textoVidaIzquierda = this.add.text(1050, 50,  `${this.personajeIzquierda.vida}`)
+        //Vida total sin actualizarce
+        this.textoVidaDerechaTotal = this.add.text(170, 50, `${this.personajeDerecha.vida}/` )
+        this.textoVidaIzquierdaTotal = this.add.text(1020, 50, `${this.personajeIzquierda.vida}/`)
     }
-
     update(){
-        // this.block.setVelocity(0);
         //Actualizar numero de temporizador
         this.tiempo.setText(this.numero)
         
-        if(this.numero === 11){
+        if(this.numero === 11 || this.numero > 12){
             clearInterval(this.intervalo)
             this.registry.events.emit('quien sigue')
         }
         this.graphics.clear();
         this.graphics.fillRectShape(this.vidaBarDerecha);
         this.graphics.fillRectShape(this.vidaBarIzquierda);
+        
+        this.textoVidaDerecha.setText(this.actualVidaDerechaTexto)
+        this.textoVidaIzquierda.setText(this.actualVidaIzquierdaTexto)
+
+
         //controles con las flechitas
         // const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
 		// const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down)
@@ -233,7 +268,6 @@ export default class Ui extends Phaser.Scene
         }
         
     }
-
     desbloquearPad(cual){
         if(cual === 'izquierda'){
             this.botonIzquierda1.activarEntrada()

@@ -46,12 +46,38 @@ export default class Preloads extends Phaser.Scene
 
         this.load.image('block', 'assets/interfaz/cursor.png')
 
+        //spritesheetInterface
+        this.load.spritesheet('clock', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 99.16, frameHeight: 100});
+        this.anims.create({
+            key: 'clockVikingo',
+            frames: this.anims.generateFrameNames('clock',{frames:[0,1,2]}),
+            frameRate: 5,
+            repeat: 0,
+            duration:4000
+        });
+        this.anims.create({
+            key: 'clockSamurai',
+            frames: this.anims.generateFrameNames('clock',{frames:[3,4]}),
+            frameRate: 5,
+            repeat: 0,
+            duration:4000
+        });
+        this.load.spritesheet('aaa', 'assets/interfaz/prie.png', { frameWidth: 100, frameHeight: 100});
+        this.anims.create({
+            key: 'aaanimation',
+            frames: this.anims.generateFrameNames('aaa',{frames:[0,1,2,3]}),
+            frameRate: 10,
+            repeat: -1
+        });
+        
+
+
 
 
         // SPRITESHEET
         //this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeAtaques.png', { frameWidth: 420, frameHeight: 430 });
-        this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 100, frameHeight: 100});
-        this.load.spritesheet('botonesAtaque2', 'assets/interfaz/botonesDeHabilidades2.png', { frameWidth: 100, frameHeight: 100});
+        // this.load.spritesheet('botonesAtaque', 'assets/interfaz/botonesDeHabilidades.png', { frameWidth: 100, frameHeight: 100});
+        // this.load.spritesheet('botonesAtaque2', 'assets/interfaz/botonesDeHabilidades2.png', { frameWidth: 100, frameHeight: 100});
 
         this.load.spritesheet('botonesAtaquePeon', 'assets/interfaz/botonesDeHabilidadesPeon.png', { frameWidth: 100, frameHeight: 100});
         this.load.spritesheet('botonesAtaqueCaballo', 'assets/interfaz/botonesDeHabilidadesCaballo.png', { frameWidth: 100, frameHeight: 100});
@@ -87,25 +113,25 @@ export default class Preloads extends Phaser.Scene
             repeat: 0
         });
         this.anims.create({
-            key: 'reynaSamuraiAtaque',
+            key: 'ataqueRapidoReynaSamurai',
             frames: this.anims.generateFrameNumbers('personajeReynaSamurai', { frames:[0,1,2,3, 4, 5, 6, 0] }),
             frameRate: 10,
             repeat: 0
         });
         this.anims.create({
-            key: 'reynaVikingoAtaque',
+            key: 'ataqueRapidoReynaVikingo',
             frames: this.anims.generateFrameNumbers('personajeReynaVikingo', { frames:[0,1,2,3, 4, 0] }),
             frameRate: 10,
             repeat: 0
         });
         this.anims.create({
-            key: 'caballoVikingoAtaque',
+            key: 'ataqueRapidoCaballoVikingo',
             frames: this.anims.generateFrameNumbers('personajeCaballoVikingo', { frames:[0,1,2,3, 4, 5, 0] }),
             frameRate: 10,
             repeat: 0
         });
         this.anims.create({
-            key: 'caballoSamuraiAtaque',
+            key: 'ataqueRapidoCaballoSamurai',
             frames: this.anims.generateFrameNumbers('personajeCaballoSamurai', { frames:[0,1,2,3, 4, 5, 6, 0] }),
             frameRate: 10,
             repeat: 0

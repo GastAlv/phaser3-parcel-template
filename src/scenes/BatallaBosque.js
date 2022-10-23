@@ -24,10 +24,10 @@ export default class BatallaBosque extends Phaser.Scene
         // console.log(this.personajes[1] instanceof Object)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'samurai'
+            return personaje.tipo === 'Samurai'
         })
         this.personajeDerecha = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'vikingo'
+            return personaje.tipo === 'Vikingo'
         })
         console.log(this.personajeIzquierda)
         // console.log(this.personajeDerecha.poderes)
@@ -42,8 +42,8 @@ export default class BatallaBosque extends Phaser.Scene
         
         this.personajeDeIzquierda = new Personaje({
             scene: this,
-            x: this.personajeIzquierda.x,
-            y: this.personajeIzquierda.y,
+            x: 450,
+            y: 275,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,

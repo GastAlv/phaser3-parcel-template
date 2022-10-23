@@ -25,7 +25,8 @@
 	},
 	"dependencies": {
 		"matter": "^0.2.0",
-		"phaser": "^3.55.2"
+		"phaser": "^3.55.2",
+		"random-js": "^2.1.0"
 	},
 	"parcelCleanPaths": [
 		"dist"

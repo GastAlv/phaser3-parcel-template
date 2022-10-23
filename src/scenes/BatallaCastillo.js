@@ -20,10 +20,10 @@ export default class BatallaCastillo extends Phaser.Scene
         this.personajes = data.personajes
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'samurai'
+            return personaje.tipo === 'Samurai'
         })
         this.personajeDerecha = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'vikingo'
+            return personaje.tipo === 'Vikingo'
         })
     }  
     create() {
@@ -50,8 +50,8 @@ export default class BatallaCastillo extends Phaser.Scene
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
-            x: this.personajeDerecha.x,
-            y: this.personajeDerecha.y,
+            x: 750,
+            y: 270,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,

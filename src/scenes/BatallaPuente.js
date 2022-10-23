@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { convertirClase, Personaje } from "../js/Personaje";
+import { convertirClase, escuchaDeHabilidades, Personaje } from "../js/Personaje";
+import { Habilidades } from "../js/Personaje";
+import { sharedInstance } from "./EventCenter";
 // import Poder from "../js/Poderes";
 
 export default class BatallaPuente extends Phaser.Scene
@@ -18,12 +20,18 @@ export default class BatallaPuente extends Phaser.Scene
     init(data)
     {
         this.personajes = data.personajes
+        console.log(this.personajes)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'samurai'
+            return personaje.tipo == 'Samurai'
         })
         this.personajeDerecha = this.personajes.find((personaje)=>{
-            return personaje.tipo === 'vikingo'
+            return personaje.tipo == 'Vikingo'
+        })
+
+        sharedInstance.on('poderes Peon',()=>{
+            this.personajeDerechoPoder1 = this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
+            this.personajeDerechoPoder1 = this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
         })
     }  
     create() {
@@ -62,86 +70,49 @@ export default class BatallaPuente extends Phaser.Scene
             tipo:  this.personajeDerecha.tipo,
             id:  this.personajeDerecha.id
         })
+        console.log(this.personajeDeDerecha.vida)
 
-        // this.personajeizquierdapoder1 = new Poder({
-        //     nombre: this.personajeIzquierda.poderes[2].nombre,
-        //     dano:this.personajeIzquierda.poderes[2].dano
-        // })
-        // this.personajeizquierdapoder2 = new Poder({
-        //     nombre: this.personajeIzquierda.poderes[1].nombre,
-        //     dano:this.personajeIzquierda.poderes[1].dano
-        // })
-
-        // const peonAtaqueRapido = new Poder({
-        //     nombre: 'Ataque Rapido',
-        //     dano: 20,
-        //     tipo: 'damage'
-        // })
-
-        // const peonCuracion = new Poder({
-        //     nombre: 'Curacion',
-        //     dano: 30,
-        //     tipo: 'curacion'
-        // })
-        // this.personajeDeDerecha.agregarPoder(peonAtaqueRapido)
-        // this.personajeDeDerecha.agregarPoder(peonCuracion)
-
-        // this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
-        // this.personajeDeIzquierda.agregarPoder(peonCuracion)
-        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder1)
-        // this.personajeDeIzquierda.agregarPoder(this.personajeizquierdapoder2)
-        // console.log(this.personajeDeIzquierda.poderes)
-
+        // this.poder1 = new Habilidades(this.personajeDeIzquierda, this.personajeDeIzquierda.sprite, this.personajeDeDerecha)
         
-        
-        // new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
-        //     this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)}, 0.5)
-
-        // new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
-        //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
-
         this.registry.events.on('ataca el samurai', ()=>{
-            this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
-            // console.log(this.registry.events.emit('actualiza Vida Vikingo', this.personajeDeDerecha.vida))
-            // console.log(this.personajeDeDerecha.poderes[0].dano)
+            // escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo)
+            (this.personajeDeIzquierda.poderes[0].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
+            (this.personajeDeIzquierda.poderes[0].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
+            (this.personajeDeIzquierda.poderes[0].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
+            (this.personajeDeIzquierda.poderes[0].tipo === 1)? this.personajeDeIzquierda.robarVida():null
+        })
+        this.registry.events.on('ataca el samurai2', ()=>{
+            (this.personajeDeIzquierda.poderes[1].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
+            (this.personajeDeIzquierda.poderes[1].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
+            (this.personajeDeIzquierda.poderes[1].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
+            (this.personajeDeIzquierda.poderes[1].tipo === 1)? this.personajeDeIzquierda.robarVida():null
         })
         this.registry.events.on('potencia ataque samurai', ()=>{
-            this.personajeDeIzquierda.doparHabilidad(0, this.personajeDeIzquierda.poderes[2].dano)
-            // console.log(this.personajeDeDerecha.poderes)
+            (this.personajeDeIzquierda.poderes[2].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
+            (this.personajeDeIzquierda.poderes[2].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
+            (this.personajeDeIzquierda.poderes[2].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
+            (this.personajeDeIzquierda.poderes[2].tipo === 1)? this.personajeDeIzquierda.robarVida():null
         })
         this.registry.events.on('activa armadura samurai', ()=>{
-            this.personajeDeIzquierda.activarDefensa();
-            console.log('este aca es el boton')
-            // console.log(this.personajeDeDerecha.poderes)
+            (this.personajeDeIzquierda.poderes[3].tipo === 1)? this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha):null;
+            (this.personajeDeIzquierda.poderes[3].tipo === 2)? this.personajeDeIzquierda.doparHabilidad():null;
+            (this.personajeDeIzquierda.poderes[3].tipo === 3)? this.personajeDeIzquierda.activarDefensa():null;
+            (this.personajeDeIzquierda.poderes[3].tipo === 1)? this.personajeDeIzquierda.robarVida():null
         })
 
         
-
+        // this.poder2 = new Habilidades(this.personajeDeDerecha, this.personajeDeDerecha.sprite, this.personajeDeIzquierda)
+        
         this.registry.events.on('ataca el vikingo', ()=>{
-            // this.registry.events.emit('actualiza Vida Samurai', this.personajeDeIzquierda.vida)
-            this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
+            (this.personajeDeDerecha.poderes[0].tipo === 1)? this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda):null;
+        })
+        this.registry.events.on('ataca el vikingo2', ()=>{
+            (this.personajeDeDerecha.poderes[1].tipo === 2)? this.personajeDeDerecha.doparHabilidad(1, this.personajeDeDerecha.poderes[1].dano):null;
         })
         this.registry.events.on('potencia ataque vikingo', ()=>{
-            this.personajeDeDerecha.doparHabilidad(0, this.personajeDeDerecha.poderes[2].dano)
         })
         this.registry.events.on('activa armadura vikingo', ()=>{
-            this.personajeDeDerecha.activarDefensa();
-            console.log('este aca es el boton')
         })
-        // this.personajeDeDerecha.animarAtaque('peonSamuraiAtaque')
-
-
-        // this.personajeDeDerecha.animarAtaque('peonVikingoAtaque');
-        // this.anims.create({
-        //     key: 'peonVikingoAtaque',
-        //     frames: this.anims.generateFrameNumbers('personajePeonVikingo', { start: 0, end: 5 }),
-        //     frameRate: 10,
-        //     repeat: 1
-        // });
-
-        // this.image = this.add.image(500, 600, 'personajePeonVikingo', 0);
-        // image.anims.play('peonVikingoAtaque', true)
-        // this.add.sprite(500, 200, 'personajePeonVikingo').play('peonVikingoAtaque');
 
         this.scene.moveAbove('BatallaPuente', 'Ui')
         this.scene.launch('Ui', this.personajes)

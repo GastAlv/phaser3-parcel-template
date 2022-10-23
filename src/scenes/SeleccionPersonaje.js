@@ -1,6 +1,7 @@
 
 import Phaser from "phaser";
 import { Button } from "../js/button";
+import { CrearPersonaje } from "../js/Personaje";
 import { sharedInstance } from "./EventCenter";
 // import { convertirClase } from "../js/Personaje";
 // import { sharedInstance } from "./EventCenter";
@@ -32,14 +33,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
         super('SeleccionPersonaje')
     }
     init(data){
-        // console.log(peonVikingo)
         this.actualizacionPersonajes = data.personaje
+        
         this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena)=> {
             this.primerEscena = false;
             this.actualizarPersonajes = true
             this.cambiarEscena = true
             this.siguienteEscena = idSiguienteEscena
 
+            console.log(personajes)
             // lista para filtrar al personaje muerto
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
@@ -59,105 +61,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
         console.log("estas en seleccion:)")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
-        // this.add.image(500, 500, 'botonesAtaque', 2)
-        this.#vikingoPeon = {
-            vida: 100,
-            sprite: 'personajePeonVikingo',
-            poderes: [
-                {nombre: 'ataqueRapidoPeonVikingo', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaquePeon',
-            velocidad: 5,
-            defensa: false,
-            tipo: 'vikingo',
-            estaVivo: true,
-            id: 1
-        };
-        this.#vikingoCaballo = {
-            vida: 100,
-            sprite: 'personajeCaballoVikingo',
-            poderes: [
-                {nombre: 'caballoVikingoAtaque', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaqueCaballo',
-            velocidad: 8,
-            defensa: false,
-            tipo: 'vikingo',
-            estaVivo: true,
-            id: 2
-        };
-        this.#vikingoReina = {
-            vida: 100,
-            sprite: 'personajeReynaVikingo',
-            poderes: [
-                {nombre: 'reynaVikingoAtaque', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaqueReyna',
-            velocidad: 8,
-            defensa: false,
-            tipo: 'vikingo',
-            estaVivo: true,
-            id: 3
-        };
         
-        this.#samuraiPeon = {
-            vida: 100,
-            sprite: 'personajePeonSamurai',
-            poderes: [
-                {nombre: 'ataqueRapidoPeonSamurai', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaquePeon',
-            velocidad: 5,
-            defensa: false,
-            tipo: 'samurai',
-            estaVivo: true,
-            id: 11
-        };
-        this.#samuraiCaballo = {
-            vida: 100,
-            sprite: 'personajeCaballoSamurai',
-            poderes: [
-                {nombre: 'caballoSamuraiAtaque', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaqueCaballo',
-            velocidad: 8,
-            defensa: false,
-            tipo: 'samurai',
-            estaVivo: true,
-            id: 22
-        };
-        this.#samuraiReina = {
-            vida: 100,
-            sprite: 'personajeReynaSamurai',
-            poderes: [
-                {nombre: 'reynaSamuraiAtaque', dano: 20, velocidad: 10},
-                {nombre: 'ataqueEstandar', dano: 30, velocidad: 6},
-                {nombre: 'gritoDeGuerra', dano: 0.2},
-                {nombre: 'momentoHisteria', dano: 0.5}
-            ],
-            spriteSheet:'botonesAtaqueReyna',
-            velocidad: 8,
-            defensa: false,
-            tipo: 'samurai',
-            estaVivo: true,
-            id: 33
-        };
-
+        this.#vikingoPeon = CrearPersonaje('Vikingo', 'Peon')
+        this.#vikingoCaballo = CrearPersonaje('Vikingo', 'Caballo')
+        this.#vikingoReina = CrearPersonaje('Vikingo', 'Reyna')
+        this.#samuraiPeon = CrearPersonaje('Samurai', 'Peon')
+        this.#samuraiCaballo = CrearPersonaje('Samurai', 'Caballo')
+        this.#samuraiReina = CrearPersonaje('Samurai', 'Reyna')
+        
+        
         this.zoomSeleccionIzquierda = this.add.image(400, 200, this.spriteI).setScale(2)
         
         this.zoomSeleccionDerecha = this.add.image(900, 200, this.spriteD).setScale(2)
@@ -168,19 +80,22 @@ export default class SeleccionPersonaje extends Phaser.Scene
         sharedInstance.on('zoom seleccion derecha', (sprite)=>{
             this.spriteD = (sprite + 'Zoom')
         });
-        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.botonPeonVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoPeon, 'zoom seleccion derecha', 'resetear derecha')
+        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.#vikingoPeon), this.botonListo1 = true}, 0.5, this.#vikingoPeon, 'zoom seleccion derecha', 'resetear derecha')
+        this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.#vikingoCaballo),  this.botonListo1 = true, console.log(this.peleadores)}, 0.5, this.#vikingoCaballo, 'zoom seleccion derecha', 'resetear derecha')
+        this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.#vikingoReina), this.botonListo1 = true}, 0.5, this.#vikingoReina, 'zoom seleccion derecha', 'resetear derecha')
 
-        this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.botonCaballoVikingo.obj),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo, 'zoom seleccion derecha', 'resetear derecha')
-        this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.botonReinaVikingo.obj), this.botonListo1 = true}, 0.5, this.#vikingoReina, 'zoom seleccion derecha', 'resetear derecha')
-
-        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.botonPeonSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiPeon, 'zoom seleccion izquierda', 'resetear izquierda')
-        
-        this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.botonCaballoSamurai.obj),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo, 'zoom seleccion izquierda', 'resetear izquierda')
-        this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.botonReinaSamurai.obj), this.botonListo2 = true}, 0.5, this.#samuraiReina, 'zoom seleccion izquierda', 'resetear izquierda')
+        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.#samuraiPeon),  this.botonListo2 = true}, 0.5, this.#samuraiPeon, 'zoom seleccion izquierda', 'resetear izquierda')
+        this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.#samuraiCaballo),  this.botonListo2 = true, console.log(this.peleadores)}, 0.5, this.#samuraiCaballo, 'zoom seleccion izquierda', 'resetear izquierda')
+        this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.#samuraiReina), this.botonListo2 = true}, 0.5, this.#samuraiReina, 'zoom seleccion izquierda', 'resetear izquierda')
 
 
         this.arrayCompleto = [this.#vikingoPeon, this.#vikingoCaballo, this.#vikingoReina, this.#samuraiPeon, this.#samuraiCaballo, this.#samuraiReina];
 
+        // this.reloj = this.add.sprite(500,500, 'clock', 0)
+        // this.reloj.play('clockSamurai')
+        // this.add.sprite(500,500, 'aaa', 0).play('aaanimation')
+
+        // this.add.sprite(500,500,'personajePeonVikingo',0).play('ataqueRapidoPeonVikingo')
     }
     update(){
         this.zoomSeleccionDerecha.setTexture(this.spriteD)
@@ -226,10 +141,10 @@ export default class SeleccionPersonaje extends Phaser.Scene
             for (let jugadorMuerto of this.listMuertos) {
                     let boton = indice[jugadorMuerto.id]
                     boton.desactivarEntrada()
-                    if(jugadorMuerto.tipo === 'vikingo'){
+                    if(jugadorMuerto.tipo === 'Vikingo'){
                         this.botonListo1 = false;
                         this.botonListo2 = true;
-                    }else if (jugadorMuerto.tipo === 'samurai'){
+                    }else if (jugadorMuerto.tipo === 'Samurai'){
                         this.botonListo1 = true;
                         this.botonListo2 = false;
                     }
@@ -244,7 +159,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                     this.scene.start('VictoriaVikingo')
                 }                               
 
-            }
+        }
         //logica para cambiar la escena que inicia se crea un indice con una key que pertenece a cada escena/escenario, se le pasa el id que recibe el evento escucha en seleccion(esta misma escena),
         //se envio desde la escena del combate anterior hasta el evento
            
