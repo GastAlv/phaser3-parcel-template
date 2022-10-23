@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { Personaje } from "../js/Personaje";
-import Poder from "../js/Poderes";
+import { Personaje, escuchaDeHabilidades} from "../js/Personaje";
 import { sharedInstance as events } from './EventCenter'
 
 export default class BatallaCiudad extends Phaser.Scene
@@ -63,59 +62,38 @@ export default class BatallaCiudad extends Phaser.Scene
             id:  this.personajeDerecha.id
         })
         
-
-        // const peonAtaqueRapido = new Poder({
-        //     nombre: 'Ataque Rapido',
-        //     dano: 60,
-        //     tipo: 'damage'
-        // })
-
-        // const peonCuracion = new Poder({
-        //     nombre: 'Curacion',
-        //     dano: 30,
-        //     tipo: 'curacion'
-        // })
-        // this.personajeDeDerecha.agregarPoder(peonAtaqueRapido)
-        // this.personajeDeDerecha.agregarPoder(peonCuracion)
-
-        // this.personajeDeIzquierda.agregarPoder(peonAtaqueRapido)
-        // this.personajeDeIzquierda.agregarPoder(peonCuracion)
-        
-        // new Button(this, 400, 600, 'botonMarco', 'ataca a el samurai', 50,  () => {
-        //     this.personajeDeDerecha.atacar(this.personajeDeDerecha, 0, this.personajeDeIzquierda)}, 0.5)
-
-        // new Button(this, 800, 600, 'botonMarco', 'ataca a el vikingo', 50,  () => {
-        //     this.personajeDeIzquierda.atacar(this.personajeDeIzquierda, 0, this.personajeDeDerecha)}, 0.5)
-
-        //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
-        this.registry.events.on('ataca el samurai', ()=>{
-            this.personajeDeIzquierda.atacar(0, this.personajeDeDerecha)
-            // console.log(this.personajeDeDerecha.poderes[0].dano)
+        this.registry.events.on('Samurai poder1', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha)
         })
-        this.registry.events.on('potencia ataque samurai', ()=>{
-            this.personajeDeIzquierda.doparHabilidad(0, this.personajeDeIzquierda.poderes[2].dano)
-            // console.log(this.personajeDeDerecha.poderes)
+        this.registry.events.on('Samurai poder2', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[1].tipo, 1, this.personajeDeIzquierda, this.personajeDeDerecha)
         })
-        this.registry.events.on('activa armadura samurai', ()=>{
-            this.personajeDeIzquierda.activarDefensa();
-            console.log('este aca es el boton')
-            // console.log(this.personajeDeDerecha.poderes)
+        this.registry.events.on('Samurai poder3', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[2].tipo, 2, this.personajeDeIzquierda, this.personajeDeDerecha)
+        })
+        this.registry.events.on('Samurai poder4', ()=>{
+            escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
         })
 
         
-
-        this.registry.events.on('ataca el vikingo', ()=>{
-            this.personajeDeDerecha.atacar(0, this.personajeDeIzquierda)
+        this.registry.events.on('Vikingo poder1', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
-        this.registry.events.on('potencia ataque vikingo', ()=>{
-            this.personajeDeDerecha.doparHabilidad(0, this.personajeDeDerecha.poderes[2].dano)
+        this.registry.events.on('Vikingo poder2', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[1].tipo, 1, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
-        this.registry.events.on('activa armadura vikingo', ()=>{
-            this.personajeDeDerecha.activarDefensa();
-            console.log('este aca es el boton')
+        this.registry.events.on('Vikingo poder3', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[2].tipo, 2, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
+        this.registry.events.on('Vikingo poder4', ()=>{
+            escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
+        })
+        
         this.scene.moveAbove('BatallaCiudad', 'Ui')
         this.scene.launch('Ui', this.personajes)
+        this.registry.events.emit('resetear Ui')
+        // this.registry.events.emit('quien empieza primero')
+        // this.registry.events.emit('primera actualizacion')
 
     }
 
@@ -127,8 +105,9 @@ export default class BatallaCiudad extends Phaser.Scene
             this.personajeDeDerecha.setGano(true)
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.start('SeleccionPersonaje')
             this.scene.stop('Ui')
+            this.scene.stop('BatallaCiudad')
+            this.scene.start('SeleccionPersonaje')
         }
         if(this.personajeDeDerecha.estaVivo === false){
             //GANO EL SAMURAI
@@ -136,8 +115,9 @@ export default class BatallaCiudad extends Phaser.Scene
             this.personajeDeIzquierda.setGano(true)
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.start('SeleccionPersonaje')
             this.scene.stop('Ui')
+            this.scene.stop('BatallaCiudad')
+            this.scene.start('SeleccionPersonaje')
         }
     }
 }

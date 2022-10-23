@@ -36,14 +36,22 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         })
 
         sharedInstance.on('sangrado 1',(dano, tipo)=>{
-            (tipo != this.tipo)?this.recibirDano(dano):null;
-            this.pintar(0x80008, 100, 300)
-            console.log('sangra el vikingo')
+            if(tipo != this.tipo){
+                this.recibirDano(dano)
+                this.pintar(0xbca0dc, 100, 300)
+                console.log('sangra el vikingo')
+            }
+            // (tipo != this.tipo)?this.recibirDano(dano):null;
+            // this.pintar(0xbca0dc, 100, 300)
         })
         sharedInstance.on('sangrado 2',(dano, tipo)=>{
-            (tipo != this.tipo)?this.recibirDano(dano):null;
-            this.pintar(0x80008, 100, 300)
-            console.log('sangra el samurai')
+            if(tipo != this.tipo){
+                this.recibirDano(dano)
+                this.pintar(0xbca0dc, 100, 300)
+                console.log('sangra el samurai')
+            }
+            // (tipo != this.tipo)?this.recibirDano(dano):null;
+            // this.pintar(0xbca0dc, 100, 300)
         })
     }
     setDefensa(bool){
@@ -56,10 +64,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.poderes[indexAModificar].dano = valor
     }
     atacar(indexDelDano, enemigo){
-
         enemigo.recibirDano(this.poderes[indexDelDano].dano, this)
-        // this.key = this.poderes[indexDelDano].nombre
-        // console.log(this.poderes[indexDelDano].dano)
     }
     cargarAtaque(indexDelDano)
     {
