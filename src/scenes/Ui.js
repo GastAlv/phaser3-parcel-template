@@ -130,10 +130,12 @@ export default class Ui extends Phaser.Scene
         //---------------------------------------------------------------------
         //cursor para el pad de los samurais
         // this.buttonSelector = this.add.image(180, 525, 'block').setScale(.25)//.setOrigin(0).body.allowGravity = false;
+       
         sharedInstance.on('turno vigente', (dano) => {
-            this.contar1 = true
+        (this.tipo === 'Samurai')?this.contar1 = true:this.contar2 = true;
             this.dano = dano
         })
+       
         //Eventos que Activan los temporizadores
         this.registry.events.on('temporizador izquierda',()=>{
             this.turnoDerecha = true;
@@ -141,6 +143,7 @@ export default class Ui extends Phaser.Scene
             //Este if suma el primer turno y avanza al siquiente turno para el enemigo ya que lo vuelve true
             if(this.contar1){
                 this.turnoAtacar++;
+                console.log('SUMA Y PASA AL SIGUIENTE TURNO', this.turnoAtacar);
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
             if(this.turnoAtacar === 2){
@@ -149,7 +152,7 @@ export default class Ui extends Phaser.Scene
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3){
                 this.turnoAtacar = 0;
-                this.contar1 = null
+                this.contar1 = false
             }
             //Este if es el combate normal
             if(this.contar1 !== true){
@@ -166,20 +169,25 @@ export default class Ui extends Phaser.Scene
                 this.turnoAtacar++;
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
-            if(this.turnoAtacar === 2){
+            if(this.turnoAtacar === 2)
+            {
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
-            if(this.turnoAtacar === 3){
+            if(this.turnoAtacar === 3)
+            {
                 this.turnoAtacar = 0;
-                this.contar2 = null
+                this.contar2 = false
             }
-            if(this.contar2 !== true){this.turnoDerecha = false;
+            if(this.contar2 !== true)
+            {
+            this.turnoDerecha = false;
             this.turnoIzquierda = true;
             this.jugadorActual = 'turno Vikingo'
             this.tituloTemporizador.setText(this.jugadorActual)
             this.desbloquearPad('derecha')
-            this.bloquearPad('izquierda')}
+            this.bloquearPad('izquierda')
+            }
         });
         //-------------------------------------------------------
         sharedInstance.on('sangra Vikingo',(dano, tipo)=>{
@@ -196,6 +204,12 @@ export default class Ui extends Phaser.Scene
             this.dano = dano
             this.tipo2 = tipo;
         });
+
+        //EVENTO ROBAR TURNO:
+        sharedInstance.on('robar-turno', (tipo)=>{
+            	this.robarturno(tipo)
+        });
+
         //Evalu quien sigue
         this.registry.events.on('quien sigue',()=>{
             // console.log('quien sigue');
@@ -238,18 +252,23 @@ export default class Ui extends Phaser.Scene
         // this.selectButton(0)
 
         //Vida que se actualiza
-        this.textoVidaDerecha = this.add.text(1050, 50, `${this.personajeDerecha.vida}`)
+        this.textoVidaDerecha = this.add.text(1050, 50, `${this.personajeDerecha.vida}`);
 
-        this.textoVidaIzquierda = this.add.text(200, 50,  `${this.personajeIzquierda.vida}`)
+        this.textoVidaIzquierda = this.add.text(200, 50,  `${this.personajeIzquierda.vida}`);
         //Vida total sin actualizarce
-        this.textoVidaDerechaTotal = this.add.text(1020, 50, `${this.personajeDerecha.vida}/` )
+        this.textoVidaDerechaTotal = this.add.text(1020, 50, `${this.personajeDerecha.vida}/` );
 
-        this.textoVidaIzquierdaTotal = this.add.text(170, 50, `${this.personajeIzquierda.vida}/`)
+        this.textoVidaIzquierdaTotal = this.add.text(170, 50, `${this.personajeIzquierda.vida}/`);
 
-        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{(this.numero === 5)? this.cambiarTurno():null;}, loop:true})
+        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero++, (this.numero === 5)? this.cambiarTurno():null;}, loop:true});
+
+
     }
     update(){
         //Actualizar numero de temporizador
+
+        
+        
         this.tiempo.setText(this.numero)
         this.graphics.clear();
         this.graphics.fillRectShape(this.vidaBarDerecha);
@@ -299,6 +318,13 @@ export default class Ui extends Phaser.Scene
     //         (this.numero === 11)?[clearInterval(this.intervalo), this.registry.events.emit('quien sigue')]:null;
     //     }, 1000);
     // }
+    robarturno(tipo){
+        // (tipo === 'Samurai')?this.ladronSamurai = false:null;
+        // (tipo === 'Vikingo')?this.ladronVikingo = false:null;
+
+        (tipo === 'Samurai')?[this.turnoDerecha = false, this.turnoIzquierda = true]:[this.turnoDerecha = true, this.turnoIzquierda = false];
+        // this.cambiarTurno();
+    }
     cambiarTurno(){
         this.numero = 0;
         (this.turnoDerecha === true)?this.registry.events.emit('temporizador derecha'):this.registry.events.emit('temporizador izquierda');

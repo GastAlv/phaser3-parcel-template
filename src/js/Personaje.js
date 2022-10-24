@@ -22,14 +22,22 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.id = id;
         this.estaVivo = estaVivo;
         this.gano = null;
-        this.defensa = false
-        // this.img = scene.add.sprite(x, y, this.sprite, 0)
+        this.defensa = false;
+        this.ladronSamurai = true;
+        this.ladronVikingo = true;
+        this.probabilidad = 0;
+        this.multiplicadorDeAtaque = 0;
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
+
         this.img = this;
         this.img.setScale(2)
         console.log(scene.constructor.name)
+
+        this.probabilidad = new Random()
+        
 
         sharedInstance.on('recibir ataqueCargado',(dano, tipo)=>{
             (tipo === this.tipo) ? this.recibirDano(dano):null
@@ -69,7 +77,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     cargarAtaque(indexDelDano)
     {
         this.dano = this.poderes[indexDelDano].dano
-        sharedInstance.emit('turno vigente', this.dano)
+        sharedInstance.emit('turno vigente', this.dano, this.tipo)
     }
     animarAtaque(key)
     {
@@ -202,9 +210,25 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.recibirCura(this.cantidadVida)
         this.emitirEvento()
     }
-    robarTurno(){
-        sharedInstance.emit('pasar turno')
+    robarTurno(indexDelDano, enemigo){
+        enemigo.recibirDano(this.poderes[indexDelDano].dano)
+
+        if(this.probabilidad.integer(1,10) <= 3){
+            (this.ladronSamurai === true)?sharedInstance.emit('robar-turno', (this.tipo)):null;
+            (this.ladronVikingo === true)?sharedInstance.emit('robar-turno', (this.tipo)):null;    
+        }
     }
+
+    multipleAtaque(indexDelDano, enemigo)
+    {
+        this.multiplicadorDeAtaque = this.probabilidad.integer(1, 3)
+        
+        console.log('DAÑO EJERCIDO: ', (this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque);
+
+
+        enemigo.recibirDano((this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque)
+    }
+
     danoPorTurno(dano){
         this.danoXTurno = true;
         // console.log(this.tipo);
@@ -269,7 +293,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                 const tipos = {
                     Peon: Datos(Math.round(random.integer(60, 68)), [
                         crearPoder(`ataqueRapidoPeon${tipo}`,(Math.round(random.integer(11, 14))), 1),
-                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 9),
+                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 5),
                         crearPoder(`momentoHisteria`, 0.3, 2),
                         crearPoder(`gritoDeGuerra`,(Math.round(random.integer(0.2, 0.3))), 3),
                     ], random.integer(4, 6), false, 'Peon', tipo),
@@ -288,7 +312,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                     Caballo:Datos(Math.round(random.integer(65, 75)), [
                         crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(10, 18))), 1),
                         crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1),
-                        crearPoder(`estampida`),
+                        crearPoder(`estampida`, null, 8),
                         crearPoder(`relinchar`, null, 6)
                     ], random.integer(7,8), false, 'Caballo', tipo),
                     Reyna:Datos(Math.round(random.integer(75, 85)), [
@@ -313,9 +337,9 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         (tipo === 2) ? atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo): null;
         (tipo === 3) ? atacante.setDefensa(true): null;
         (tipo === 4) ? atacante.robarVida(index, enemigo): null;
-        // (tipo === 5) ? atacante.atacar(index, enemigo): null;
+        (tipo === 5) ? atacante.multipleAtaque(index, enemigo): null;
         (tipo === 6) ? atacante.recibirCura(atacante.poderes[index].dano): null;
-        // (tipo === 7) ? atacante.cargarAtaque(index): null;
-        // (tipo === 8) ? atacante.robarTurno(): null;
+        (tipo === 7) ? atacante.cargarAtaque(index): null;
+        (tipo === 8) ? atacante.robarTurno(index, enemigo): null;
         (tipo === 9) ? atacante.danoPorTurno(atacante.poderes[index].dano): null;
     }
