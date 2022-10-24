@@ -187,12 +187,12 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
     emitirEvento(){
         if(this.tipo === 'Samurai'){
-            return sharedInstance.emit('actualiza Vida Samurai', this.vida),
-            console.log("actualizar vida de samurai")
+            return sharedInstance.emit('actualiza Vida Samurai', this.vida)
+            // console.log("actualizar vida de samurai")
             
         }else{
-            return sharedInstance.emit('actualiza Vida Vikingo', this.vida),
-            console.log("actualizar vida de vikingo")
+            return sharedInstance.emit('actualiza Vida Vikingo', this.vida)
+            // console.log("actualizar vida de vikingo")
         }
     }
     robarVida(indexDelDano, enemigo)
@@ -214,8 +214,6 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
 }
     export function convertirClase(clase){
         return {
-        x: clase.img.x,
-        y: clase.img.y,
         vida: clase.vida,
         sprite: clase.sprite,
         poderes: clase.poderes,
@@ -224,22 +222,24 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         defensa: clase.defensa,
         tipo: clase.tipo,
         estaVivo: clase.estaVivo,
-        id: clase.id}
+        id: clase.id,
+        vidaBase: clase.vidaBase
+    }
     }
     export function Datos(vida, poderes, velocidad, defensa, clase, tipo){
         let id = 0;
         
         (tipo === 'Samurai' && clase === 'Peon')? id = 11:null;
-        // (tipo === 'Samurai' && clase === 'Torre')? this.tipo = 11:null;
-        // (tipo === 'Samurai' && clase === 'Alfil')? this.tipo = 11:null;
         (tipo === 'Samurai' && clase === 'Caballo')? id = 22:null;
         (tipo === 'Samurai' && clase === 'Reyna')? id = 33:null;
+        // (tipo === 'Samurai' && clase === 'Alfil')? id = 44:null;
+        // (tipo === 'Samurai' && clase === 'Torre')? id = 55:null;
 
         (tipo === 'Vikingo' && clase === 'Peon')? id = 1:null;
-        // (tipo === 'Vikingo' && clase === 'Torre')? this.tipo = 1:null;
-        // (tipo === 'Vikingo' && clase === 'Alfil')? this.tipo = 1:null;
         (tipo === 'Vikingo' && clase === 'Caballo')? id = 2:null;
         (tipo === 'Vikingo' && clase === 'Reyna')? id = 3:null;
+        (tipo === 'Vikingo' && clase === 'Alfil')? id = 4:null;
+        (tipo === 'Vikingo' && clase === 'Torre')? id = 5:null;
         return{
                 vida: vida,
                 sprite: `personaje${clase}${tipo}`,
@@ -249,7 +249,9 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                 defensa: defensa,
                 tipo: tipo,
                 estaVivo: true,
-                id: id
+                id: id,
+                vidaBase: vida,
+                clase: clase
             }
     }
 

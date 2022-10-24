@@ -26,10 +26,13 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionPeonVikingo', 'assets/images/spPeonVikingo.png')
         this.load.image('seleccionReinaVikingo', 'assets/images/spReinaVikingo.png')
         this.load.image('seleccionAlfilVikingo', 'assets/images/spAlfilVikingo.png')
+        this.load.image('seleccionTorreVikingo', 'assets/images/spTorreVikingo.png')
 
         this.load.image('seleccionCaballoSamurai', 'assets/images/spCaballoSamurai.png')
         this.load.image('seleccionCaballoVikingo', 'assets/images/spCaballoVikingo.png')
         this.load.image('seleccionReinaSamurai', 'assets/images/spReinaSamurai.png')
+        this.load.image('seleccionAlfilSamurai', 'assets/images/spAlfilSamurai.png')
+        this.load.image('seleccionTorreSamurai', 'assets/images/spTorreSamurai.png')
 
         this.load.image('seleccionPeonSamuraiZoom', 'assets/interfaz/spzoomPeonSamurai.png')
         this.load.image('seleccionPeonVikingoZoom', 'assets/interfaz/spzoomPeonVikingo.png')
@@ -37,6 +40,7 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionCaballoVikingoZoom', 'assets/interfaz/spzoomCaballoVikingo.png')
         this.load.image('seleccionReinaSamuraiZoom', 'assets/interfaz/spzoomReinaSamurai.png')
         this.load.image('seleccionReinaVikingoZoom', 'assets/interfaz/spzoomReinaVikingo.png')
+        
 
         // Interfaz
         this.load.image('botonMarco', 'assets/interfaz/botonMarco.png');
@@ -99,7 +103,8 @@ export default class Preloads extends Phaser.Scene
         this.load.spritesheet('personajeCaballoVikingo', 'assets/spriteSheet/caballoVikingoSheet.png', { frameWidth: 226, frameHeight: 140}); 
         this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 164, frameHeight: 140}); 
         this.load.spritesheet('personajeReynaVikingo', 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 183, frameHeight: 140});
-        this.load.spritesheet('personajeAlfilVikingo', 'assets/spriteSheet/alfilVikingoSheet.png', { frameWidth: 61, frameHeight: 140});
+        this.load.spritesheet('personajeAlfilVikingo', 'assets/spriteSheet/alfilVikingoSheet.png', { frameWidth: 140, frameHeight: 300});
+        this.load.spritesheet('personajeTorreVikingo', 'assets/spriteSheet/torreVikingoSheet.png', { frameWidth: 140, frameHeight: 300});
     }
 
     create(){
