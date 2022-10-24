@@ -79,13 +79,37 @@ export class Button
 }
 
 export class BotonHabilidades extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, callback, indexDeSprite){
+    constructor(scene, x, y, texture, callback, indexDeSprite, infoHabilidad){
         super(scene, x, y, texture, callback)
         this.img = scene.add.image(x, y, texture, indexDeSprite)
         .setInteractive({ useHandCursor: true })
         .on("pointerdown", () => callback())
-        .on("pointerover", ()=> this.img.setScale(1 + 0.08))
-        .on("pointerout", ()=> this.img.setScale(1))
+        .on("pointerover", ()=> {this.img.setScale(1 + 0.08), this.mostrarInformacion()})
+        .on("pointerout", ()=> {this.img.setScale(1), this.ocultarInformacion()})
+        this.contenedor = scene.add.container(x, y-(y/5.5))
+
+        this.textoInformacion = scene.add.text(0, 0, infoHabilidad,{
+            fontSize: '20px',
+            fontFamily: 'Arial',
+            color: '#000',
+            align: 'center',
+            backgroundColor: '#4f7abb',
+            padding: {
+                y: 10,
+                x: 5
+            },
+            border: 5 ,
+            shadow: {
+                color: '#000000',
+                fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                blur: 8
+            }
+        }).setOrigin(.5)
+        this.contenedor.add([this.textoInformacion])
+        this.textoInformacion.visible = false;
+
     }
     desactivarEntrada(){
         this.img.disableInteractive()
@@ -95,19 +119,11 @@ export class BotonHabilidades extends Phaser.GameObjects.Sprite {
         this.img.setInteractive({ useHandCursor: true })
         this.img.clearTint()
     }
+    mostrarInformacion(){
+        // super.scene.make.text(this.textoInformacion)
+        this.textoInformacion.visible = true;
+    }
+    ocultarInformacion(){
+        this.textoInformacion.visible = false;
+    }
 }
-// export class Temporizador extends Button{
-//     constructor(scene, x, y, texture, text, size, callback, scale, objeto = null){
-//         super(scene, x, y,text, size)
-
-//         this.texto = this.add.text(500,500, 'temporizador Samurai')
-//         this. = this.tiempo = this.add.text(690,500, this.numero)
-//     }
-// }
-
-// class ManagerTimeRanges{
-//     constructor(props){
-//         const {} = props
-
-//     }
-// }

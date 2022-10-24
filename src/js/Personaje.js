@@ -268,43 +268,44 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     export function CrearPersonaje(tipo, clase){
                 const tipos = {
                     Peon: Datos(Math.round(random.integer(60, 68)), [
-                        crearPoder(`ataqueRapidoPeon${tipo}`,(Math.round(random.integer(11, 14))), 1),
-                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 9),
-                        crearPoder(`momentoHisteria`, 0.3, 2),
-                        crearPoder(`gritoDeGuerra`,(Math.round(random.integer(0.2, 0.3))), 3),
+                        crearPoder(`ataqueRapidoPeon${tipo}`,(Math.round(random.integer(11, 14))), 1, 'Ataca al enemigo\n con un daño: min:11 a max:14'),
+                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 9, 'Ataca al enemigo con un daño: min:9 a max:15'),
+                        crearPoder(`momentoHisteria`, 0.3, 2, 'Aumenta el daño base en un 30%'),
+                        crearPoder(`gritoDeGuerra`,(Math.round(random.integer(0.2, 0.3))), 3, `Intimida al enemigo reduciendo \n el dano recibido en un min:20% y max:30%`),
                     ], random.integer(4, 6), false, 'Peon', tipo),
                     Alfil:Datos(Math.round(random.integer(60, 68)), [
-                        crearPoder(`ataqueRapidoAlfil${tipo}`),
-                        crearPoder(`sangrado`,10, 9),
-                        crearPoder(`curacion`, null, 6),
-                        crearPoder(`cantoMotivador`)
+                        crearPoder(`ataqueRapidoAlfil${tipo}`, (Math.round(random.integer(10, 16))),'Ataca al enemigo\n con un daño: min:10 a max:16'),
+                        crearPoder(`sangrado`,10, 9,'Causa daño:10 en cada turno al enemigo'),
+                        crearPoder(`curacion`, null, 6, 'Se cura un 45% HP'),
+                        crearPoder(`cantoMotivador`, null, 2, 'Aumenta el daño base en un 30%')
                     ], random.integer(6,7), false, 'Alfil', tipo),
                     Torre:Datos(Math.round(random.integer(60, 68)), [
-                        crearPoder(`ataqueRapidoTorre${tipo}`, 1),
-                        crearPoder(`ataqueCargado`, (Math.round(random.integer(60, 65))), 7),
-                        crearPoder(`arrollar`, null, 8),
-                        crearPoder(`refuerzo`, (Math.round(random.integer(0.40, 0.50))), 3)
+                        crearPoder(`ataqueRapidoTorre${tipo}`, (Math.round(random.integer(18, 22))), 1, 'Ataca al enemigo\n con un daño: min:18 a max:22'),
+                        crearPoder(`ataqueCargado`, (Math.round(random.integer(60, 65))), 7, 'Se carga el ataque y al tercer turno hace daño: min:60 a max:65'),
+                        crearPoder(`arrollar`, null, 8, 'Paraliza al enemigo\n por un turno'),
+                        crearPoder(`refuerzo`, (Math.round(random.integer(0.40, 0.50))), 3, 'Reduce el daño recibido un 45% del daño')
                     ], random.integer(2,3), false, 'Torre', tipo),
                     Caballo:Datos(Math.round(random.integer(65, 75)), [
-                        crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(10, 18))), 1),
-                        crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1),
-                        crearPoder(`estampida`),
-                        crearPoder(`relinchar`, null, 6)
+                        crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(17, 20))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:20'),
+                        crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, 'Ataca al enemigo con un daño: min:13 y max:15'),
+                        crearPoder(`estampida`,null , null, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
+                        crearPoder(`relinchar`, null, 6, 'Se cura un hasta un 75% HP cuando tiene menos de 50% de HP')
                     ], random.integer(7,8), false, 'Caballo', tipo),
                     Reyna:Datos(Math.round(random.integer(75, 85)), [
-                        crearPoder(`ataqueRapidoReyna${tipo}`,(Math.round(random.integer(17, 25))), 1),
-                        crearPoder(`boostCritico`, 0.80, 2),
-                        crearPoder(`roboDeVida`, (Math.round(random.integer(10, 15))), 4),
-                        crearPoder(`esquiva`, 1, 3)
+                        crearPoder(`ataqueRapidoReyna${tipo}`,(Math.round(random.integer(17, 25))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:25'),
+                        crearPoder(`boostCritico`, 0.80, 2, 'Aumenta el ataque en un 80% por un turno'),
+                        crearPoder(`roboDeVida`, (Math.round(random.integer(10, 15))), 4, 'Se cura entre min:10% y max:15%\n del daño realizado'),
+                        crearPoder(`esquiva`, 1, 3, 'Esquiva el siguiente ataque enemigo')
                     ], random.integer(8,9), false, 'Reyna', tipo)
                 }
                 return tipos[clase]
             }
-    function crearPoder(nombre, dano, tipo){
+    function crearPoder(nombre, dano, tipo, info){
         return{
             nombre: nombre,
             dano: dano,
             tipo: tipo,
+            info: info
         }
     }
     //funcion que evalua que metodo/funcion usar para la habilidad

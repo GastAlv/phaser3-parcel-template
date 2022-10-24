@@ -11,12 +11,13 @@ export default class SeleccionPersonaje extends Phaser.Scene
 {
     botonListo1;
     botonListo2;
-    #samuraiPeon
-    #samuraiCaballo
-    #samuraiReina
-    #vikingoPeon
-    #vikingoCaballo
-    #vikingoReina
+    #samuraiPeon;
+    #samuraiCaballo;
+    #samuraiReina;
+    #vikingoPeon;
+    #vikingoCaballo;
+    #vikingoReina;
+    #vikingoAlfil;
     per1;
     per2;
     peleadores = [];
@@ -65,6 +66,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.#vikingoPeon = CrearPersonaje('Vikingo', 'Peon')
         this.#vikingoCaballo = CrearPersonaje('Vikingo', 'Caballo')
         this.#vikingoReina = CrearPersonaje('Vikingo', 'Reyna')
+        this.#vikingoAlfil = CrearPersonaje('Vikingo', 'Alfil')
         
         this.#samuraiPeon = CrearPersonaje('Samurai', 'Peon')
         this.#samuraiCaballo = CrearPersonaje('Samurai', 'Caballo')
@@ -84,6 +86,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.#vikingoPeon), this.botonListo1 = true}, 0.5, this.#vikingoPeon, 'zoom seleccion derecha', 'resetear derecha')
         this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.#vikingoCaballo),  this.botonListo1 = true}, 0.5, this.#vikingoCaballo, 'zoom seleccion derecha', 'resetear derecha')
         this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.#vikingoReina), this.botonListo1 = true}, 0.5, this.#vikingoReina, 'zoom seleccion derecha', 'resetear derecha')
+
+        this.botonAlfilVikingo = new Button(this, 1050, 542, 'seleccionAlfilVikingo', '', 0, () => {this.peleadores.push(this.#vikingoAlfil), this.botonListo1 = true}, 0.5, this.#vikingoAlfil, 'zoom seleccion derecha', 'resetear derecha')
 
         this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.#samuraiPeon),  this.botonListo2 = true}, 0.5, this.#samuraiPeon, 'zoom seleccion izquierda', 'resetear izquierda')
         this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.#samuraiCaballo),  this.botonListo2 = true}, 0.5, this.#samuraiCaballo, 'zoom seleccion izquierda', 'resetear izquierda')

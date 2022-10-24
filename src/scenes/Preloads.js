@@ -24,10 +24,12 @@ export default class Preloads extends Phaser.Scene
         //SPRITES
         this.load.image('seleccionPeonSamurai', 'assets/images/spPeonSamurai.png')
         this.load.image('seleccionPeonVikingo', 'assets/images/spPeonVikingo.png')
+        this.load.image('seleccionReinaVikingo', 'assets/images/spReinaVikingo.png')
+        this.load.image('seleccionAlfilVikingo', 'assets/images/spAlfilVikingo.png')
+
         this.load.image('seleccionCaballoSamurai', 'assets/images/spCaballoSamurai.png')
         this.load.image('seleccionCaballoVikingo', 'assets/images/spCaballoVikingo.png')
         this.load.image('seleccionReinaSamurai', 'assets/images/spReinaSamurai.png')
-        this.load.image('seleccionReinaVikingo', 'assets/images/spReinaVikingo.png')
 
         this.load.image('seleccionPeonSamuraiZoom', 'assets/interfaz/spzoomPeonSamurai.png')
         this.load.image('seleccionPeonVikingoZoom', 'assets/interfaz/spzoomPeonVikingo.png')
@@ -88,17 +90,16 @@ export default class Preloads extends Phaser.Scene
 
 
 
-        this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 164, frameHeight: 140}); 
-
-        this.load.spritesheet('personajePeonSamurai', 'assets/spriteSheet/peonSamuraiSheet.png', { frameWidth: 147, frameHeight: 140}); 
-
+        
+        this.load.spritesheet('personajePeonSamurai', 'assets/spriteSheet/peonSamuraiSheet.png', { frameWidth: 147, frameHeight: 140});
         this.load.spritesheet('personajeCaballoSamurai', 'assets/spriteSheet/caballoSamuraiSheet.png', { frameWidth: 140, frameHeight: 140}); 
+        this.load.spritesheet('personajeReynaSamurai', 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 178, frameHeight: 140});
+        this.load.spritesheet('personajeAlfilSamurai', 'assets/spriteSheet/alfilSamuraiSheet.png', { frameWidth: 61, frameHeight: 140});
 
         this.load.spritesheet('personajeCaballoVikingo', 'assets/spriteSheet/caballoVikingoSheet.png', { frameWidth: 226, frameHeight: 140}); 
-
-        this.load.spritesheet('personajeReynaSamurai', 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 178, frameHeight: 140}); 
-
+        this.load.spritesheet('personajePeonVikingo', 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 164, frameHeight: 140}); 
         this.load.spritesheet('personajeReynaVikingo', 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 183, frameHeight: 140});
+        this.load.spritesheet('personajeAlfilVikingo', 'assets/spriteSheet/alfilVikingoSheet.png', { frameWidth: 61, frameHeight: 140});
     }
 
     create(){
