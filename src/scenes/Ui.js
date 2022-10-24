@@ -13,20 +13,24 @@ export default class Ui extends Phaser.Scene
     cursors;
     buttons = [];
 	selectedButtonIndex = 0;
-    contar1;
-    contar2;
+    contar1 = false;
+    contar2 = false;
     turnoAtacar = 0;
     sangrar = false;
     sangrar2 = false;
     numero = 0;
+    colorBarDerecha;
+    colorBarIzquierda;
+    
+    // colorEstatico = 0x3a3a3a;
     
 	constructor()
 	{
-		super({key :'Ui'});
+        super({key :'Ui'});
 	}
     init(data){
         this.cursors = this.input.keyboard.createCursorKeys()
-
+        
         this.jugadores = data;
         console.log(this.jugadores)
         // console.log(this.jugadores)
@@ -38,7 +42,20 @@ export default class Ui extends Phaser.Scene
         });
         // console.log(this.personajeDerecha.poderes)
         this.enterBase = this.input.keyboard;
-        this.enter = this.enterBase.addKey(13)
+        this.enter = this.enterBase.addKey(13);
+        // this.colorBarDerecha = 0x009B5C;
+        // this.colorBarIzquierda = 0x3a3a3a;
+        this.sangrar = false
+        this.sangrar2 = false
+        this.contar1 = false;
+        this.contar2 = false;
+        
+
+        this.evaluaQueColor(this.personajeDerecha);
+        this.evaluaQueColor(this.personajeIzquierda);
+
+
+        
         
     }
     preload(){
@@ -47,33 +64,39 @@ export default class Ui extends Phaser.Scene
     create()
     {
         
-        console.log(this.personajeDerecha.velocidad)
-        console.log(this.personajeIzquierda.velocidad)
+        
         this.vidaDerechaWidht = 300;
         this.vidaIzquierdaWidht = -300;
         this.actualVidaDerecha = this.vidaDerechaWidht;
         this.actualVidaIzquierda = this.vidaIzquierdaWidht;
+        
+        this.graficosDerecha = this.add.graphics();
+        this.vidaBarDerecha = new Phaser.Geom.Rectangle((this.cameras.main.centerX+(this.cameras.main.centerX /4.2)), 50, this.vidaDerechaWidht, 30);
 
+        this.graficosIzquierda = this.add.graphics()
+        this.vidaBarIzquierda = new Phaser.Geom.Rectangle((this.cameras.main.centerX / 1.2), 50, this.vidaIzquierdaWidht, 30);
 
-        this.graphics = this.add.graphics({
-            fillStyle: {color:0x009B5C}
-        });
-        this.vidaBarDerecha = new Phaser.Geom.Rectangle(740, 50, this.vidaDerechaWidht, 30);
-        this.vidaBarIzquierda = new Phaser.Geom.Rectangle(500, 50, this.vidaIzquierdaWidht, 30);
+        
+        this.modificaLasBarrasDeVidaDeInicio(this.personajeDerecha)
+        this.modificaLasBarrasDeVidaDeInicio(this.personajeIzquierda)
+        // this.actualVidaDerechaTexto = this.personajeDerecha.vida;
+        // this.vidaBarDerecha.width = this.reglaDeTres(this.personajeDerecha.vida, this.vidaDerechaWidht)
+        // this.actualVidaIzquierdaTexto = this.personajeIzquierda.vida
+        // this.vidaBarIzquierda.width = this.reglaDeTres(this.personajeIzquierda.vida, this.vidaIzquierdaWidht);
+        
 
-        // this.registry.events.on('primera actualizacion', ()=>{
-        //     this.vidaBarDerecha.width = this.reglaDeTres(this.personajeDerecha.vida, this.vidaDerechaWidht);
-        //     this.vidaBarIzquierda.width = this.reglaDeTres(this.personajeIzquierda.vida, this.vidaIzquierdaWidht);
-        // })
-        //this.add.image( this.cameras.main.centerX , 580, 'interfaz');
+        
+        
 
-        this.botonIzquierda1  = new BotonHabilidades(this, 180, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0)  ;      
+        this.add.image( this.cameras.main.centerX , 580, 'interfaz');
 
-        this.botonIzquierda2  = new BotonHabilidades(this, 300, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1);
+        this.botonIzquierda1  = new BotonHabilidades(this, 180, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info);      
 
-        this.botonIzquierda3  = new BotonHabilidades(this, 180, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2);
+        this.botonIzquierda2  = new BotonHabilidades(this, 300, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info);
 
-        this.botonIzquierda4 = new BotonHabilidades(this, 300, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3);
+        this.botonIzquierda3  = new BotonHabilidades(this, 180, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info);
+
+        this.botonIzquierda4 = new BotonHabilidades(this, 300, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info);
         // this.buttons.push(this.botonIzquierda1)
         // this.buttons.push(this.botonIzquierda2)
         // this.buttons.push(this.botonIzquierda3)
@@ -103,29 +126,40 @@ export default class Ui extends Phaser.Scene
         //     clearInterval(this.intervalo)
         //     this.registry.events.emit('temporizador derecha')
         // })
-
-        this.botonDerecha1  = new BotonHabilidades(this, 1100, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder1'), this.cambiarTurno()}, 4);
-
-        this.botonDerecha2  = new BotonHabilidades(this, 980, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5);
-
-        this.botonDerecha3  = new BotonHabilidades(this, 1100, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6);
-
-        this.botonDerecha4 = new BotonHabilidades(this, 980, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7);
+        this.botonDerecha1  = new BotonHabilidades(this, 1100, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder1'), this.cambiarTurno()}, 4, this.personajeDerecha.poderes[0].info);
+        this.botonDerecha2  = new BotonHabilidades(this, 980, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5, this.personajeDerecha.poderes[1].info);
+        this.botonDerecha3  = new BotonHabilidades(this, 1100, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6, this.personajeDerecha.poderes[2].info);
+        this.botonDerecha4 = new BotonHabilidades(this, 980, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info);
 
         //Cremos el Temporizadores
-        this.tituloTemporizador = this.add.text(500,500, '')
-        this.tiempo = this.add.text(690,500, this.numero)
+        this.estiloCSS = {fontFamily:'Impact', fontSize:35, backgroundColor: '#b29823'};
+        this.tituloTemporizador = this.add.text((this.cameras.main.centerX / 1.15) , 30, '', this.estiloCSS)
+        this.tiempo = this.add.text(this.cameras.main.centerX, 80, this.numero, this.estiloCSS)
         //-------------------------------------------------
         //actualizan las barras de vida
         sharedInstance.on('actualiza Vida Vikingo', (vida)=>{
-            this.actualVidaDerechaTexto = vida
+            this.actualVidaDerechaTexto = Math.round(vida);
+            (this.actualVidaDerechaTexto>= this.personajeDerecha.vidaBase)?this.actualVidaDerechaTexto = this.personajeDerecha.vidaBase:this.actualVidaDerechaTexto = Math.round(vida);
+            
+
             this.vidaBarDerecha.width = this.reglaDeTres(vida, this.vidaDerechaWidht);
+            console.log(this.personajeDerecha.vida*.5, this.personajeDerecha.vida*.25);
+
+            (vida <= (this.personajeDerecha.vida*.5))?this.colorBarDerecha = 0xe6da00:null;
+            (vida <= (this.personajeDerecha.vida*.25))?this.colorBarDerecha = 0xe51c1a:null;
             // console.log(vida)
             // console.log('llego el mensaje', vida)
         });
         sharedInstance.on('actualiza Vida Samurai', (vida)=>{
-            this.actualVidaIzquierdaTexto = vida
-            this.vidaBarIzquierda.width = this.reglaDeTres(vida, this.vidaIzquierdaWidht)
+            this.actualVidaIzquierdaTexto = Math.round(vida);
+            (this.actualVidaDerechaTexto>= this.personajeDerecha.vidaBase)?this.actualVidaDerechaTexto = this.personajeDerecha.vidaBase:this.actualVidaDerechaTexto = Math.round(vida);
+
+            this.vidaBarIzquierda.width = this.reglaDeTres(vida, this.vidaIzquierdaWidht);
+            console.log(this.personajeIzquierda.vida*.5, this.personajeIzquierda.vida*.25);
+
+            (vida <= (this.personajeIzquierda.vida*.5))?this.colorBarIzquierda = 0xe6da00:null;
+            (vida <= (this.personajeIzquierda.vida*.25))?this.colorBarIzquierda = 0xe51c1a:null;
+            
         });
         //---------------------------------------------------------------------
         //cursor para el pad de los samurais
@@ -141,13 +175,14 @@ export default class Ui extends Phaser.Scene
             this.turnoDerecha = true;
             this.turnoIzquierda = false;
             //Este if suma el primer turno y avanza al siquiente turno para el enemigo ya que lo vuelve true
-            if(this.contar1){
+            if(this.contar1 === true){
                 this.turnoAtacar++;
                 console.log('SUMA Y PASA AL SIGUIENTE TURNO', this.turnoAtacar);
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
             if(this.turnoAtacar === 2){
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
+                this.turnoAtacar = 0
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3){
@@ -163,15 +198,16 @@ export default class Ui extends Phaser.Scene
             }
         });
         this.registry.events.on('temporizador derecha', ()=>{
-            this.turnoDerecha = true;
-            this.turnoIzquierda = false;
-            if(this.contar2){
+            this.turnoDerecha = false;
+            this.turnoIzquierda = true;
+            if(this.contar2 === true){
                 this.turnoAtacar++;
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
             if(this.turnoAtacar === 2)
             {
-                sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
+                sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeIzquierda.tipo)
+                this.turnoAtacar = 0
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3)
@@ -181,8 +217,8 @@ export default class Ui extends Phaser.Scene
             }
             if(this.contar2 !== true)
             {
-            this.turnoDerecha = false;
-            this.turnoIzquierda = true;
+            // this.turnoDerecha = false;
+            // this.turnoIzquierda = true;
             this.jugadorActual = 'turno Vikingo'
             this.tituloTemporizador.setText(this.jugadorActual)
             this.desbloquearPad('derecha')
@@ -196,6 +232,7 @@ export default class Ui extends Phaser.Scene
             this.sangrar = true
             this.dano = dano
             this.tipo = tipo;
+            // (this.sangrar === true)?sharedInstance.emit('sangrado 1', this.dano, this.tipo):null;
         });
         sharedInstance.on('sangra Samurai',(dano, tipo)=>{
             console.log('empieza a sangrar el samurai');
@@ -203,11 +240,14 @@ export default class Ui extends Phaser.Scene
             this.sangrar2 = true
             this.dano = dano
             this.tipo2 = tipo;
+            // (this.sangrar2 === true)?sharedInstance.emit('sangrado 2', this.dano, this.tipo2):null;
         });
 
         //EVENTO ROBAR TURNO:
         sharedInstance.on('robar-turno', (tipo)=>{
-            	this.robarturno(tipo)
+            	
+                this.cambiarTurno();
+
         });
 
         //Evalu quien sigue
@@ -217,13 +257,13 @@ export default class Ui extends Phaser.Scene
                 this.registry.events.emit('temporizador derecha');
                 // this.turnoDerecha = false;
                 // this.turnoIzquierda = true;
-                // (this.sangrar === true)?sharedInstance.emit('sangrado 1', this.dano, this.tipo):null;
+                (this.sangrar === true)?sharedInstance.emit('sangrado 1', this.dano, this.tipo):null;
                 // console.log('sigue el vikingo')
             }else if(this.turnoIzquierda === true){
                 this.registry.events.emit('temporizador izquierda');
                 // this.turnoDerecha = true;
                 // this.turnoIzquierda = false;
-                // (this.sangrar2 === true)?sharedInstance.emit('sangrado 2', this.dano, this.tipo2):null;
+                (this.sangrar2 === true)?sharedInstance.emit('sangrado 2', this.dano, this.tipo2):null;
                 // console.log('sigue el samurai')
             }
         });
@@ -252,17 +292,17 @@ export default class Ui extends Phaser.Scene
         // this.selectButton(0)
 
         //Vida que se actualiza
-        this.textoVidaDerecha = this.add.text(1050, 50, `${this.personajeDerecha.vida}`);
+        this.textoVidaDerecha = this.add.text(this.cameras.main.centerX+(this.cameras.main.centerX/1.7), 50, `${this.personajeDerecha.vida}`, {fontFamily:'Tw Cen MT', fontSize:25})
 
-        this.textoVidaIzquierda = this.add.text(200, 50,  `${this.personajeIzquierda.vida}`);
+        this.textoVidaIzquierda = this.add.text(this.cameras.main.centerX/2.5, 50,  `${this.personajeIzquierda.vida}`, {fontFamily:'Tw Cen MT', fontSize:25})
         //Vida total sin actualizarce
-        this.textoVidaDerechaTotal = this.add.text(1020, 50, `${this.personajeDerecha.vida}/` );
+        this.textoVidaDerechaTotal = this.add.text(this.cameras.main.centerX+(this.cameras.main.centerX/1.55), 50, `/${this.personajeDerecha.vida}`, {fontFamily:'Tw Cen MT', fontSize:20})
 
-        this.textoVidaIzquierdaTotal = this.add.text(170, 50, `${this.personajeIzquierda.vida}/`);
+        this.textoVidaIzquierdaTotal = this.add.text(this.cameras.main.centerX/2.2, 50, `/${this.personajeIzquierda.vida}`, {fontFamily:'Tw Cen MT', fontSize:20})
 
-        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero++, (this.numero === 5)? this.cambiarTurno():null;}, loop:true});
+        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero++,(this.numero === 5)? this.cambiarTurno():null;}, loop:true})
 
-
+    
     }
     update(){
         //Actualizar numero de temporizador
@@ -270,14 +310,20 @@ export default class Ui extends Phaser.Scene
         
         
         this.tiempo.setText(this.numero)
-        this.graphics.clear();
-        this.graphics.fillRectShape(this.vidaBarDerecha);
-        this.graphics.fillRectShape(this.vidaBarIzquierda);
+        
+        this.graficosDerecha.clear();
+        this.graficosIzquierda.clear()
+
+        
+        this.graficosDerecha.fillRectShape(this.vidaBarDerecha).fillStyle(this.colorBarIzquierda);
+        this.graficosIzquierda.fillRectShape(this.vidaBarIzquierda).fillStyle(this.colorBarDerecha);
         
         this.textoVidaDerecha.setText(this.actualVidaDerechaTexto)
         
         this.textoVidaIzquierda.setText(this.actualVidaIzquierdaTexto)
-
+        
+        
+        
 
         //controles con las flechitas
         // const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
@@ -310,54 +356,48 @@ export default class Ui extends Phaser.Scene
         //     this.selectNextButton(1)
         // }
     }
-
-    // Temporizador(){
-    //     this.numero = 0;
-    //     this.intervalo = setInterval(()=>{
-    //         this.numero += 1;
-    //         (this.numero === 11)?[clearInterval(this.intervalo), this.registry.events.emit('quien sigue')]:null;
-    //     }, 1000);
-    // }
-    robarturno(tipo){
-        // (tipo === 'Samurai')?this.ladronSamurai = false:null;
-        // (tipo === 'Vikingo')?this.ladronVikingo = false:null;
-
-        (tipo === 'Samurai')?[this.turnoDerecha = false, this.turnoIzquierda = true]:[this.turnoDerecha = true, this.turnoIzquierda = false];
-        // this.cambiarTurno();
-    }
     cambiarTurno(){
         this.numero = 0;
-        (this.turnoDerecha === true)?this.registry.events.emit('temporizador derecha'):this.registry.events.emit('temporizador izquierda');
+        (this.turnoDerecha === true)?[this.registry.events.emit('temporizador derecha'), (this.sangrar  ===  true)?sharedInstance.emit('sangrado 1', this.dano, this.tipo):null]
+        :[this.registry.events.emit('temporizador izquierda'), (this.sangrar2 === true)?sharedInstance.emit('sangrado 2', this.dano, this.tipo2):null];
+        // (this.sangrar  ===  true)?sharedInstance.emit('sangrado 1', this.dano, this.tipo):null;
+        // (this.sangrar2 === true)?sharedInstance.emit('sangrado 2', this.dano, this.tipo):null;
     }
+
+    // robarTurno(tipo){
+    //     (tipo === 'Samurai')?[this.turnoIzquierda = true, this.turnoDerecha = false]:[this.turnoIzquierda = false, this.turnoDerecha = true];
+    //     console.log(tipo);
+    //     this.cambiarTurno();
+    //     }
 
     reglaDeTres(vida, lifeWidht) {
         return vida * lifeWidht / 100;
     }
     bloquearPad(cual){
         if(cual === 'izquierda'){
-            this.botonIzquierda1.desactivarEntrada()
-            this.botonIzquierda2.desactivarEntrada()
-            this.botonIzquierda3.desactivarEntrada()
-            this.botonIzquierda4.desactivarEntrada()
+            this.botonIzquierda1.desactivarEntrada();
+            this.botonIzquierda2.desactivarEntrada();
+            this.botonIzquierda3.desactivarEntrada();
+            this.botonIzquierda4.desactivarEntrada();
         }else if(cual === 'derecha'){
-            this.botonDerecha1.desactivarEntrada()
-            this.botonDerecha2.desactivarEntrada()
-            this.botonDerecha3.desactivarEntrada()
-            this.botonDerecha4.desactivarEntrada()
+            this.botonDerecha1.desactivarEntrada();
+            this.botonDerecha2.desactivarEntrada();
+            this.botonDerecha3.desactivarEntrada();
+            this.botonDerecha4.desactivarEntrada();
         }
         
     }
     desbloquearPad(cual){
         if(cual === 'izquierda'){
-            this.botonIzquierda1.activarEntrada()
-            this.botonIzquierda2.activarEntrada()
-            this.botonIzquierda3.activarEntrada()
-            this.botonIzquierda4.activarEntrada()
+            this.botonIzquierda1.activarEntrada();
+            this.botonIzquierda2.activarEntrada();
+            this.botonIzquierda3.activarEntrada();
+            this.botonIzquierda4.activarEntrada();
         }else if(cual === 'derecha'){
-            this.botonDerecha1.activarEntrada()
-            this.botonDerecha2.activarEntrada()
-            this.botonDerecha3.activarEntrada()
-            this.botonDerecha4.activarEntrada()
+            this.botonDerecha1.activarEntrada();
+            this.botonDerecha2.activarEntrada();
+            this.botonDerecha3.activarEntrada();
+            this.botonDerecha4.activarEntrada();
         }
         
     }
@@ -403,5 +443,16 @@ export default class Ui extends Phaser.Scene
 
         // emit the 'selected' event
         button.emit('selected')
+    }
+    evaluaQueColor(personaje){
+        (personaje.vida > (personaje.vidaBase * 0.5))?[(personaje.tipo === 'Samurai')?this.colorBarIzquierda = 0x009B5C:this.colorBarDerecha = 0x009B5C]:null;
+        (personaje.vida <= (personaje.vidaBase * 0.5))?[(personaje.tipo === 'Samurai')?this.colorBarIzquierda = 0xe6da00:this.colorBarDerecha = 0xe6da00]:null;
+        (personaje.vida <= (personaje.vidaBase * 0.25))?[(personaje.tipo === 'Samurai')?this.colorBarIzquierda = 0xe51c1a:this.colorBarDerecha = 0xe51c1a]:null;
+        
+    }
+    modificaLasBarrasDeVidaDeInicio(personaje){
+        (personaje.tipo === 'Samurai')?[this.actualVidaIzquierdaTexto = personaje.vida, this.vidaBarIzquierda.width = this.reglaDeTres(personaje.vida, this.vidaIzquierdaWidht)]:
+        [this.actualVidaDerechaTexto = personaje.vida, this.vidaBarDerecha.width = this.reglaDeTres(personaje.vida, this.vidaDerechaWidht)];
+        
     }
 }

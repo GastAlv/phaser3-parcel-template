@@ -104,6 +104,7 @@ export default class BatallaCastillo extends Phaser.Scene
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.registry.events.emit('resetear Ui')
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCastillo')
             this.scene.start('VictoriaVikingo')
         }
@@ -114,6 +115,7 @@ export default class BatallaCastillo extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCastillo')
             this.scene.start('SeleccionPersonaje')
         }

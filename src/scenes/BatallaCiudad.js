@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades} from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, convertirClase} from "../js/Personaje";
 import { sharedInstance as events } from './EventCenter'
 
 export default class BatallaCiudad extends Phaser.Scene
@@ -18,6 +18,7 @@ export default class BatallaCiudad extends Phaser.Scene
     init(data)
     {
         this.personajes = data.personajes
+        console.log(this.personajes)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
             return personaje.tipo === 'Samurai'
@@ -29,7 +30,7 @@ export default class BatallaCiudad extends Phaser.Scene
     create() {
         console.log("estas en ciudad")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        // new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
 
         
         
@@ -91,9 +92,6 @@ export default class BatallaCiudad extends Phaser.Scene
         
         this.scene.moveAbove('BatallaCiudad', 'Ui')
         this.scene.launch('Ui', this.personajes)
-        this.registry.events.emit('resetear Ui')
-        // this.registry.events.emit('quien empieza primero')
-        // this.registry.events.emit('primera actualizacion')
 
     }
 
@@ -103,9 +101,11 @@ export default class BatallaCiudad extends Phaser.Scene
             //GANO EL VIKINGO
             let idSiguienteEscena = 1
             this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
+            console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCiudad')
             this.scene.start('SeleccionPersonaje')
         }
@@ -113,9 +113,11 @@ export default class BatallaCiudad extends Phaser.Scene
             //GANO EL SAMURAI
             let idSiguienteEscena = 3
             this.personajeDeIzquierda.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
+            console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCiudad')
             this.scene.start('SeleccionPersonaje')
         }

@@ -19,6 +19,7 @@ export default class BatallaBosque extends Phaser.Scene
     init(data)
     {
         this.personajes = data.personajes
+        console.log(this.personajes)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
             return personaje.tipo === 'Samurai'
@@ -26,7 +27,6 @@ export default class BatallaBosque extends Phaser.Scene
         this.personajeDerecha = this.personajes.find((personaje)=>{
             return personaje.tipo === 'Vikingo'
         })
-        console.log(this.personajeIzquierda)
         // console.log(this.personajeDerecha.poderes)
 
         
@@ -34,7 +34,7 @@ export default class BatallaBosque extends Phaser.Scene
     create() {
         console.log("estas en bosque")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioBosque').setScale(1.135)
-        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        // new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
 
         
         this.personajeDeIzquierda = new Personaje({
@@ -110,6 +110,7 @@ export default class BatallaBosque extends Phaser.Scene
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaBosque')
             this.scene.start('SeleccionPersonaje')
         }
@@ -122,6 +123,7 @@ export default class BatallaBosque extends Phaser.Scene
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaBosque')
             this.scene.start('SeleccionPersonaje')
         }

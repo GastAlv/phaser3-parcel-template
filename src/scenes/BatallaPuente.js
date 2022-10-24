@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Button } from "../js/button";
+import { BotonSencillo} from "../js/button";
 import { convertirClase, escuchaDeHabilidades, Personaje } from "../js/Personaje";
 // import Poder from "../js/Poderes";
 
@@ -30,12 +30,12 @@ export default class BatallaPuente extends Phaser.Scene
     create() {
         console.log("estas en puente")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
-        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
 
         this.personajeDeIzquierda = new Personaje({
             scene: this,
             x: 450,
-            y: 270,
+            y: 240,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
@@ -49,7 +49,7 @@ export default class BatallaPuente extends Phaser.Scene
         this.personajeDeDerecha = new Personaje({
             scene: this,
             x: 750,
-            y: 275,
+            y: 240,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,
@@ -97,7 +97,7 @@ export default class BatallaPuente extends Phaser.Scene
             this.personajeDeDerecha.setGano(true)
             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.stop('Ui')
+            this.scene.stop('Ui') 
             this.scene.stop('BatallaPuente')
             this.scene.start('SeleccionPersonaje')
         }

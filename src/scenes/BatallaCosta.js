@@ -103,6 +103,7 @@ export default class BatallaCosta extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCosta')
             this.scene.start('SeleccionPersonaje')
         }
@@ -113,6 +114,7 @@ export default class BatallaCosta extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            this.registry.events.emit('resetear-ui')
             this.scene.stop('BatallaCosta')
             this.scene.start('VictoriaSamurai')
         }
