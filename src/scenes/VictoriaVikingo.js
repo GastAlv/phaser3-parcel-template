@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import {Button} from '../js/button';
+import {BotonSencillo, Button} from '../js/button';
 
 
 // Manejador de eventos centralizados para comunicacion de componentes
@@ -31,7 +31,7 @@ export default class VictoriaVikingo extends Phaser.Scene
         
 
 
-        new Button(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
+        new BotonSencillo(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
 
     }
 }

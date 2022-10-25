@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades, convertirClase} from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, convertirClase, removerEscucha} from "../js/Personaje";
 import { sharedInstance as events } from './EventCenter'
 
 export default class BatallaCiudad extends Phaser.Scene
@@ -91,7 +91,7 @@ export default class BatallaCiudad extends Phaser.Scene
         })
         
         this.scene.moveAbove('BatallaCiudad', 'Ui')
-        this.scene.launch('Ui', this.personajes)
+        this.scene.run('Ui', this.personajes)
 
     }
 
@@ -105,8 +105,18 @@ export default class BatallaCiudad extends Phaser.Scene
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
-            this.scene.stop('BatallaCiudad')
+            // removerEscucha();
+            this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+
+            // this.registry.events.emit('resetear-ui')
+            // this.scene.stop('BatallaCiudad')
             this.scene.start('SeleccionPersonaje')
         }
         if(this.personajeDeDerecha.estaVivo === false){
@@ -117,8 +127,18 @@ export default class BatallaCiudad extends Phaser.Scene
             console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
-            this.scene.stop('BatallaCiudad')
+            // removerEscucha();
+            this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+
+            // this.registry.events.emit('resetear-ui')
+            // this.scene.stop('BatallaCiudad')
             this.scene.start('SeleccionPersonaje')
         }
     }
