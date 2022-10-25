@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import Button from '../js/button';
+import Button, { BotonSencillo } from '../js/button';
 
 
 // Manejador de eventos centralizados para comunicacion de componentes
@@ -30,11 +30,11 @@ export default class MainMenu extends Phaser.Scene
         
 
 
-        const buttonJugar = new Button(this, 750, 205, 'botonMarco', 'JUGAR', 80, () => this.scene.start('SeleccionFaccion'), 0.67);
+        const buttonJugar = new BotonSencillo(this, 750, 205, 'botonMarco', 'JUGAR', 80, () => this.scene.start('SeleccionFaccion'), 0.67);
         // const buttonAyuda = new Button(this, 756, 348, 'AYUDA', 70, () => this.scene.start('Ayuda'), 0.50);
-        const botonCreditos = new Button(this, 760, 478, 'botonMarco', 'CREDITOS', 60, () => this.scene.start('Creditos'), 0.43);
+        const botonCreditos = new BotonSencillo(this, 760, 478, 'botonMarco', 'CREDITOS', 60, () => this.scene.start('Creditos'), 0.43);
         
-        const botonOpciones = new Button(this, 1210, 60, 'botonOpciones', '', 0, () => this.scene.start('Creditos'), 0.72);
+        const botonOpciones = new BotonSencillo(this, 1210, 60, 'botonOpciones', '', 0, () => this.scene.start('Creditos'), 0.72);
         
 
     }

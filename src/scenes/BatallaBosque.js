@@ -40,7 +40,7 @@ export default class BatallaBosque extends Phaser.Scene
         this.personajeDeIzquierda = new Personaje({
             scene: this,
             x: 450,
-            y: 275,
+            y: 320,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
@@ -54,7 +54,7 @@ export default class BatallaBosque extends Phaser.Scene
         this.personajeDeDerecha = new Personaje({
             scene: this,
             x: 750,
-            y: 275,
+            y: 320,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,

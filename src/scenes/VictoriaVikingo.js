@@ -31,7 +31,8 @@ export default class VictoriaVikingo extends Phaser.Scene
         
 
 
-        new BotonSencillo(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
+        this.volverMenu = new BotonSencillo(this, 900, 670, 'botonMarco', 'VOLVER AL MENU', 40, () => this.scene.start('MainMenu'), 0.4);
+ 
 
     }
 }

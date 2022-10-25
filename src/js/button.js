@@ -4,7 +4,7 @@ import { sharedInstance } from "../scenes/EventCenter";
 
 loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 export class BotonSencillo{
-    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null, eventoHover = null, eventoOut = null){
+    constructor(scene, x, y, texture, text, size, callback, scale, objeto = null, eventoHover = null, eventoOut = null, color = null){
         this.scale = scale;
         this.activo = true;
         this.container = scene.add.container(x, y)
@@ -16,7 +16,7 @@ export class BotonSencillo{
         .on("pointerout", ()=> {this.img.setScale(scale), sharedInstance.emit(eventoOut)})
         this.txt = scene.add.text(0, 0, text, {fontSize: size})
         .setOrigin(0.5)
-        .setStyle({fontFamily: 'asian'})
+        .setStyle({fontFamily: 'asian', color: color})
         this.container.add([this.img, this.txt])
     }
     desactivarEntrada(){

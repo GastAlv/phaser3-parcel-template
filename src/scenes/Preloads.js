@@ -44,6 +44,10 @@ export default class Preloads extends Phaser.Scene
         this.load.image('seleccionCaballoVikingoZoom', 'assets/interfaz/spzoomCaballoVikingo.png')
         this.load.image('seleccionReinaSamuraiZoom', 'assets/interfaz/spzoomReinaSamurai.png')
         this.load.image('seleccionReinaVikingoZoom', 'assets/interfaz/spzoomReinaVikingo.png')
+        this.load.image('seleccionAlfilSamuraiZoom', 'assets/interfaz/spzoomAlfilSamurai.png')
+        this.load.image('seleccionAlfilVikingoZoom', 'assets/interfaz/spzoomAlfilVikingo.png')
+        this.load.image('seleccionTorreSamuraiZoom', 'assets/interfaz/spzoomTorreSamurai.png')
+        this.load.image('seleccionTorreVikingoZoom', 'assets/interfaz/spzoomTorreVikingo.png')
         
 
         // Interfaz
@@ -161,7 +165,7 @@ export default class Preloads extends Phaser.Scene
                 endFrame: 9
             }
         });
-        this.scene.start('SeleccionPersonaje');
+        this.scene.start('MainMenu');
 
     } 
 

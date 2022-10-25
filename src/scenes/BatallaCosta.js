@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Button, BotonSencillo } from "../js/button";
-import { Personaje, escuchaDeHabilidades } from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, convertirClase } from "../js/Personaje";
 import { removerEscucha } from "../js/Personaje";
 
 export default class BatallaCosta extends Phaser.Scene
@@ -101,7 +101,7 @@ export default class BatallaCosta extends Phaser.Scene
             //GANO EL VIKINGO
             let idSiguienteEscena = 4
             this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
             // removerEscucha();

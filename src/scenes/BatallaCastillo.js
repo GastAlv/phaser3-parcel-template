@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BotonSencillo, Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades, removerEscucha } from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, removerEscucha, convertirClase } from "../js/Personaje";
 
 export default class BatallaCastillo extends Phaser.Scene
 {
@@ -99,7 +99,7 @@ export default class BatallaCastillo extends Phaser.Scene
             //GANO EL VIKINGO
             // let idSiguienteEscena = 2
             this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
 
             this.scene.stop('Ui')
@@ -120,7 +120,7 @@ this.registry.events.removeListener('Vikingo poder4')
             //GANO EL SAMURAI
             let idSiguienteEscena = 2
             this.personajeDeIzquierda.setGano(true)
-            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
             // removerEscucha();

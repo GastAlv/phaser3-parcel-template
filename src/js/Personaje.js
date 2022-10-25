@@ -27,43 +27,26 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.ladronVikingo = true;
         this.probabilidad = 0;
         this.multiplicadorDeAtaque = 0;
-
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
-
         this.img = this;
         this.img.setScale(2)
-        // console.log(scene.constructor.name)
-
         this.probabilidad = new Random()
-        
-
         sharedInstance.on('recibir ataqueCargado',(dano, tipo)=>{
-            console.log(tipo);
             (tipo === this.tipo) ? this.recibirDano(dano):null
-            
         })
-
         sharedInstance.on('sangrado 1',(dano, tipo)=>{
             if(tipo != this.tipo){
                 this.recibirDano(dano)
-                console.log(tipo)
                 this.pintar(0xbca0dc, 100, 300)
-                // console.log('sangra el vikingo')
             }
-            // (tipo != this.tipo)?this.recibirDano(dano):null;
-            // this.pintar(0xbca0dc, 100, 300)
         })
         sharedInstance.on('sangrado 2',(dano, tipo)=>{
             if(tipo != this.tipo){
-                console.log(tipo)
                 this.recibirDano(dano)
                 this.pintar(0xbca0dc, 100, 300)
-                // console.log('sangra el samurai')
             }
-            // (tipo != this.tipo)?this.recibirDano(dano):null;
-            // this.pintar(0xbca0dc, 100, 300)
         })
     }
     setDefensa(bool){
@@ -76,29 +59,28 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.poderes[indexAModificar].dano = valor
     }
     atacar(indexDelDano, enemigo){
-        console.log('ATACA: ',this.sprite, 'CON DAÑO: ', this.poderes[indexDelDano].dano);
         enemigo.recibirDano(this.poderes[indexDelDano].dano)
     }
+    // Se auto ataca con el ataque cargado
     cargarAtaque(indexDelDano)
     {
         this.dano = this.poderes[indexDelDano].dano
         sharedInstance.emit('turno vigente', this.dano, this.tipo)
     }
+
+    //no utilizado por ahora
     animarAtaque(key)
     {
         this.play(key);
-        //{true} le da jerarquia a la que lo tiene
     }
 
     recibirDano(dano){
         
         if(this.getDefensa === true)
         {
-            console.log(this.poderes[3].dano)
             this.porcentaje = this.poderes[3].dano
             this.vida -= (dano * (1 - this.porcentaje))
             this.pintar(0xe5c063, 100, 800)
-            console.log(this.vida)
             this.setDefensa(false)
             this.emitirEvento()
             // this.img.clearTint()
@@ -106,27 +88,18 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             
             this.vida -= dano;
             this.pintar(0xFF00000, 300, 800)
-            console.log(`VIDA RESTANTE de ${this.sprite}`, this.vida)
             this.emitirEvento()
-
         }
-
         if(this.vida <= 0)
         {
             this.estaVivo = false;
             this.vida = 0;
-
-            console.log('MURIO:', this.id)
         }
-        // console.log(this.vida)
     }
-
     recibirCura(dano)
     {
         this.vidaCheck = this.vida+dano;
         this.vidaCheck2 = this.vida+(this.vida * (dano/3));
-
-
         if(this.id ===  2 || this.id === 22){
             (this.vida >= (this.vidaBase*.5))? this.vida :null;
             (this.vida < (this.vidaBase*.5))? this.vida = (this.vidaBase*0.75)  :null;
@@ -137,14 +110,8 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             {
                 this.vida = this.vidaBase;
                 this.emitirEvento()
-
                 return
-            };
-            // (this.vida >= this.vidaBase)?[this.vida = this.vidaBase, this.emitirEvento()]: this.emitirEvento();
-
-
-
-
+            }
             (this.vida >= (this.vidaBase*.5))? this.vida += (this.vida * (dano/3)) :null;
             (this.vida <  (this.vidaBase*.5))? this.vida += (this.vidaBase*dano)    :null;
             
@@ -161,30 +128,6 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         }else{
             this.vida += dano;
         }
-
-       
-        
-        // console.log('animacion recibir cura');
-    }
-
-    agregarPoder(keyPoder)
-    {
-        this.poderes.push(keyPoder)
-    }
-
-    elegirPoder(index)
-    {
-        return this.poderes[index]
-    }
-    actualizarDatos(objeto){
-        this.vida = objeto.vida;
-        this.tiempo = objeto.tiempo;
-        this.sprite = objeto.sprite;
-        this.poderes = objeto.poderes;
-        this.velocidad = objeto.velocidad;
-        this.defensa = objeto.defensa
-        this.estaVivo = objeto.estaVivo
-        this.id = objeto.id
     }
     setGano(valor){
         this.gano = valor;
@@ -200,7 +143,6 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         }else {
             this.danoPotenciado = this.poderes[indexAPotenciar].dano +(this.poderes[indexAPotenciar].dano * porcentaje)
             this.setPoder(indexAPotenciar, this.danoPotenciado)
-            console.log(this.poderes)
         }
     }
 
@@ -240,26 +182,18 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.probabilidadDeRobarTurno = Math.round(this.probabilidad.integer(1,10))
         console.log(this.probabilidadDeRobarTurno);
         if(this.probabilidadDeRobarTurno <= 3){
-
-            sharedInstance.emit('robar-turno', (this.tipo));
+            sharedInstance.emit('robar-turno');
         }
     }
 
     multipleAtaque(indexDelDano, enemigo=null)
     {
-        this.multiplicadorDeAtaque = this.probabilidad.integer(1, 3)
-        
-        console.log('DAÑO EJERCIDO: ', (this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque);
-
-
-        // enemigo.recibirDano((this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque)
+        this.multiplicadorDeAtaque = this.probabilidad.integer(1, 3);
+        enemigo.recibirDano((this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque)
     }
 
     danoPorTurno(dano){
         this.danoXTurno = true;
-        // console.log(this.tipo);
-        
-        
         (this.tipo === 'Samurai')?sharedInstance.emit('sangra Vikingo',dano, this.tipo):sharedInstance.emit('sangra Samurai',dano, this.tipo);
     }
 }
@@ -373,27 +307,12 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         (tipo === 8) ? atacante.robarTurno(enemigo): null;
         (tipo === 9) ? atacante.danoPorTurno(atacante.poderes[index].dano): null;
     }
+    /*
+    A modificar para las funciones en los ataque 
 
-    // export function escuchaDeHabilidades(tipo,index, atacante, enemigo){
-    //     (tipo === 1) ? atacante.atacar(index, enemigo): null;
-    //     (tipo === 2) ? null: null;
-    //     (tipo === 3) ? null: null;
-    //     (tipo === 4) ? null: null;
-    //     (tipo === 5) ? null: null;
-    //     (tipo === 6) ? null: null;
-    //     (tipo === 7) ? null: null;
-    //     (tipo === 8) ? null: null;
-    //     (tipo === 9) ? null: null;
-    // }
+    *DOPAR HABILIDAD: ver de que no se hardcodee el poder que dopa en, porque es el index:0 siempre y ver si el usuario puede eleguir cual potenciar, 
+    sino potencia su ataque 0 siempre. porque  habria que cambiarlos en todos los personajes para que decidan que poder dopar y se tendria que llamar dopar habilidad
+    (Aumenta las estadisticas del poder seleccionado)
 
-    // export function removerEscucha(){
-    //     this.registry.events.removeListener('Samurai poder1')
-    //     this.registry.events.removeListener('Samurai poder2')
-    //     this.registry.events.removeListener('Samurai poder3')
-    //     this.registry.events.removeListener('Samurai poder4')
-    
-    //     this.registry.events.removeListener('Vikingo poder1')
-    //     this.registry.events.removeListener('Vikingo poder2')
-    //     this.registry.events.removeListener('Vikingo poder3')
-    //     this.registry.events.removeListener('Vikingo poder4')
-    // }
+    *
+    */

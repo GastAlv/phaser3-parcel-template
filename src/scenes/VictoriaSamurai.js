@@ -30,7 +30,7 @@ export default class VictoriaSamurai extends Phaser.Scene
         victoriaSamurai.setScale(1.25)
 
 
-        new BotonSencillo(this, 750, 205, 'botonMarco', 'VOLVER AL MENU', 80, () => this.scene.start('MainMenu'), 0.67);
+        new BotonSencillo(this, 900, 600, 'botonMarco', 'VOLVER AL MENU', 40, () => this.scene.start('MainMenu'), 0.4);
 
 
     }
