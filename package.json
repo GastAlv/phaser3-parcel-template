@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"matter": "^0.2.0",
+		"parcel-bundler": "^1.12.5",
 		"phaser": "^3.55.2",
 		"random-js": "^2.1.0"
 	},
