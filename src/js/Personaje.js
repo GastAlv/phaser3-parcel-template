@@ -340,7 +340,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                     Caballo:Datos(Math.round(random.integer(65, 75)), [
                         crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(17, 20))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:20'),
                         crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, 'Ataca al enemigo con un daño: min:13 y max:15'),
-                        crearPoder(`estampida`,null , null, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
+                        crearPoder(`estampida`, 10, 5, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
                         crearPoder(`relinchar`, null, 6, 'Se cura un hasta un 75% HP cuando tiene menos de 50% de HP')
                     ], random.integer(7,8), false, 'Caballo', tipo),
                     Reyna:Datos(Math.round(random.integer(75, 85)), [

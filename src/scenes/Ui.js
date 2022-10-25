@@ -182,10 +182,11 @@ export default class Ui extends Phaser.Scene
             //Este if realiza el ataque cuando pasaron 2 turnos
             if(this.turnoAtacar === 2){
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
-                this.turnoAtacar = 0
+                this.turnoAtacar++
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
-            if(this.turnoAtacar === 3){
+            if(this.turnoAtacar === 3)
+            {
                 this.turnoAtacar = 0;
                 this.contar1 = false
             }
@@ -202,12 +203,12 @@ export default class Ui extends Phaser.Scene
             this.turnoIzquierda = true;
             if(this.contar2 === true){
                 this.turnoAtacar++;
+                console.log('SUMA Y PASA AL SIGUIENTE TURNO', this.turnoAtacar);
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
-            if(this.turnoAtacar === 2)
-            {
+            if(this.turnoAtacar === 2){
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeIzquierda.tipo)
-                this.turnoAtacar = 0
+                this.turnoAtacar++
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3)
