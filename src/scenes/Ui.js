@@ -313,7 +313,7 @@ export default class Ui extends Phaser.Scene
 
         this.textoVidaIzquierdaTotal = this.add.text(this.cameras.main.centerX/2.2, 50, `/${this.personajeIzquierda.vida}`, {fontFamily:'Tw Cen MT', fontSize:20})
 
-        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero++,(this.numero === 5)? this.cambiarTurno():null;}, loop:true})
+        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero++,(this.numero === 15)? this.cambiarTurno():null;}, loop:true})
 
     
     }
