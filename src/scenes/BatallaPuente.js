@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { BotonSencillo} from "../js/button";
 import { convertirClase, escuchaDeHabilidades, Personaje } from "../js/Personaje";
+import { removerEscucha } from "../js/Personaje";
+
 // import Poder from "../js/Poderes";
 
 export default class BatallaPuente extends Phaser.Scene
@@ -62,6 +64,7 @@ export default class BatallaPuente extends Phaser.Scene
         })
         this.registry.events.on('Samurai poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
+            console.log(this.personajeDeIzquierda.sprite);
             
         })
         this.registry.events.on('Samurai poder2', ()=>{
@@ -78,6 +81,7 @@ export default class BatallaPuente extends Phaser.Scene
         })
         this.registry.events.on('Vikingo poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
+            console.log(this.personajeDeDerecha.sprite);
             
         })
         this.registry.events.on('Vikingo poder2', ()=>{
@@ -93,7 +97,7 @@ export default class BatallaPuente extends Phaser.Scene
             
         })
         this.scene.moveAbove('BatallaPuente', 'Ui')
-        this.scene.launch('Ui', this.personajes)
+        this.scene.run('Ui', this.personajes)
 
     }
 
@@ -107,6 +111,16 @@ export default class BatallaPuente extends Phaser.Scene
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui') 
             this.scene.stop('BatallaPuente')
+            // removerEscucha();
+            this.registry.events.removeListener('Samurai poder1')
+            this.registry.events.removeListener('Samurai poder2')
+            this.registry.events.removeListener('Samurai poder3')
+            this.registry.events.removeListener('Samurai poder4')
+            
+            this.registry.events.removeListener('Vikingo poder1')
+            this.registry.events.removeListener('Vikingo poder2')
+            this.registry.events.removeListener('Vikingo poder3')
+            this.registry.events.removeListener('Vikingo poder4')
             this.scene.start('SeleccionPersonaje')
         }
         if(this.personajeDeDerecha.estaVivo === false){
@@ -117,7 +131,21 @@ export default class BatallaPuente extends Phaser.Scene
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
             this.scene.stop('BatallaPuente')
+            // removerEscucha();
+            this.registry.events.removeListener('Samurai poder1')
+            this.registry.events.removeListener('Samurai poder2')
+            this.registry.events.removeListener('Samurai poder3')
+            this.registry.events.removeListener('Samurai poder4')
+            
+            this.registry.events.removeListener('Vikingo poder1')
+            this.registry.events.removeListener('Vikingo poder2')
+            this.registry.events.removeListener('Vikingo poder3')
+            this.registry.events.removeListener('Vikingo poder4')   
+            
             this.scene.start('SeleccionPersonaje')
         }
     }
 }
+
+
+

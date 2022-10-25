@@ -2,11 +2,6 @@ import Phaser from "phaser"
 import { sharedInstance } from "../scenes/EventCenter";
 
 
-
-
-
-
-
 loadFont("asian", "assets/fuentes/OPTIAsian.otf");
 export class BotonSencillo{
     constructor(scene, x, y, texture, text, size, callback, scale, objeto = null, eventoHover = null, eventoOut = null){

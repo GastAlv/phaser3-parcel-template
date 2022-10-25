@@ -77,7 +77,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
     atacar(indexDelDano, enemigo){
         console.log('ATACA: ',this.sprite, 'CON DAÑO: ', this.poderes[indexDelDano].dano);
-        enemigo.recibirDano(this.poderes[indexDelDano].dano, this)
+        enemigo.recibirDano(this.poderes[indexDelDano].dano)
     }
     cargarAtaque(indexDelDano)
     {
@@ -245,14 +245,14 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         }
     }
 
-    multipleAtaque(indexDelDano, enemigo)
+    multipleAtaque(indexDelDano, enemigo=null)
     {
         this.multiplicadorDeAtaque = this.probabilidad.integer(1, 3)
         
         console.log('DAÑO EJERCIDO: ', (this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque);
 
 
-        enemigo.recibirDano((this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque)
+        // enemigo.recibirDano((this.poderes[indexDelDano].dano) * this.multiplicadorDeAtaque)
     }
 
     danoPorTurno(dano){
@@ -361,7 +361,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             info: info
         }
     }
-    //funcion que evalua que metodo/funcion usar para la habilidad
+    // funcion que evalua que metodo/funcion usar para la habilidad
     export function escuchaDeHabilidades(tipo,index, atacante, enemigo){
         (tipo === 1) ? atacante.atacar(index, enemigo): null;
         (tipo === 2) ? atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo): null;
@@ -373,3 +373,27 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         (tipo === 8) ? atacante.robarTurno(enemigo): null;
         (tipo === 9) ? atacante.danoPorTurno(atacante.poderes[index].dano): null;
     }
+
+    // export function escuchaDeHabilidades(tipo,index, atacante, enemigo){
+    //     (tipo === 1) ? atacante.atacar(index, enemigo): null;
+    //     (tipo === 2) ? null: null;
+    //     (tipo === 3) ? null: null;
+    //     (tipo === 4) ? null: null;
+    //     (tipo === 5) ? null: null;
+    //     (tipo === 6) ? null: null;
+    //     (tipo === 7) ? null: null;
+    //     (tipo === 8) ? null: null;
+    //     (tipo === 9) ? null: null;
+    // }
+
+    // export function removerEscucha(){
+    //     this.registry.events.removeListener('Samurai poder1')
+    //     this.registry.events.removeListener('Samurai poder2')
+    //     this.registry.events.removeListener('Samurai poder3')
+    //     this.registry.events.removeListener('Samurai poder4')
+    
+    //     this.registry.events.removeListener('Vikingo poder1')
+    //     this.registry.events.removeListener('Vikingo poder2')
+    //     this.registry.events.removeListener('Vikingo poder3')
+    //     this.registry.events.removeListener('Vikingo poder4')
+    // }

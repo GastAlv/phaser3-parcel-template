@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Button, BotonSencillo } from "../js/button";
 import { Personaje, escuchaDeHabilidades } from "../js/Personaje";
+import { removerEscucha } from "../js/Personaje";
 
 export default class BatallaCosta extends Phaser.Scene
 {
@@ -90,7 +91,7 @@ export default class BatallaCosta extends Phaser.Scene
         })
 
         this.scene.moveAbove('BatallaCosta', 'Ui')
-        this.scene.launch('Ui', this.personajes)
+        this.scene.run('Ui', this.personajes)
 
     }
 
@@ -103,7 +104,17 @@ export default class BatallaCosta extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
-            this.scene.stop('BatallaCosta')
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+            
+            // this.scene.stop('BatallaCosta')
             this.scene.start('SeleccionPersonaje')
         }
         if(this.personajeDeDerecha.estaVivo === false){
@@ -113,7 +124,17 @@ export default class BatallaCosta extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
-            this.scene.stop('BatallaCosta')
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+            
+            // this.scene.stop('BatallaCosta')
             this.scene.start('VictoriaSamurai')
         }
     }

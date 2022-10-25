@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BotonSencillo, Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades } from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, removerEscucha } from "../js/Personaje";
 
 export default class BatallaCastillo extends Phaser.Scene
 {
@@ -90,8 +90,7 @@ export default class BatallaCastillo extends Phaser.Scene
         })
 
         this.scene.moveAbove('BatallaCastillo', 'Ui')
-        this.scene.launch('Ui', this.personajes)
-
+        this.scene.run('Ui', this.personajes)
     }
 
     update()
@@ -104,8 +103,17 @@ export default class BatallaCastillo extends Phaser.Scene
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
 
             this.scene.stop('Ui')
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
             
-            this.scene.stop('BatallaCastillo')
+            // this.scene.stop('BatallaCastillo')
             this.scene.start('VictoriaVikingo')
         }
         if(this.personajeDeDerecha.estaVivo === false){
@@ -115,8 +123,17 @@ export default class BatallaCastillo extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
             
-            this.scene.stop('BatallaCastillo')
+            // this.scene.stop('BatallaCastillo')
             this.scene.start('SeleccionPersonaje')
         }
     }

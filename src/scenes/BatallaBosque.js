@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { Button } from "../js/button";
-import { convertirClase, Personaje, escuchaDeHabilidades } from "../js/Personaje";
+import { convertirClase, Personaje, escuchaDeHabilidades, removerEscucha } from "../js/Personaje";
 // import Poder from "../js/Poderes";
 // import { sharedInstance as events } from './EventCenter'
 
@@ -104,7 +104,7 @@ export default class BatallaBosque extends Phaser.Scene
         })
         
         this.scene.moveAbove('BatallaBosque', 'Ui')
-        this.scene.launch('Ui', this.personajes)
+        this.scene.run('Ui', this.personajes)
 
     }
 
@@ -117,9 +117,17 @@ export default class BatallaBosque extends Phaser.Scene
             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha];
             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
-            this.scene.stop('BatallaBosque')
+            this.scene.stop('Ui');
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+            // this.scene.stop('BatallaBosque')
             this.scene.start('SeleccionPersonaje')
         }
         if(this.personajeDeDerecha.estaVivo === false){
@@ -129,9 +137,17 @@ export default class BatallaBosque extends Phaser.Scene
             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
-            this.scene.stop('BatallaBosque')
+            this.scene.stop('Ui');
+            // removerEscucha();
+                        this.registry.events.removeListener('Samurai poder1')
+this.registry.events.removeListener('Samurai poder2')
+this.registry.events.removeListener('Samurai poder3')
+this.registry.events.removeListener('Samurai poder4')
+this.registry.events.removeListener('Vikingo poder1')
+this.registry.events.removeListener('Vikingo poder2')
+this.registry.events.removeListener('Vikingo poder3')
+this.registry.events.removeListener('Vikingo poder4')
+            // this.scene.stop('BatallaBosque')
             this.scene.start('SeleccionPersonaje')
         }
     }
