@@ -182,8 +182,8 @@ export default class Ui extends Phaser.Scene
         //cursor para el pad de los samurais
         // this.buttonSelector = this.add.image(180, 525, 'block').setScale(.25)//.setOrigin(0).body.allowGravity = false;
        
-        sharedInstance.on('turno vigente', (dano) => {
-        (this.tipo === 'Samurai')?this.contar1 = true:this.contar2 = true;
+        sharedInstance.on('turno vigente', (dano, tipo) => {
+        (tipo === 'Samurai')?this.contar1 = true:this.contar2 = true;
             this.dano = dano
         })
        
@@ -199,14 +199,14 @@ export default class Ui extends Phaser.Scene
                 console.log('SUMA Y PASA AL SIGUIENTE TURNO', this.turnoAtacar);
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
-            if(this.turnoAtacar === 2){
+            if(this.turnoAtacar === 1){
                 this.turnoDerecha = true;
                 this.turnoIzquierda = false;
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
                 this.turnoAtacar++
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
-            if(this.turnoAtacar === 3){
+            if(this.turnoAtacar === 2){
                 this.turnoDerecha = true;
                 this.turnoIzquierda = false;
                 this.turnoAtacar = 0;
