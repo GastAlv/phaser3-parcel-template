@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Button } from "../js/button";
+import { BotonSencillo, Button } from "../js/button";
 import { Personaje, escuchaDeHabilidades } from "../js/Personaje";
 
 export default class BatallaCastillo extends Phaser.Scene
@@ -29,7 +29,7 @@ export default class BatallaCastillo extends Phaser.Scene
         console.log("estas en puente")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCastillo').setScale(1.135)
-        new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
         
         
         
@@ -102,9 +102,9 @@ export default class BatallaCastillo extends Phaser.Scene
             this.personajeDeDerecha.setGano(true)
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.registry.events.emit('resetear Ui')
+
             this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
+            
             this.scene.stop('BatallaCastillo')
             this.scene.start('VictoriaVikingo')
         }
@@ -115,7 +115,7 @@ export default class BatallaCastillo extends Phaser.Scene
             this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
-            this.registry.events.emit('resetear-ui')
+            
             this.scene.stop('BatallaCastillo')
             this.scene.start('SeleccionPersonaje')
         }

@@ -49,6 +49,8 @@ export default class Ui extends Phaser.Scene
         this.sangrar2 = false
         this.contar1 = false;
         this.contar2 = false;
+        this.turnoAtacar = 0;
+
         
 
         this.evaluaQueColor(this.personajeDerecha);
@@ -97,6 +99,8 @@ export default class Ui extends Phaser.Scene
         this.botonIzquierda3  = new BotonHabilidades(this, 180, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info);
 
         this.botonIzquierda4 = new BotonHabilidades(this, 300, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info);
+        
+        
         // this.buttons.push(this.botonIzquierda1)
         // this.buttons.push(this.botonIzquierda2)
         // this.buttons.push(this.botonIzquierda3)
@@ -143,7 +147,7 @@ export default class Ui extends Phaser.Scene
             
 
             this.vidaBarDerecha.width = this.reglaDeTres(vida, this.vidaDerechaWidht);
-            console.log(this.personajeDerecha.vida*.5, this.personajeDerecha.vida*.25);
+            
 
             (vida <= (this.personajeDerecha.vida*.5))?this.colorBarDerecha = 0xe6da00:null;
             (vida <= (this.personajeDerecha.vida*.25))?this.colorBarDerecha = 0xe51c1a:null;
@@ -155,7 +159,7 @@ export default class Ui extends Phaser.Scene
             (this.actualVidaDerechaTexto>= this.personajeDerecha.vidaBase)?this.actualVidaDerechaTexto = this.personajeDerecha.vidaBase:this.actualVidaDerechaTexto = Math.round(vida);
 
             this.vidaBarIzquierda.width = this.reglaDeTres(vida, this.vidaIzquierdaWidht);
-            console.log(this.personajeIzquierda.vida*.5, this.personajeIzquierda.vida*.25);
+
 
             (vida <= (this.personajeIzquierda.vida*.5))?this.colorBarIzquierda = 0xe6da00:null;
             (vida <= (this.personajeIzquierda.vida*.25))?this.colorBarIzquierda = 0xe51c1a:null;
@@ -176,16 +180,22 @@ export default class Ui extends Phaser.Scene
             this.turnoIzquierda = false;
             //Este if suma el primer turno y avanza al siquiente turno para el enemigo ya que lo vuelve true
             if(this.contar1 === true){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
                 this.turnoAtacar++;
                 console.log('SUMA Y PASA AL SIGUIENTE TURNO', this.turnoAtacar);
             }
             //Este if realiza el ataque cuando pasaron 2 turnos
             if(this.turnoAtacar === 2){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeDerecha.tipo)
-                this.turnoAtacar = 0
+                this.turnoAtacar++
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3){
+                this.turnoDerecha = true;
+                this.turnoIzquierda = false;
                 this.turnoAtacar = 0;
                 this.contar1 = false
             }
@@ -207,7 +217,7 @@ export default class Ui extends Phaser.Scene
             if(this.turnoAtacar === 2)
             {
                 sharedInstance.emit('recibir ataqueCargado', this.dano, this.personajeIzquierda.tipo)
-                this.turnoAtacar = 0
+                this.turnoAtacar++
             }
             //Este if es para actualizar los valores de la variables, para así volver al combate normal despues de ejecutar el ataque con carga
             if(this.turnoAtacar === 3)

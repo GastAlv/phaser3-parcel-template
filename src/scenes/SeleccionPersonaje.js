@@ -45,7 +45,6 @@ export default class SeleccionPersonaje extends Phaser.Scene
             this.cambiarEscena = true
             this.siguienteEscena = idSiguienteEscena
 
-            console.log(personajes)
             // lista para filtrar al personaje muerto
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
@@ -62,7 +61,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
                 return personaje.estaVivo === true
             })
             
-            console.log('Este es el vivo',this.peleadores)
+            console.log('Este es el vivo', this.peleadores)
         });
     }
 
@@ -87,7 +86,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             // }
         }
 
-        console.log("estas en seleccion:)")
+        console.log("ESTAS EN SELECCION")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
         // new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
         
@@ -193,7 +192,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         }
         if(this.listMuertos.length === 5)
             {
-                if(this.peleadores[0].tipo === 'samurai')
+                if(this.peleadores[0].tipo === 'Samurai')
                 {
                     this.scene.start('VictoriaSamurai')
                 } else {

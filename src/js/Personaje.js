@@ -34,7 +34,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
 
         this.img = this;
         this.img.setScale(2)
-        console.log(scene.constructor.name)
+        // console.log(scene.constructor.name)
 
         this.probabilidad = new Random()
         
@@ -50,7 +50,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                 this.recibirDano(dano)
                 console.log(tipo)
                 this.pintar(0xbca0dc, 100, 300)
-                console.log('sangra el vikingo')
+                // console.log('sangra el vikingo')
             }
             // (tipo != this.tipo)?this.recibirDano(dano):null;
             // this.pintar(0xbca0dc, 100, 300)
@@ -60,7 +60,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                 console.log(tipo)
                 this.recibirDano(dano)
                 this.pintar(0xbca0dc, 100, 300)
-                console.log('sangra el samurai')
+                // console.log('sangra el samurai')
             }
             // (tipo != this.tipo)?this.recibirDano(dano):null;
             // this.pintar(0xbca0dc, 100, 300)
@@ -76,6 +76,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.poderes[indexAModificar].dano = valor
     }
     atacar(indexDelDano, enemigo){
+        console.log('ATACA: ',this.sprite, 'CON DAÑO: ', this.poderes[indexDelDano].dano);
         enemigo.recibirDano(this.poderes[indexDelDano].dano, this)
     }
     cargarAtaque(indexDelDano)
@@ -105,17 +106,17 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             
             this.vida -= dano;
             this.pintar(0xFF00000, 300, 800)
-            console.log('animacion recibir daño')
+            console.log(`VIDA RESTANTE de ${this.sprite}`, this.vida)
             this.emitirEvento()
-            // this.img.clearTint()
+
         }
 
         if(this.vida <= 0)
         {
             this.estaVivo = false;
             this.vida = 0;
-            console.log('animacion de muerte')
-            console.log('murio!.')
+
+            console.log('MURIO:', this.id)
         }
         // console.log(this.vida)
     }
@@ -340,7 +341,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                     Caballo:Datos(Math.round(random.integer(65, 75)), [
                         crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(17, 20))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:20'),
                         crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, 'Ataca al enemigo con un daño: min:13 y max:15'),
-                        crearPoder(`estampida`,null , null, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
+                        crearPoder(`estampida`, 8, 5, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
                         crearPoder(`relinchar`, null, 6, 'Se cura un hasta un 75% HP cuando tiene menos de 50% de HP')
                     ], random.integer(7,8), false, 'Caballo', tipo),
                     Reyna:Datos(Math.round(random.integer(75, 85)), [

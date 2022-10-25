@@ -69,29 +69,38 @@ export default class BatallaBosque extends Phaser.Scene
 
         this.registry.events.on('Samurai poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha)
+            
+        
         })
         this.registry.events.on('Samurai poder2', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[1].tipo, 1, this.personajeDeIzquierda, this.personajeDeDerecha)
+            
         })
         this.registry.events.on('Samurai poder3', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[2].tipo, 2, this.personajeDeIzquierda, this.personajeDeDerecha)
+            
         })
         this.registry.events.on('Samurai poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
+            
         })
 
         
         this.registry.events.on('Vikingo poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda)
+            
         })
         this.registry.events.on('Vikingo poder2', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[1].tipo, 1, this.personajeDeDerecha, this.personajeDeIzquierda)
+            
         })
         this.registry.events.on('Vikingo poder3', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[2].tipo, 2, this.personajeDeDerecha, this.personajeDeIzquierda)
+            
         })
         this.registry.events.on('Vikingo poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
+            
         })
         
         this.scene.moveAbove('BatallaBosque', 'Ui')
@@ -107,7 +116,6 @@ export default class BatallaBosque extends Phaser.Scene
             this.personajeDeDerecha.setGano(true)
             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha];
             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-            console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
             this.registry.events.emit('resetear-ui')
@@ -120,7 +128,6 @@ export default class BatallaBosque extends Phaser.Scene
             this.personajeDeIzquierda.setGano(true)
             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-            console.log(this.personajesActuales)
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
             this.scene.stop('Ui')
             this.registry.events.emit('resetear-ui')
