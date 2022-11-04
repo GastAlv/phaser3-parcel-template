@@ -90,8 +90,12 @@ export default class BatallaCiudad extends Phaser.Scene
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
         
+        const objeto = {
+            personajes: this.personajes,
+            crear:true,
+        };
         this.scene.moveAbove('BatallaCiudad', 'Ui')
-        this.scene.run('Ui', this.personajes)
+        this.scene.run('Ui', objeto)
 
     }
 

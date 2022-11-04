@@ -14,6 +14,8 @@ import VictoriaSamurai from './scenes/VictoriaSamurai'
 import VictoriaVikingo from './scenes/VictoriaVikingo'
 
 import Ui from './scenes/Ui'
+import Mochila from './js/mochilas'
+import Opciones from './scenes/Opciones'
 
 const config = {
 	type: Phaser.AUTO,
@@ -28,7 +30,7 @@ const config = {
 		},
 		max: {
 			width: 1600,
-			height: 1200,
+			height: 1280,
 		},
 	},
 	physics: {
@@ -38,7 +40,10 @@ const config = {
 			debug: false,
 		}
 	},
-	scene: [Preloads, MainMenu, Creditos, SeleccionFaccion, SeleccionPersonaje, Ui, BatallaPuente, BatallaBosque, BatallaCiudad, BatallaCastillo, BatallaCosta, VictoriaSamurai, VictoriaVikingo ]
+	audio: {
+        disableWebAudio: true
+    },
+	scene: [Preloads, MainMenu, Creditos, Opciones, SeleccionFaccion, SeleccionPersonaje, Ui, Mochila, BatallaPuente, BatallaBosque, BatallaCiudad, BatallaCastillo, BatallaCosta, VictoriaSamurai, VictoriaVikingo ]
 }
 
 export default new Phaser.Game(config)

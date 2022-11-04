@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-import { Button } from "../js/button";
-import { convertirClase, Personaje, escuchaDeHabilidades, removerEscucha } from "../js/Personaje";
+import { convertirClase, Personaje, escuchaDeHabilidades} from "../js/Personaje";
 // import Poder from "../js/Poderes";
 // import { sharedInstance as events } from './EventCenter'
 
@@ -70,7 +69,6 @@ export default class BatallaBosque extends Phaser.Scene
         this.registry.events.on('Samurai poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha)
             
-        
         })
         this.registry.events.on('Samurai poder2', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[1].tipo, 1, this.personajeDeIzquierda, this.personajeDeDerecha)
@@ -102,9 +100,12 @@ export default class BatallaBosque extends Phaser.Scene
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
             
         })
-        
+        this.objeto = {
+            personajes: this.personajes,
+            crear:false,
+        };
         this.scene.moveAbove('BatallaBosque', 'Ui')
-        this.scene.run('Ui', this.personajes)
+        this.scene.launch('Ui', this.objeto)
 
     }
 

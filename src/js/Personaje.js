@@ -1,16 +1,19 @@
 import Phaser from "phaser";
 import { sharedInstance } from "../scenes/EventCenter";
 import { Random } from "random-js";
+import { curarSangrado, rebote } from "./objetos";
+import { ManejadorDeSonidos } from "./ManejadorDeSonidos";
+import { getPhrase } from "../services/translations";
 const random = new Random()
 //Setter como funcion/metodo y los getters con GET antes de la funcion
-
 export class Personaje extends Phaser.Physics.Arcade.Sprite
 {
     #defensa;
     constructor(props){
         const {scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true} = props
         super(scene, x, y, sprite, 0)
-        this.vidaBase = vida
+        this.scene = scene;
+        this.vidaBase = vida;
         this.vida = vida;
         this.tiempo = tiempo;
         this.sprite = sprite;
@@ -31,9 +34,16 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.img = this;
-        this.img.setScale(2)
-        this.probabilidad = new Random()
+        this.img.setScale(2);
+        this.probabilidad = new Random();
+        this.soloLaClaseDelPersonaje = this.sprite.slice(9);
+        this.sonidos = new ManejadorDeSonidos({scene:scene, volumen:1, loop:false});
+        
+        
+
         sharedInstance.on('recibir ataqueCargado',(dano, tipo)=>{
+            this.sonidos.AtaqueCargadoCargando.pause();
+            this.sonidos.AtaqueCargado.play();
             (tipo === this.tipo) ? this.recibirDano(dano):null
         })
         sharedInstance.on('sangrado 1',(dano, tipo)=>{
@@ -51,6 +61,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
     setDefensa(bool){
         this.#defensa = bool
+        this.sonidos.Defensa.play()
     }
     get getDefensa(){
         return this.#defensa
@@ -59,11 +70,14 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.poderes[indexAModificar].dano = valor
     }
     atacar(indexDelDano, enemigo){
+        (this.play(this.poderes[indexDelDano].nombre))
+        this.sonidos.Damage.play()
         enemigo.recibirDano(this.poderes[indexDelDano].dano)
     }
     // Se auto ataca con el ataque cargado
     cargarAtaque(indexDelDano)
     {
+        this.sonidos.AtaqueCargadoCargando.play();
         this.dano = this.poderes[indexDelDano].dano
         sharedInstance.emit('turno vigente', this.dano, this.tipo)
     }
@@ -75,6 +89,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
 
     recibirDano(dano){
+
         
         if(this.getDefensa === true)
         {
@@ -95,17 +110,31 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             this.estaVivo = false;
             this.vida = 0;
         }
+        let direccion
+        (this.tipo === 'Samurai')?[direccion=(this.x-50)]:[direccion=(this.x+50)];
+        this.tweens = this.scene.tweens.add({
+            targets: this.img,
+            x: direccion,
+            y: this.y,
+            ease: "Bounce.easeInOut",
+            duration: 500,
+            repeat: 0,
+            yoyo: true,
+            onStart: () =>{
+            },
+            onComplete: () =>{
+            }
+        })
     }
     recibirCura(dano)
     {
         this.vidaCheck = this.vida+dano;
         this.vidaCheck2 = this.vida+(this.vida * (dano/3));
-        if(this.id ===  2 || this.id === 22){
+        if(this.quePersonajeSeCura() === 'Caballo'){
             (this.vida >= (this.vidaBase*.5))? this.vida :null;
             (this.vida < (this.vidaBase*.5))? this.vida = (this.vidaBase*0.75)  :null;
             this.emitirEvento()
-        }else if(this.id ===  4 || this.id === 44){
-            
+        }else if(this.quePersonajeSeCura() === 'Reyna'){
             if(this.vida >= this.vidaBase)
             {
                 this.vida = this.vidaBase;
@@ -138,9 +167,11 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     doparHabilidad(indexAPotenciar, porcentaje, enemigo = null){
         // this.poderes[index].dano += this.poderes[index].dano * porcentaje;
         if(this.id ===  3 || this.id === 33){
+            this.sonidos.Damage.play()
             this.danoPotenciado = this.poderes[indexAPotenciar].dano
             enemigo.recibirDano(this.danoPotenciado + (this.poderes[indexAPotenciar].dano * porcentaje), null)
         }else {
+            this.sonidos.DoparHabilidad.play()
             this.danoPotenciado = this.poderes[indexAPotenciar].dano +(this.poderes[indexAPotenciar].dano * porcentaje)
             this.setPoder(indexAPotenciar, this.danoPotenciado)
         }
@@ -171,6 +202,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
     robarVida(indexDelDano, enemigo)
     {
+        this.sonidos.RobarVida.play()
         enemigo.recibirDano(this.poderes[indexDelDano].dano);
         this.cantidadVida = this.poderes[indexDelDano].dano * 0.75
         this.recibirCura(this.cantidadVida)
@@ -196,6 +228,11 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.danoXTurno = true;
         (this.tipo === 'Samurai')?sharedInstance.emit('sangra Vikingo',dano, this.tipo):sharedInstance.emit('sangra Samurai',dano, this.tipo);
     }
+    quePersonajeSeCura(){
+        this.ubicacionDeLaPalabraqueSeElimina = this.soloLaClaseDelPersonaje.indexOf(this.tipo)
+        this.soloLaClaseDelPersonaje = this.soloLaClaseDelPersonaje.slice(0, this.ubicacionDeLaPalabraqueSeElimina)
+        return this.soloLaClaseDelPersonaje
+    }
 }
     export function convertirClase(clase){
         return {
@@ -214,22 +251,23 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     export function Datos(vida, poderes, velocidad, defensa, clase, tipo){
         let id = 0;
         
-        (tipo === 'Samurai' && clase === 'Peon')? id = 11:null;
-        (tipo === 'Samurai' && clase === 'Caballo')? id = 22:null;
-        (tipo === 'Samurai' && clase === 'Reyna')? id = 33:null;
-        (tipo === 'Samurai' && clase === 'Alfil')? id = 44:null;
-        (tipo === 'Samurai' && clase === 'Torre')? id = 55:null;
-
-        (tipo === 'Vikingo' && clase === 'Peon')? id = 1:null;
-        (tipo === 'Vikingo' && clase === 'Caballo')? id = 2:null;
-        (tipo === 'Vikingo' && clase === 'Reyna')? id = 3:null;
-        (tipo === 'Vikingo' && clase === 'Alfil')? id = 4:null;
-        (tipo === 'Vikingo' && clase === 'Torre')? id = 5:null;
-        return{
+        (tipo === getPhrase('Samurai') && clase === getPhrase('Peon'))? id = 11:null;
+        (tipo === getPhrase('Samurai') && clase === getPhrase('Caballo'))? id = 22:null;
+        (tipo === getPhrase('Samurai') && clase === getPhrase('Reyna'))? id = 33:null;
+        (tipo === getPhrase('Samurai') && clase === getPhrase('Alfil'))? id = 44:null;
+        (tipo === getPhrase('Samurai') && clase === getPhrase('Torre'))? id = 55:null;
+        
+        
+        (tipo === getPhrase('Vikingo') && clase === getPhrase('Peon'))? id = 1:null;
+        (tipo === getPhrase('Vikingo') && clase === getPhrase('Caballo'))? id = 2:null;
+        (tipo === getPhrase('Vikingo') && clase === getPhrase('Reyna'))? id = 3:null;
+        (tipo === getPhrase('Vikingo') && clase === getPhrase('Alfil'))? id = 4:null;
+        (tipo === getPhrase('Vikingo') && clase === getPhrase('Torre'))? id = 5:null;
+        return {
                 vida: vida,
-                sprite: `personaje${clase}${tipo}`,
+                sprite: `${getPhrase('personaje')}${clase}${tipo}`,
                 poderes: poderes,
-                spriteSheet: `botonesAtaque${clase}`,
+                spriteSheet: `${getPhrase(`botonesAtaque`)}${clase}`,
                 velocidad: velocidad,
                 defensa: defensa,
                 tipo: tipo,
@@ -253,37 +291,42 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     */
 
     export function CrearPersonaje(tipo, clase){
+        let Peon = getPhrase('Peon');
+        let Caballo = getPhrase('Caballo');
+        let Torre = getPhrase('Torre');
+        let Reyna = getPhrase('Reyna');
+        let Alfil = getPhrase('Alfil');
                 const tipos = {
-                    Peon: Datos(Math.round(random.integer(60, 68)), [
-                        crearPoder(`ataqueRapidoPeon${tipo}`,(Math.round(random.integer(11, 14))), 1, 'Ataca al enemigo\n con un daño: min:11 a max:14'),
-                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 1, 'Ataca al enemigo con un daño: min:9 a max:15'),
-                        crearPoder(`momentoHisteria`, 0.3, 2, 'Aumenta el daño base en un 30%'),
-                        crearPoder(`gritoDeGuerra`,(Math.round(random.integer(0.2, 0.3))), 3, `Intimida al enemigo reduciendo \n el dano recibido en un min:20% y max:30%`),
-                    ], random.integer(4, 6), false, 'Peon', tipo),
-                    Alfil:Datos(Math.round(random.integer(60, 68)), [
-                        crearPoder(`ataqueRapidoAlfil${tipo}`, (Math.round(random.integer(10, 16))), 1,'Ataca al enemigo\n con un daño: min:10 a max:16'),
-                        crearPoder(`sangrado`,10, 9,'Causa daño:10 en cada turno al enemigo'),
-                        crearPoder(`curacion`, 0.45, 6, 'Se cura un 45% HP'),
-                        crearPoder(`cantoMotivador`, null, 2, 'Aumenta el daño base en un 30%')
-                    ], random.integer(6,7), false, 'Alfil', tipo),
-                    Torre:Datos(Math.round(random.integer(85, 95)), [
-                        crearPoder(`ataqueRapidoTorre${tipo}`, (Math.round(random.integer(18, 22))), 1, 'Ataca al enemigo\n con un daño: min:18 a max:22'),
-                        crearPoder(`ataqueCargado`, (Math.round(random.integer(60, 65))), 7, 'Se carga el ataque y al tercer turno hace daño: min:60 a max:65'),
-                        crearPoder(`arrollar`, 10, 8, 'Paraliza al enemigo\n por un turno'),
-                        crearPoder(`refuerzo`, (Math.round(random.integer(0.40, 0.50))), 3, 'Reduce el daño recibido un 45% del daño')
-                    ], random.integer(2,3), false, 'Torre', tipo),
-                    Caballo:Datos(Math.round(random.integer(65, 75)), [
-                        crearPoder(`ataqueRapidoCaballo${tipo}`,(Math.round(random.integer(17, 20))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:20'),
-                        crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, 'Ataca al enemigo con un daño: min:13 y max:15'),
-                        crearPoder(`estampida`, 8, 5, 'Se ataca un numero repetida\n de veces con un daño menor al normal'),
-                        crearPoder(`relinchar`, null, 6, 'Se cura un hasta un 75% HP cuando tiene menos de 50% de HP')
-                    ], random.integer(7,8), false, 'Caballo', tipo),
-                    Reyna:Datos(Math.round(random.integer(75, 85)), [
-                        crearPoder(`ataqueRapidoReyna${tipo}`,(Math.round(random.integer(17, 25))), 1, 'Ataca al enemigo\n con un daño: min:17 a max:25'),
-                        crearPoder(`boostCritico`, 0.80, 2, 'Aumenta el ataque en un 80% por un turno'),
-                        crearPoder(`roboDeVida`, (Math.round(random.integer(10, 15))), 4, 'Se cura entre min:10% y max:15%\n del daño realizado'),
-                        crearPoder(`esquiva`, 1, 3, 'Esquiva el siguiente ataque enemigo')
-                    ], random.integer(8,9), false, 'Reyna', tipo)
+                    [Peon]: Datos(Math.round(random.integer(60, 68)), [
+                        crearPoder(`${getPhrase('Animacion poder')}Uno${clase}${tipo}`,(Math.round(random.integer(11, 14))), 1, getPhrase('Ataca al enemigo con un daño: min:11 a max:14').toUpperCase()),
+                        crearPoder(`ataqueEstandar`,(Math.round(random.integer(9, 15))), 1, getPhrase('Ataca al enemigo con un daño: min:9 a max:15').toUpperCase()),
+                        crearPoder(`momentoHisteria`, 0.3, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase()),
+                        crearPoder(`gritoDeGuerra`,(Math.round(random.integer(0.2, 0.3))), 3, getPhrase(`Intimida al enemigo reduciendo el dano recibido en un min:20% y max:30%`).toUpperCase()),
+                    ], random.integer(4, 6), false, clase, tipo),
+                    [Alfil]:Datos(Math.round(random.integer(60, 68)), [
+                        crearPoder(`${getPhrase('Animacion poder')}Uno${clase}${tipo}`, (Math.round(random.integer(10, 16))), 1,getPhrase('Ataca al enemigo con un daño: min:10 a max:16').toUpperCase()),
+                        crearPoder(`sangrado`,10, 9,getPhrase('Causa daño:10 en cada turno al enemigo').toUpperCase()),
+                        crearPoder(`curacion`, 0.45, 6, getPhrase('Se cura un 45% HP').toUpperCase()),
+                        crearPoder(`cantoMotivador`, null, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase())
+                    ], random.integer(6,7), false, clase, tipo),
+                    [Torre]:Datos(Math.round(random.integer(85, 95)), [
+                        crearPoder(`${getPhrase('Animacion poder')}Uno${clase}${tipo}`, (Math.round(random.integer(18, 22))), 1, getPhrase('Ataca al enemigo con un daño: min:18 a max:22').toUpperCase()),
+                        crearPoder(`ataqueCargado`, (Math.round(random.integer(60, 65))), 7, getPhrase('Se carga el ataque y al tercer turno hace daño: min:60 a max:65').toUpperCase()),
+                        crearPoder(`arrollar`, 10, 8, getPhrase('Paraliza al enemigo por un turno').toUpperCase()),
+                        crearPoder(`refuerzo`, (Math.round(random.integer(0.40, 0.50))), 3, getPhrase('Reduce el daño recibido un 45% del daño').toUpperCase())
+                    ], random.integer(2,3), false, clase, tipo),
+                    [Caballo]:Datos(Math.round(random.integer(65, 75)), [
+                        crearPoder(`${getPhrase('Animacion poder')}Uno${clase}${tipo}`,(Math.round(random.integer(17, 20))), 1, getPhrase('Ataca al enemigo con un daño: min:17 a max:20').toUpperCase()),
+                        crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, getPhrase('Ataca al enemigo con un daño: min:13 y max:15').toUpperCase()),
+                        crearPoder(`estampida`, 8, 5, getPhrase('Se ataca un numero repetida de veces con un daño menor al normal').toUpperCase()),
+                        crearPoder(`relinchar`, null, 6, getPhrase('Se cura un hasta un 75% HP cuando tiene menos de 50% de HP').toUpperCase())
+                    ], random.integer(7,8), false, clase, tipo),
+                    [Reyna]:Datos(Math.round(random.integer(75, 85)), [
+                        crearPoder(`${getPhrase('Animacion poder')}Uno${clase}${tipo}`,(Math.round(random.integer(17, 25))), 1, getPhrase('Ataca al enemigo con un daño: min:17 a max:25').toUpperCase()),
+                        crearPoder(`boostCritico`, 0.80, 2, getPhrase('Aumenta el ataque en un 80% por un turno').toUpperCase()),
+                        crearPoder(`roboDeVida`, (Math.round(random.integer(10, 15))), 4, getPhrase('Se cura entre min:10% y max:15% del daño realizado').toUpperCase()),
+                        crearPoder(`esquiva`, 1, 3, getPhrase('Esquiva el siguiente ataque enemigo').toUpperCase())
+                    ], random.integer(8,9), false, clase, tipo)
                 }
                 return tipos[clase]
             }
@@ -292,11 +335,12 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             nombre: nombre,
             dano: dano,
             tipo: tipo,
-            info: info
+            info: info.toUpperCase()
         }
     }
     // funcion que evalua que metodo/funcion usar para la habilidad
     export function escuchaDeHabilidades(tipo,index, atacante, enemigo){
+        console.log(tipo);
         (tipo === 1) ? atacante.atacar(index, enemigo): null;
         (tipo === 2) ? atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo): null;
         (tipo === 3) ? atacante.setDefensa(true): null;
@@ -306,7 +350,24 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         (tipo === 7) ? atacante.cargarAtaque(index): null;
         (tipo === 8) ? atacante.robarTurno(enemigo): null;
         (tipo === 9) ? atacante.danoPorTurno(atacante.poderes[index].dano): null;
-    }
+        (tipo === 'CurarSangrado') ? curarSangrado({quienSeCura:atacante.tipo}): null;
+        (tipo === 'Rebote') ? rebote({usuario:atacante, enemigo:enemigo, indexDelPoder:null}): null;
+        (tipo === 'Atacar') ? console.log('Atacar'): null;
+        (tipo === 'Revivir') ? console.log('Revivir'): null;
+        (tipo === 'Escudo divino') ? console.log('Escudo divino'): null;
+        // const queHabilidadUsar = {
+        //     1:atacante.atacar(index, enemigo),
+        //     2:atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo),
+        //     3:atacante.setDefensa(true),
+        //     4:atacante.robarVida(index, enemigo),
+        //     5:atacante.multipleAtaque(index, enemigo),
+        //     6:atacante.recibirCura(atacante.poderes[index].dano),
+        //     7:atacante.cargarAtaque(index),
+        //     8:atacante.robarTurno(enemigo),
+        //     9:atacante.danoPorTurno(atacante.poderes[index].dano),
+        // }
+        // queHabilidadUsar[tipo];
+    };
     /*
     A modificar para las funciones en los ataque 
 

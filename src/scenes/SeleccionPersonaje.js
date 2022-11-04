@@ -2,6 +2,7 @@
 import Phaser from "phaser";
 import { BotonSencillo, Button } from "../js/button";
 import { CrearPersonaje } from "../js/Personaje";
+import { getPhrase } from "../services/translations";
 import { sharedInstance } from "./EventCenter";
 // import { convertirClase } from "../js/Personaje";
 // import { sharedInstance } from "./EventCenter";
@@ -31,18 +32,37 @@ export default class SeleccionPersonaje extends Phaser.Scene
     primerEscena = true;
     nuevoMuerto;
 
+    texto = '';
+    
+
     zoomSeleccionDerecha;
     zoomSeleccionIzquierda;
     actualizarPersonajes = false;
-    muerto = 0;
+    quienPerdio;
+    
+    // muerto = 0;
 
     constructor(){
         super('SeleccionPersonaje')
     }
     init(data){
+        this.sonidos = data.sonidos
+        this.registry.events.on('resetear listas para jugar de nuevo', ()=>{
+            this.peleadores = [];
+            this.personajesActuales = [];
+            this.listMuertos = [];
+            this.muertosVikingos =[];
+            this.muertosSamurais = [];
+            this.nuevoMuerto = undefined;
+            this.primerEscena = true;
+            this.actualizarPersonajes = false;
+            this.siguienteEscena = null;
+            console.log('se reseteo todo', this.siguienteEscena,);
+        });
         this.actualizacionPersonajes = data.personaje
         
         this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena)=> {
+            console.log(this.listMuertos)
             this.primerEscena = false;
             this.actualizarPersonajes = true
             this.cambiarEscena = true
@@ -51,6 +71,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
             });
+        (this.nuevoMuerto.tipo === 'Samurai')?[this.quienPerdio = `ELIGE TU FICHA SAMURAI`]:[this.quienPerdio = 'ELIGE TU FICHA VIKINGO'];
             // lista para filtrar al personaje vivo
 
             // aca se esta pasando desde el arraycompleto el personaje pero con la vida al 100% 
@@ -65,13 +86,17 @@ export default class SeleccionPersonaje extends Phaser.Scene
         (this.pushearMuertos === true)?[(this.nuevoMuerto.tipo === 'Samurai')?this.muertosSamurais.push(this.nuevoMuerto):this.muertosVikingos.push(this.nuevoMuerto), this.pushearMuertos = false]:null;
         (this.muertosVikingos.length === 5)?this.scene.start('VictoriaSamurai'):null;
         (this.muertosSamurais.length === 5)?this.scene.start('VictoriaVikingo'):null;
-        (this.nuevoMuerto != null)?this.listMuertos.push(this.nuevoMuerto):null;
+        (this.nuevoMuerto != undefined)?this.listMuertos.push(this.nuevoMuerto):null;
+
+        //Se envia a dormir a la escena 'Mochila' para no mostrarla en la SeleccionPersonaje, asi despues se va al combate y se mantienen los objetos
+        this.scene.sleep('Mochila')
+        
     }
 
     create() {
         this.style = {
             fontSize: '20px',
-            fontFamily: 'Agency FB',
+            fontFamily: 'asian',
             color: '#000',
             // align: 'center',
             backgroundColor: '#4f7abb',
@@ -91,27 +116,31 @@ export default class SeleccionPersonaje extends Phaser.Scene
 
         console.log("ESTAS EN SELECCION")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
-        new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('Juego'), 0.75)
+
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('Juego'), scale:0.75})
         
-        this.#vikingoPeon = CrearPersonaje('Vikingo', 'Peon')
-        this.#vikingoCaballo = CrearPersonaje('Vikingo', 'Caballo')
-        this.#vikingoReina = CrearPersonaje('Vikingo', 'Reyna')
-        this.#vikingoAlfil = CrearPersonaje('Vikingo', 'Alfil')
-        this.#vikingoTorre = CrearPersonaje('Vikingo', 'Torre')
-        
-        this.#samuraiPeon = CrearPersonaje('Samurai', 'Peon')
-        this.#samuraiCaballo = CrearPersonaje('Samurai', 'Caballo')
-        this.#samuraiReina = CrearPersonaje('Samurai', 'Reyna')
-        this.#samuraiAlfil = CrearPersonaje('Samurai', 'Alfil')
-        this.#samuraiTorre = CrearPersonaje('Samurai', 'Torre')
+        this.#vikingoPeon = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Peon'))
+        this.#vikingoCaballo = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Caballo'))
+        this.#vikingoReina = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Reyna'))
+        this.#vikingoAlfil = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Alfil'))
+        this.#vikingoTorre = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Torre'))
+        console.log(this.#vikingoTorre);
+        this.#samuraiPeon = CrearPersonaje(getPhrase('Samurai'), getPhrase('Peon'))
+        this.#samuraiCaballo = CrearPersonaje(getPhrase('Samurai'), getPhrase('Caballo'))
+        this.#samuraiReina = CrearPersonaje(getPhrase('Samurai'), getPhrase('Reyna'))
+        this.#samuraiAlfil = CrearPersonaje(getPhrase('Samurai'), getPhrase('Alfil'))
+        this.#samuraiTorre = CrearPersonaje(getPhrase('Samurai'), getPhrase('Torre'))
+
+        console.log(getPhrase('Vikingo'));
         
         
         this.zoomSeleccionIzquierda = this.add.image(480, 200, this.spriteI).setScale(2)
-        this.infoSeleccionIzquierda = this.add.text(80, 50, '',this.style)
+        this.infoSeleccionIzquierda = this.add.text(80, 50, '',this.style);
         
         this.zoomSeleccionDerecha = this.add.image(800, 200, this.spriteD).setScale(2)
-        this.infoSeleccionDerecha = this.add.text(980, 50, '', this.style)
+        this.infoSeleccionDerecha = this.add.text(980, 50, '', this.style);
 
+        
         sharedInstance.on('zoom seleccion izquierda', (sprite, texto)=>{
             this.spriteI = (sprite + 'Zoom')
             this.infoSeleccionIzquierda.setText(texto)
@@ -125,45 +154,47 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.#vikingoReina), this.botonListo1 = true}, 1, this.#vikingoReina, 'zoom seleccion derecha')
         this.botonAlfilVikingo = new Button(this, 1110, 542, 'seleccionAlfilVikingo', '', 0, () => {this.peleadores.push(this.#vikingoAlfil), this.botonListo1 = true}, 1, this.#vikingoAlfil, 'zoom seleccion derecha')
         this.botonTorreVikingo = new Button(this, 1245, 542, 'seleccionTorreVikingo', '', 0, () => {this.peleadores.push(this.#vikingoTorre), this.botonListo1 = true}, 1, this.#vikingoTorre, 'zoom seleccion derecha')
-
+        
         this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.#samuraiPeon),  this.botonListo2 = true}, 1, this.#samuraiPeon, 'zoom seleccion izquierda')
         this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.#samuraiCaballo),  this.botonListo2 = true}, 1, this.#samuraiCaballo, 'zoom seleccion izquierda')
         this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.#samuraiReina), this.botonListo2 = true}, 1, this.#samuraiReina, 'zoom seleccion izquierda')
         this.botonAlfilSamurai = new Button(this, 165, 542, 'seleccionAlfilSamurai', '', 0, () => {this.peleadores.push(this.#samuraiAlfil), this.botonListo2 = true}, 1, this.#samuraiAlfil, 'zoom seleccion izquierda')
         this.botonTorreSamurai = new Button(this, 30, 542, 'seleccionTorreSamurai', '', 0, () => {this.peleadores.push(this.#samuraiTorre), this.botonListo2 = true}, 1, this.#samuraiTorre, 'zoom seleccion izquierda')
 
-        // this.arrayCompleto = [this.#vikingoPeon, this.#vikingoCaballo, this.#vikingoReina, this.#samuraiPeon, this.#samuraiCaballo, this.#samuraiReina];
-        
-
+        //Feedback para saber quien eligue el siguientepeleador que murio en el anterior combate
+        this.add.text(this.cameras.main.centerX, 50, this.quienPerdio, this.style).setStyle({fontSize: '40px', fontDamily: 'asian'});
+        //ELIGE TU HEROE
+        this.add.text(this.cameras.main.centerX-(this.cameras.main.centerX/4), 0, getPhrase('ELIGE TU HEROE'), this.style).setStyle({fontSize: '60px', fontDamily: 'asian'});
     }
     update(){
         this.zoomSeleccionDerecha.setTexture(this.spriteD)
         this.zoomSeleccionIzquierda.setTexture(this.spriteI)
+
         if(this.botonListo1 && this.botonListo2 === true)
         {
             this.botonListo1 = false
             this.botonListo2 = false
             this.actualizacionPersonajes === false
-
             const objeto = {
-                personajes: this.peleadores
+                personajes: this.peleadores,
+                crear:true,
+                sonidos:this.sonidos,
             };
-            (this.primerEscena === true)?[this.primerEscena = false, this.scene.start('BatallaPuente', objeto)]:null;
+            (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto)]:null;
  
             switch(this.siguienteEscena){
-                case 1 : this.scene.start('BatallaCastillo', objeto)
+                case 1 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
                 break
-                case 2 : this.scene.start("BatallaCiudad", objeto)
+                case 2 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
                 break
-                case 3 : this.scene.start("BatallaPuente", objeto)
+                case 3 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
                 break
-                case 4 : this.scene.start("BatallaBosque", objeto)
+                case 4 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
                 break
-                case 5 : this.scene.start('BatallaCosta', objeto)
+                case 5 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
                 break
             }
         }
-
         if(this.actualizarPersonajes === true){
             const indice = {
                 1 : this.botonPeonVikingo,
@@ -189,21 +220,6 @@ export default class SeleccionPersonaje extends Phaser.Scene
                     }
             }
         }
-        // (this.listMuertos.length === 8)?[(this.peleadores[0].tipo === 'Samurai')?this.scene.start('VictoriaSamurai'):this.scene.start('VictoriaVikingo')]:console.log('Las lista tiene',this.listMuertos.length, 'jugadores Muertos');
-        // if(this.listMuertos.length === 8)
-        //     {
-        //         if(this.peleadores[0].tipo === 'Samurai')
-        //         {
-        //             this.scene.start('VictoriaSamurai')
-        //         } else {
-        //             this.scene.start('VictoriaVikingo')
-        //         }                               
-
-        // }
-        //logica para cambiar la escena que inicia se crea un indice con una key que pertenece a cada escena/escenario, se le pasa el id que recibe el evento escucha en seleccion(esta misma escena),
-        //se envio desde la escena del combate anterior hasta el evento
-           
     }
-    
 }
 

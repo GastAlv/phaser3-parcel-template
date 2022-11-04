@@ -1,5 +1,8 @@
 import Phaser from 'phaser'
-import Button, { BotonSencillo } from '../js/button';
+import { BotonSencillo, Item } from '../js/button';
+import { ManejadorDeSonidos } from '../js/ManejadorDeSonidos';
+import { getTranslations, getPhrase } from '../services/translations'
+import keys from '../enums/keys';
 
 
 // Manejador de eventos centralizados para comunicacion de componentes
@@ -18,24 +21,32 @@ import Button, { BotonSencillo } from '../js/button';
 
 export default class MainMenu extends Phaser.Scene
 {
+    #language
+    Primera = true;
 	constructor()
 	{
 		super('MainMenu')
 	}
-
-
+    init(data){
+        this.#language = data.language;
+    }
     create()
     {
+        const sonidos = new ManejadorDeSonidos({scene:this, volumen:1, loop:true});
+        sonidos.MainMenuSonido.play()
+        
+
         const menuFondo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'menuInicio');
         
 
 
-        const buttonJugar = new BotonSencillo(this, 750, 205, 'botonMarco', 'JUGAR', 80, () => this.scene.start('SeleccionFaccion'), 0.67);
+        const buttonJugar = new BotonSencillo({scene:this, x:750, y:205, texture:'botonMarco', text:getPhrase('JUGAR'), size:80, callback:() => {this.scene.start('SeleccionFaccion', {sonidos: sonidos, language:this.#language}), this.registry.events.emit('resetear listas para jugar de nuevo')}, scale:0.67, callbackHover:()=>{sonidos.HoverBoton.play()}, callbackOut:()=>{sonidos.HoverBoton.pause()}});
         // const buttonAyuda = new Button(this, 756, 348, 'AYUDA', 70, () => this.scene.start('Ayuda'), 0.50);
-        const botonCreditos = new BotonSencillo(this, 760, 478, 'botonMarco', 'CREDITOS', 60, () => this.scene.start('Creditos'), 0.43);
+        const botonAyuda = new BotonSencillo({scene:this, x:760, y:350, texture:'botonMarco', text:getPhrase('AYUDA'), size:40, callback:() => {this.scene.start('Ayuda', {sonidos: sonidos, language:this.#language})}, scale:0.5,  callbackHover:()=>{sonidos.HoverBoton.play()}, callbackOut:()=>{sonidos.HoverBoton.pause()}});
         
-        const botonOpciones = new BotonSencillo(this, 1210, 60, 'botonOpciones', '', 0, () => this.scene.start('Creditos'), 0.72);
+        const botonCreditos = new BotonSencillo({scene:this, x:760, y:478, texture:'botonMarco', text:getPhrase('CREDITOS'), size:40, callback:() => {this.scene.start('Creditos', {sonidos: sonidos, language:this.#language})}, scale:0.43,  callbackHover:()=>{sonidos.HoverBoton.play()}, callbackOut:()=>{sonidos.HoverBoton.pause()}});
         
-
+        const botonOpciones = new BotonSencillo({scene:this, x:1210, y:60, texture:'botonOpciones', text:'', size:0, callback:() => {this.scene.start('Opciones', {sonidos: sonidos, language: this.#language })}, scale:0.72, callbackHover:()=>{sonidos.HoverBoton.play()}, callbackOut:()=>{sonidos.HoverBoton.pause()}});
+        
     }
 }
