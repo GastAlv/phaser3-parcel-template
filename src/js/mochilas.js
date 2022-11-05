@@ -26,7 +26,6 @@ export default class Mochila extends Phaser.Scene
         this.inventarioVikingo = new Inventario({scene:this, ubicacionInicio:{x:1240,y:480}, ubicacionFinal:{x:850,y:300}, tipo:'Vikingo'});
 
         this.registry.events.on('desactivar mochila', (queMochilaDesactivo)=>{
-            console.log(queMochilaDesactivo);
             (queMochilaDesactivo === 'Samurai')?[this.inventarioSamurai.desactivarMochila(), this.inventarioVikingo.activarMochila()]:[this.inventarioVikingo.desactivarMochila(), this.inventarioSamurai.activarMochila()];
         })
         //prueba de un monoevento que evalua quien lo suelta. para no crear dos eventos 

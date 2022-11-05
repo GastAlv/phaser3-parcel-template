@@ -28,10 +28,10 @@ export default class BatallaPuente extends Phaser.Scene
         console.log(this.personajes)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
-            return personaje.tipo == getPhrase('Samurai')
+            return personaje.tipo == 'Samurai'
         })
         this.personajeDerecha = this.personajes.find((personaje)=>{
-            return personaje.tipo == getPhrase('Vikingo')
+            return personaje.tipo == 'Vikingo'
         })
     }  
     create() {
@@ -134,8 +134,8 @@ export default class BatallaPuente extends Phaser.Scene
 
 
         this.registry.events.on('victoria de combate', (ganador)=>{
+            
             this.registry.events.emit('detener timer y todo los pads')
-
             this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
             
             let timeOutParaSoltarBotin = setTimeout(()=>{

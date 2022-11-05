@@ -94,7 +94,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
     }
 
     create() {
-        this.style = {
+        this.cameras.main.fadeIn(1000);
+        let style = {
             fontSize: '20px',
             fontFamily: 'asian',
             color: '#000',
@@ -117,28 +118,28 @@ export default class SeleccionPersonaje extends Phaser.Scene
         console.log("ESTAS EN SELECCION")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'pta').setScale(1.13)
 
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('Juego'), scale:0.75})
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('MainMenu'), scale:0.75})
         
-        this.#vikingoPeon = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Peon'))
-        this.#vikingoCaballo = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Caballo'))
-        this.#vikingoReina = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Reyna'))
-        this.#vikingoAlfil = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Alfil'))
-        this.#vikingoTorre = CrearPersonaje(getPhrase('Vikingo'), getPhrase('Torre'))
+        this.#vikingoPeon = CrearPersonaje('Vikingo','Peon');
+        this.#vikingoCaballo = CrearPersonaje('Vikingo','Caballo');
+        this.#vikingoReina = CrearPersonaje('Vikingo','Reyna');
+        this.#vikingoAlfil = CrearPersonaje('Vikingo','Alfil');
+        this.#vikingoTorre = CrearPersonaje('Vikingo','Torre');
         console.log(this.#vikingoTorre);
-        this.#samuraiPeon = CrearPersonaje(getPhrase('Samurai'), getPhrase('Peon'))
-        this.#samuraiCaballo = CrearPersonaje(getPhrase('Samurai'), getPhrase('Caballo'))
-        this.#samuraiReina = CrearPersonaje(getPhrase('Samurai'), getPhrase('Reyna'))
-        this.#samuraiAlfil = CrearPersonaje(getPhrase('Samurai'), getPhrase('Alfil'))
-        this.#samuraiTorre = CrearPersonaje(getPhrase('Samurai'), getPhrase('Torre'))
+        this.#samuraiPeon = CrearPersonaje('Samurai', 'Peon');
+        this.#samuraiCaballo = CrearPersonaje('Samurai', 'Caballo');
+        this.#samuraiReina = CrearPersonaje('Samurai', 'Reyna');
+        this.#samuraiAlfil = CrearPersonaje('Samurai', 'Alfil');
+        this.#samuraiTorre = CrearPersonaje('Samurai', 'Torre');
 
         console.log(getPhrase('Vikingo'));
         
         
         this.zoomSeleccionIzquierda = this.add.image(480, 200, this.spriteI).setScale(2)
-        this.infoSeleccionIzquierda = this.add.text(80, 50, '',this.style);
+        this.infoSeleccionIzquierda = this.add.text(80, 50, '',style);
         
         this.zoomSeleccionDerecha = this.add.image(800, 200, this.spriteD).setScale(2)
-        this.infoSeleccionDerecha = this.add.text(980, 50, '', this.style);
+        this.infoSeleccionDerecha = this.add.text(980, 50, '', style);
 
         
         sharedInstance.on('zoom seleccion izquierda', (sprite, texto)=>{
@@ -162,9 +163,9 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.botonTorreSamurai = new Button(this, 30, 542, 'seleccionTorreSamurai', '', 0, () => {this.peleadores.push(this.#samuraiTorre), this.botonListo2 = true}, 1, this.#samuraiTorre, 'zoom seleccion izquierda')
 
         //Feedback para saber quien eligue el siguientepeleador que murio en el anterior combate
-        this.add.text(this.cameras.main.centerX, 50, this.quienPerdio, this.style).setStyle({fontSize: '40px', fontDamily: 'asian'});
+        this.add.text(this.cameras.main.centerX, 50, this.quienPerdio, style).setStyle({fontSize: '40px', fontDamily: 'asian'});
         //ELIGE TU HEROE
-        this.add.text(this.cameras.main.centerX-(this.cameras.main.centerX/4), 0, getPhrase('ELIGE TU HEROE'), this.style).setStyle({fontSize: '60px', fontDamily: 'asian'});
+        this.add.text(this.cameras.main.centerX-(this.cameras.main.centerX/4), 0, getPhrase('ELIGE TU HEROE'), style).setStyle({fontSize: '60px', fontDamily: 'asian'});
     }
     update(){
         this.zoomSeleccionDerecha.setTexture(this.spriteD)

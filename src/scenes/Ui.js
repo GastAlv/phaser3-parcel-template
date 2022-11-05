@@ -43,10 +43,10 @@ export default class Ui extends Phaser.Scene
         console.log(this.jugadores)
 
         this.personajeIzquierda = this.jugadores.find((personaje)=>{
-            return personaje.tipo === getPhrase('Samurai')
+            return personaje.tipo === 'Samurai'
         });
         this.personajeDerecha = this.jugadores.find((personaje)=>{
-            return personaje.tipo === getPhrase('Vikingo')
+            return personaje.tipo === 'Vikingo'
         });
         // console.log(this.personajeDerecha.poderes)
         this.enterBase = this.input.keyboard;
@@ -60,17 +60,7 @@ export default class Ui extends Phaser.Scene
         this.turnoAtacar = 0;
         this.evaluaQueColor(this.personajeDerecha);
         this.evaluaQueColor(this.personajeIzquierda);
-
-        // this.botonIzquierda1  = new BotonHabilidades(this, 180, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info);
-        // this.botonIzquierda2  = new BotonHabilidades(this, 300, 525, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info);
-        // this.botonIzquierda3  = new BotonHabilidades(this, 180, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info);
-        // this.botonIzquierda4 = new BotonHabilidades(this, 300, 650, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info);
         
-        // this.botonDerecha1  = new BotonHabilidades(this, 1100, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder1'), this.cambiarTurno()}, 4, this.personajeDerecha.poderes[0].info);
-        // this.botonDerecha2  = new BotonHabilidades(this, 980, 525, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5, this.personajeDerecha.poderes[1].info);
-        // this.botonDerecha3  = new BotonHabilidades(this, 1100, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6, this.personajeDerecha.poderes[2].info);
-        // this.botonDerecha4 = new BotonHabilidades(this, 980, 650, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info);
-
         this.scene.moveAbove('Ui', 'Mochila');
         // this.scene.launch('Mochila')
         (this.crearMochilas === true)?[this.scene.launch('Mochila'), console.log('se lanzo la escena'), this.crearMochilas = false]:[this.scene.run('Mochila'), console.log('se corre la escena')];
@@ -96,7 +86,6 @@ export default class Ui extends Phaser.Scene
         this.modificaLasBarrasDeVidaDeInicio(this.personajeIzquierda)
         
 
-        // this.add.image( this.cameras.main.centerX , 580, 'interfaz');
         this.botonIzquierda1  = new BotonHabilidades(this, 80, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info, 80, 500);      
         this.botonIzquierda2  = new BotonHabilidades(this, 220, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info, 80, 500);
         this.botonIzquierda3  = new BotonHabilidades(this, 360, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info, 80, 500);
@@ -180,12 +169,13 @@ export default class Ui extends Phaser.Scene
         });
         this.registry.events.on('detener timer y todo los pads', ()=>{
             this.timedEvent.paused = true;
-            // this.tituloTemporizador.setText('0');
-            // this.tiempo.setText('0');
-            this.bloquearPad('derecha');
+            this.turnoDerecha = false;
+            let intervalo = setTimeout(()=>{this.bloquearPad('derecha');
             this.bloquearPad('izquierda');
             this.registry.events.emit('desactivar mochila', 'Samurai');
             this.registry.events.emit('desactivar mochila', 'Vikingo');
+            clearInterval(intervalo)
+            },1)
         });
         //---------------------------------------------------------------------
         //cursor para el pad de los samurais

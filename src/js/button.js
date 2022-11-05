@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import { sharedInstance } from "../scenes/EventCenter";
+import { getPhrase } from "../services/translations";
 import { ManejadorDeSonidos } from "./ManejadorDeSonidos";
 
 
@@ -37,13 +38,13 @@ export class Button
         
         this.obj = objeto
         this.informacion = [
-            `${this.obj.clase} ${this.obj.tipo}`,
+            `${getPhrase(this.obj.clase)} ${getPhrase(this.obj.tipo)}`,
             '',
-            '❤️ VIDA: '+ this.obj.vida,
+            `❤️ ${getPhrase('VIDA')}: `+ this.obj.vida,
             '',
-            '⚡ VELOCIDAD: '+this.obj.velocidad,
+            `⚡ ${getPhrase('VELOCIDAD')}:`+ this.obj.velocidad,
             '',
-            '🎯 HABILIDADES: ',
+            `🎯 ${getPhrase(`HABILIDADES`)}: `,
             this.obj.poderes[0].nombre,
             this.obj.poderes[1].nombre,
             this.obj.poderes[2].nombre,
