@@ -33,7 +33,7 @@ export default class SeleccionFaccion extends Phaser.Scene
         
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'elegirFaccion')
         //ELIGE TU facción
-        this.add.text(this.cameras.main.centerX-(this.cameras.main.centerX/4), 0, getPhrase('ELIGE TU FACCIÓN'), style).setStyle({fontSize: '60px', fontDamily: 'asian'});
+        this.add.text(this.cameras.main.centerX, 70, getPhrase('ELIGE TU FACCIÓN'), style).setStyle({fontSize: '70px', fontDamily: 'asian'}).setOrigin(.5)
 
         new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('MainMenu', {sonidos:this.sonidos, languaje:this.#languaje}), scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
 

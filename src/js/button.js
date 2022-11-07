@@ -38,19 +38,12 @@ export class Button
         
         this.obj = objeto
         this.informacion = [
-            `${getPhrase(this.obj.clase)} ${getPhrase(this.obj.tipo)}`,
-            '',
-            `❤️ ${getPhrase('VIDA')}: `+ this.obj.vida,
-            '',
-            `⚡ ${getPhrase('VELOCIDAD')}:`+ this.obj.velocidad,
-            '',
-            `🎯 ${getPhrase(`HABILIDADES`)}: `,
-            this.obj.poderes[0].nombre,
-            this.obj.poderes[1].nombre,
-            this.obj.poderes[2].nombre,
-            this.obj.poderes[3].nombre,
-    ];
+            `${getPhrase(this.obj.clase).toUpperCase()} ${getPhrase(this.obj.tipo).toUpperCase()}`+
+            `❤️ ${getPhrase('VIDA')}: `+ this.obj.vida+
+            `⚡ ${getPhrase('VELOCIDAD')}:`+ this.obj.velocidad
+        ];
         this.scale = scale;
+        this.texture = texture;
         this.activo = true;
         this.container = scene.add.container(x, y)
         this.img = scene.add.image(0, 0, texture)
@@ -62,26 +55,27 @@ export class Button
         this.txt = scene.add.text(0, 0, text, {fontSize: size})
         .setOrigin(0.5)
         .setStyle({fontFamily: 'asian'})
-        this.textoDeEstado = scene.add.text(0,0,'', {fontSize:30, fontFamily:'asian'}).setOrigin(.5)
+        this.textoDeEstado = scene.add.text(0,0,'', {fontSize:30, fontFamily:'asian', color:`#F00`}).setOrigin(.5)
         this.container.add([this.img, this.txt, this.textoDeEstado])
     }
-    desactivarEntrada(){
+    desactivarEntrada({cartelParaMostrarDesactivado:cartelParaMostrarDesactivado}){
         this.img.removeInteractive()
         this.img.setTint(0x000000)
-        this.textoDeEstado.setText('MUERTO')
+        this.textoDeEstado.setText(cartelParaMostrarDesactivado)
     }
 }
 
-export class BotonHabilidades extends Phaser.GameObjects.Sprite {
+export class BotonHabilidades /*extends Phaser.GameObjects.Sprite*/ {
     constructor(scene, x, y, texture, callback, indexDeSprite, infoHabilidad, xTexto, yTexto){
-        super(scene, x, y, texture, callback)
-        this.img = scene.add.image(x, y, texture, indexDeSprite)
+        // super(scene, x, y, texture, callback)
+        this.img = scene.add.sprite(x, y, texture, indexDeSprite)
         .setInteractive({ useHandCursor: true })
         .on("pointerdown", () => callback())
         .on("pointerover", ()=> {this.img.setScale(1 + 0.08), this.mostrarInformacion()})
         .on("pointerout", ()=> {this.img.setScale(1), this.ocultarInformacion()})
         // this.contenedor = scene.add.container(x, y-(y/5.5))
         // sharedInstance.emit('mostrar texto boton', infoHabilidad)
+        this.img.visible = true;
 
         this.textoInformacion = scene.add.text(xTexto, yTexto, infoHabilidad,{
             fontSize: '25px',
@@ -184,7 +178,7 @@ export class Inventario{
         // this.item5 = scene.add.image(-50, 60,'empty', 2).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoCinco), this.objetoUsado(this.item5)})
         // this.item6 = scene.add.image(30, 60,'empty', 1).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoSeis), this.objetoUsado(this.item6)})
 
-        this.cruz = scene.add.image(0, 0, 'crus').setInteractive({useHandCursor: true}).on("pointerdown", () => this.cerrarMochila()).setScale(.05).setOrigin(2.5,2.5)
+        this.cruz = scene.add.image(0, 0, 'crus').setInteractive({useHandCursor: true}).on("pointerdown", () => this.cerrarMochila()).setScale(.3).setOrigin(2.5,2.5)
         this.contenedor.add([this.imgMochila, this.item1, this.item2, this.item3, this.item4, this.item5, this.item6, this.cruz])
         // this.contenedor.add([this.imgMochila, this.cruz])
         this.contenedor.visible = false

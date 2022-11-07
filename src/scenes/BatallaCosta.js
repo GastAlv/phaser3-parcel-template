@@ -30,7 +30,7 @@ export default class BatallaCosta extends Phaser.Scene
         console.log("ESTAS EN COSTA")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCosta').setScale(1.135)
-        new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        // new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
         
         
         

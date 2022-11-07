@@ -85,6 +85,7 @@ export default class Preloads extends Phaser.Scene
 
         this.load.image('mochilaAbierta', 'assets/interfaz/mochilaAbierta.png')
         this.load.image('mochilaCerrada', 'assets/interfaz/mochilaCerrada.png')
+        
         this.load.image('crus', 'assets/interfaz/crus.png')
         this.load.image('empty', 'assets/interfaz/empty.png')
         this.load.spritesheet('lootUno', 'assets/interfaz/lootUno.png', { frameWidth: 40, frameHeight: 40});

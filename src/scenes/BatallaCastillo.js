@@ -29,7 +29,7 @@ export default class BatallaCastillo extends Phaser.Scene
         console.log("estas en puente")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCastillo').setScale(1.135)
-        new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        // new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
         
         
         

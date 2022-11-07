@@ -10,7 +10,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
 {
     #defensa;
     constructor(props){
-        const {scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true} = props
+        const {scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true, clase} = props
         super(scene, x, y, sprite, 0)
         this.scene = scene;
         this.vidaBase = vida;
@@ -22,6 +22,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.spriteSheet = spriteSheet
         this.#defensa = defensa;
         this.tipo = tipo;
+        this.clase = clase
         this.id = id;
         this.estaVivo = estaVivo;
         this.gano = null;
@@ -233,18 +234,19 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         return this.soloLaClaseDelPersonaje
     }
 }
-    export function convertirClase(clase){
+    export function convertirClase(Clase){
         return {
-        vida: clase.vida,
-        sprite: clase.sprite,
-        poderes: clase.poderes,
-        spriteSheet: clase.spriteSheet,
-        velocidad: clase.velocidad,
-        defensa: clase.defensa,
-        tipo: clase.tipo,
-        estaVivo: clase.estaVivo,
-        id: clase.id,
-        vidaBase: clase.vidaBase
+        vida: Clase.vida,
+        sprite: Clase.sprite,
+        poderes: Clase.poderes,
+        spriteSheet: Clase.spriteSheet,
+        velocidad: Clase.velocidad,
+        defensa: Clase.defensa,
+        tipo: Clase.tipo,
+        estaVivo: Clase.estaVivo,
+        id: Clase.id,
+        vidaBase: Clase.vidaBase,
+        clase: Clase.clase
     }
     }
     export function Datos(vida, poderes, velocidad, defensa, clase, tipo){
