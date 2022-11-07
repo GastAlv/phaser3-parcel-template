@@ -166,77 +166,9 @@ export default class SeleccionPersonaje extends Phaser.Scene
         //ELIGE TU HEROE
         this.add.text(this.cameras.main.centerX, 10, getPhrase('ELIGE TU HEROE'), style).setStyle({fontSize: '60px', fontDamily: 'asian'}).setOrigin(.5)
 
-        this.registry.events.on('manejador de combates', ()=>{
-            this.botonListo1 = false
-            this.botonListo2 = false
-            const objeto = {
-                personajes: this.peleadores,
-                crear:true,
-                sonidos:this.sonidos,
-            };
-            (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto)]:null;
- 
-            switch(this.siguienteEscena){
-                case 1 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
-                break
-                case 2 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
-                break
-                case 3 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
-                break
-                case 4 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto), console.log('¡Problema de ejecucuin!'), this.siguienteEscena = 0]
-                break
-                case 5 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
-                break
-            }
-            // const listaDeEscenas = {
-            //     1: [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)],
-            //     2: [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)],
-            //     3: [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)],
-            //     4: [this.scene.start("BatallaBosque", objeto), console.log('¡Problema de ejecucuin!')],
-            //     5: [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)],
-            // }
-            // listaDeEscenas[this.siguienteEscena]
-            
-        });
-        this.registry.events.on('actualizar Botones Y Personajes', ()=>{
-            const indice = {
-                1 : this.botonPeonVikingo,
-                2 : this.botonCaballoVikingo,
-                3 : this.botonReinaVikingo,
-                4 : this.botonAlfilVikingo,
-                5 : this.botonTorreVikingo,
-                11 : this.botonPeonSamurai,
-                22 : this.botonCaballoSamurai,
-                33 : this.botonReinaSamurai,
-                44 : this.botonAlfilSamurai,
-                55 : this.botonTorreSamurai,
-            }
-            for (let jugadorMuerto of this.listMuertos) {
-                let boton = indice[jugadorMuerto.id]
-                boton.desactivarEntrada({cartelParaMostrarDesactivado:'MUERTO'})
-                if(jugadorMuerto.tipo === 'Vikingo'){
-                    this.botonListo1 = false;
-                    this.botonListo2 = true;
-                    
-                    this.BLOQUEARBOTONES({tipo:jugadorMuerto.tipo, textura: indice[this.peleadores[0].id].texture});
-                }else if (jugadorMuerto.tipo === 'Samurai'){
-                    this.botonListo1 = true;
-                    this.botonListo2 = false;
-                    this.BLOQUEARBOTONES({tipo:jugadorMuerto.tipo, textura: indice[this.peleadores[0].id].texture})
-                }
-            }
-        });
-    }
-    update(){
-        this.zoomSeleccionVikingo.setTexture(this.spriteD)
-        this.zoomSeleccionSamurai.setTexture(this.spriteI)
-        this.revisarListos()
-        this.actualizarBotonesYPersonajes()
-        // if(this.botonListo1 && this.botonListo2 === true)
-        // {
+        // this.registry.events.on('manejador de combates', ()=>{
         //     this.botonListo1 = false
         //     this.botonListo2 = false
-        //     this.actualizacionPersonajes === false
         //     const objeto = {
         //         personajes: this.peleadores,
         //         crear:true,
@@ -251,13 +183,22 @@ export default class SeleccionPersonaje extends Phaser.Scene
         //         break
         //         case 3 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
         //         break
-        //         case 4 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
+        //         case 4 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto), console.log('¡Problema de ejecucuin!'), this.siguienteEscena = 0]
         //         break
         //         case 5 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
         //         break
         //     }
-        // }
-        // if(this.actualizarPersonajes === true){
+            // const listaDeEscenas = {
+            //     1: [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)],
+            //     2: [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)],
+            //     3: [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)],
+            //     4: [this.scene.start("BatallaBosque", objeto), console.log('¡Problema de ejecucuin!')],
+            //     5: [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)],
+            // }
+            // listaDeEscenas[this.siguienteEscena]
+            
+        // });
+        // this.registry.events.on('actualizar Botones Y Personajes', ()=>{
         //     const indice = {
         //         1 : this.botonPeonVikingo,
         //         2 : this.botonCaballoVikingo,
@@ -284,7 +225,66 @@ export default class SeleccionPersonaje extends Phaser.Scene
         //             this.BLOQUEARBOTONES({tipo:jugadorMuerto.tipo, textura: indice[this.peleadores[0].id].texture})
         //         }
         //     }
-        // }
+        // });
+    }
+    update(){
+        this.zoomSeleccionVikingo.setTexture(this.spriteD)
+        this.zoomSeleccionSamurai.setTexture(this.spriteI)
+        // this.revisarListos()
+        // this.actualizarBotonesYPersonajes()
+        if(this.botonListo1 && this.botonListo2 === true)
+        {
+            this.botonListo1 = false
+            this.botonListo2 = false
+            this.actualizacionPersonajes === false
+            const objeto = {
+                personajes: this.peleadores,
+                crear:true,
+                sonidos:this.sonidos,
+            };
+            (this.primerEscena === true)?[this.primerEscena = false, this.scene.start('BatallaPuente', objeto)]:null;
+ 
+            switch(this.siguienteEscena){
+                case 1 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
+                break
+                case 2 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
+                break
+                case 3 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
+                break
+                case 4 : [this.scene.start("BatallaBosque", objeto)]
+                break
+                case 5 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
+                break
+            }
+        }
+        if(this.actualizarPersonajes === true){
+            const indice = {
+                1 : this.botonPeonVikingo,
+                2 : this.botonCaballoVikingo,
+                3 : this.botonReinaVikingo,
+                4 : this.botonAlfilVikingo,
+                5 : this.botonTorreVikingo,
+                11 : this.botonPeonSamurai,
+                22 : this.botonCaballoSamurai,
+                33 : this.botonReinaSamurai,
+                44 : this.botonAlfilSamurai,
+                55 : this.botonTorreSamurai,
+            }
+            for (let jugadorMuerto of this.listMuertos) {
+                let boton = indice[jugadorMuerto.id]
+                boton.desactivarEntrada({cartelParaMostrarDesactivado:'MUERTO'})
+                if(jugadorMuerto.tipo === 'Vikingo'){
+                    this.botonListo1 = false;
+                    this.botonListo2 = true;
+                    
+                    // this.BLOQUEARBOTONES({tipo:jugadorMuerto.tipo, textura: indice[this.peleadores[0].id].texture});
+                }else if (jugadorMuerto.tipo === 'Samurai'){
+                    this.botonListo1 = true;
+                    this.botonListo2 = false;
+                    // this.BLOQUEARBOTONES({tipo:jugadorMuerto.tipo, textura: indice[this.peleadores[0].id].texture})
+                }
+            }
+        }
     }
     revisarListos(){
         (this.botonListo1 && this.botonListo2 === true)?[this.registry.events.emit('manejador de combates')]:null;

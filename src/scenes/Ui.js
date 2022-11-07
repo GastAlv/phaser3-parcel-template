@@ -455,7 +455,6 @@ export default class Ui extends Phaser.Scene
             this.botonDerecha3.desactivarEntrada();
             this.botonDerecha4.desactivarEntrada();
         }
-        
     }
     desbloquearPad(cual){
         if(cual === 'izquierda'){

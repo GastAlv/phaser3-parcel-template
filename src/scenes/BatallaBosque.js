@@ -128,9 +128,10 @@ export default class BatallaBosque extends Phaser.Scene
             crear:false,
             sonidos: this.sonidos,
         };
+        console.log(objeto);
 
         this.scene.moveAbove('BatallaPuente', 'Ui');
-        this.scene.launch('Ui', objeto);
+        this.scene.run('Ui', objeto);
 
 
     //     this.registry.events.on('victoria de combate', (ganador)=>{

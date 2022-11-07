@@ -94,12 +94,12 @@ export default class BatallaPuente extends Phaser.Scene
         Al realizar la funcion en el segundo parametro que se le pasa un numero, no vamos a pasar nada ya que, con "tipoDeHabilidad" le enviamos el tipo para que busque que funcion usar, 
         deberiamos enviarlo en el caso de que se complemente ell objeto junto otra habilidad del array poderes de cada personaje
         */
-        sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
-            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
-            this.habilidad = tipoDeHabilidad
-            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
+        // sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
+        //     //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+        //     this.habilidad = tipoDeHabilidad
+        //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
             
-        })
+        // })
 
         this.registry.events.on('Vikingo poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
@@ -119,12 +119,12 @@ export default class BatallaPuente extends Phaser.Scene
             
         })
          //Evento solo para usar el inventario Vikingo
-         sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
-            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
-            this.habilidad = tipoDeHabilidad
-            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
+        //  sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
+        //     //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+        //     this.habilidad = tipoDeHabilidad
+        //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
             
-        });
+        // });
         this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:100, color:'#686cd6', fontFamily:'asian'});
 
         const objeto = {
@@ -133,7 +133,7 @@ export default class BatallaPuente extends Phaser.Scene
             sonidos: this.sonidos,
         };
         this.scene.moveAbove('BatallaPuente', 'Ui');
-        this.scene.launch('Ui', objeto);
+        this.scene.run('Ui', objeto);
 
 
     //     this.registry.events.on('victoria de combate', (ganador)=>{
