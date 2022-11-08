@@ -14,8 +14,6 @@ export default class SeleccionFaccion extends Phaser.Scene
     init(data){
         this.sonidos = data.sonidos
         this.#languaje = data.language
-        
-        
     }
     create() {
         let style = {

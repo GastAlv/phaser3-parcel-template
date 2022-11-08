@@ -139,6 +139,9 @@ export class Inventario{
     tipoObjetoCinco;
     tipoObjetoSeis;
 
+    items = []
+    selectedButtonIndex = 0;
+
     espacioOcupadoUno = false;
     espacioOcupadoDos = false;
     espacioOcupadoTres = false;
@@ -146,6 +149,8 @@ export class Inventario{
     espacioOcupadoCinco = false;
     espacioOcupadoSeis = false;
     espacio = [this.espacioOcupadoUno, this.espacioOcupadoDos, this.espacioOcupadoTres, this.espacioOcupadoCuatro, this.espacioOcupadoCinco, this.espacioOcupadoSeis];
+
+    
 
     constructor(props){
         const {scene:scene, ubicacionInicio = {}, ubicacionFinal = {}, tipo: tipo} = props;
@@ -171,20 +176,24 @@ export class Inventario{
         this.item4 = scene.add.image(30, 0,'empty', 4).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{(this.espacioOcupadoCuatro === true)?[sharedInstance.emit(this.evento, this.tipoObjetoCuatro), this.objetoUsado(this.item4, 4)]:console.log('Espacio vacio');}).on('pointerover', ()=>{console.log(this.tipoObjetoCuatro);})
         this.item5 = scene.add.image(-50, 60,'empty', 2).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{(this.espacioOcupadoCinco === true)?[sharedInstance.emit(this.evento, this.tipoObjetoCinco), this.objetoUsado(this.item5, 5)]:console.log('Espacio vacio');}).on('pointerover', ()=>{console.log(this.tipoObjetoCinco);})
         this.item6 = scene.add.image(30, 60,'empty', 1).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{(this.espacioOcupadoSeis === true)?[sharedInstance.emit(this.evento, this.tipoObjetoSeis), this.objetoUsado(this.item6, 6)]:console.log('Espacio vacio');}).on('pointerover', ()=>{console.log(this.tipoObjetoSeis);})
-        // this.item1 = scene.add.image(-50,-60,'empty', 1).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoUno), this.objetoUsado(this.item1)})
-        // this.item2 = scene.add.image(30,-60,'empty', 2).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoDos), this.objetoUsado(this.item2)})
-        // this.item3 = scene.add.image(-50, 0,'empty', 3).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoTres), this.objetoUsado(this.item3)})
-        // this.item4 = scene.add.image(30, 0,'empty', 4).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoCuatro), this.objetoUsado(this.item4)})
-        // this.item5 = scene.add.image(-50, 60,'empty', 2).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoCinco), this.objetoUsado(this.item5)})
-        // this.item6 = scene.add.image(30, 60,'empty', 1).setInteractive({useHandCursor: true}).setOrigin(0, 0).on('pointerdown', ()=>{sharedInstance.emit(this.evento, this.tipoObjetoSeis), this.objetoUsado(this.item6)})
+        this.selector = scene.add.image(0, 0, 'marcoSelector').setScale(.33).setOrigin(0, 0)
+        this.items.push(this.item1)
+        this.items.push(this.item2)
+        this.items.push(this.item3)
+        this.items.push(this.item4)
+        this.items.push(this.item5)
+        this.items.push(this.item6)
 
         this.cruz = scene.add.image(0, 0, 'crus').setInteractive({useHandCursor: true}).on("pointerdown", () => this.cerrarMochila()).setScale(.3).setOrigin(2.5,2.5)
-        this.contenedor.add([this.imgMochila, this.item1, this.item2, this.item3, this.item4, this.item5, this.item6, this.cruz])
+        this.contenedor.add([this.imgMochila, this.item1, this.item2, this.item3, this.item4, this.item5, this.item6, this.cruz, this.selector])
         // this.contenedor.add([this.imgMochila, this.cruz])
         this.contenedor.visible = false
         this.cruz.visible = false
         this.sonidos = new ManejadorDeSonidos({scene:scene, volumen:1, loop:false})
 
+        sharedInstance.on('mover selector', (ADondeMover)=>{
+            this.selectNextButton(ADondeMover);
+        });
 
         sharedInstance.on('actualizar notificacion', (notificacion, AQueMochila)=>{
             (AQueMochila === this.tipo)?this.notificacionObjetos.setText(notificacion):null;
@@ -197,27 +206,6 @@ export class Inventario{
         });
         //-----------------------------------------------------------------------
         sharedInstance.on('agregar item', (texture, MochilaDeQuien, nombreDelObjeto)=>{
-            // (MochilaDeQuien === this.tipo)?console.log('La mochila es de ', MochilaDeQuien):null;
-            
-            //Aca se le almacena el nombre del objeto asi enviarselo a escuchaDeHabilidades de Personaje.js y que utilice la funcion correcta que hace el objeto
-            // const dondeGuardarElTipo = {
-            //     1:this.tipoObjetoUno = nombreDelObjeto,
-            //     2:this.tipoObjetoDos = nombreDelObjeto,
-            //     3:this.tipoObjetoTres = nombreDelObjeto,
-            //     4:this.tipoObjetoCuatro = nombreDelObjeto,
-            //     5:this.tipoObjetoCinco = nombreDelObjeto,
-            //     6:this.tipoObjetoSeis = nombreDelObjeto,
-            // };
-            // console.log(dondeGuardarElTipo[this.espacioUsadoDeInventario]);
-            // const dondeGuardarElTipo = [
-            //     this.tipoObjetoUno = nombreDelObjeto,
-            //     this.tipoObjetoDos = nombreDelObjeto,
-            //     this.tipoObjetoTres = nombreDelObjeto,
-            //     this.tipoObjetoCuatro = nombreDelObjeto,
-            //     this.tipoObjetoCinco = nombreDelObjeto,
-            //     this.tipoObjetoSeis = nombreDelObjeto,
-            // ];
-            
             // console.log(dondeGuardarElTipo);
             (this.espacioUsadoDeInventario === 1)?this.tipoObjetoUno = nombreDelObjeto:null;
             (this.espacioUsadoDeInventario === 2)?this.tipoObjetoDos = nombreDelObjeto:null;
@@ -234,31 +222,9 @@ export class Inventario{
                 5:this.espacioOcupadoCinco = true,
                 6:this.espacioOcupadoSeis = true,
             };
-            // const ocuparElEspacio1 = [
-            //     this.espacioOcupadoUno = true,
-            //     this.espacioOcupadoDos = true,
-            //     this.espacioOcupadoTres = true,
-            //     this.espacioOcupadoCuatro = true,
-            //     this.espacioOcupadoCinco = true,
-            //     this.espacioOcupadoSeis = true,
-            // ];
-            // const ocuparElEpacio2 = [
-            //     this.espacioOcupadoUno,
-            //     this.espacioOcupadoDos,
-            //     this.espacioOcupadoTres,
-            //     this.espacioOcupadoCuatro,
-            //     this.espacioOcupadoCinco,
-            //     this.espacioOcupadoSeis,
-            // ];
-            // (MochilaDeQuien === this.tipo)?[dondeGuardarElTipo[this.espacioUsadoDeInventario], ocuparEspacio[this.espacioUsadoDeInventario]]:null;
             (MochilaDeQuien === this.tipo)?[ocuparEspacio[this.espacioUsadoDeInventario]/*, dondeGuardarElTipo[this.espacioUsadoDeInventario]*/]:null;
-            // console.log(dondeGuardarElTipo[this.espacioUsadoDeInventario]);
-            // ocuparEspacio[this.espacioUsadoDeInventario];
 
             (this.espacioUsadoDeInventario === 7)?sharedInstance.emit('inventario lleno'):[(MochilaDeQuien === this.tipo)?[this.dondeGuardar(this.espacioUsadoDeInventario, texture), sharedInstance.emit('actualizar notificacion', this.espacioUsadoDeInventario, MochilaDeQuien), this.espacioUsadoDeInventario++]:null];
-            // console.log(this.espacioUsadoDeInventario);
-            
-            
         });
         sharedInstance.on('objeto usado', (indexEspacio)=>{
             this.vaciarEspacio = {
@@ -272,6 +238,40 @@ export class Inventario{
             console.log('el objeto es el ', indexEspacio,this.vaciarEspacio[indexEspacio])
         });
     }
+    selectButton(index)
+    {
+        const currentButton = this.items[this.selectedButtonIndex]
+
+        // set the current selected button to a white tint
+        currentButton.clearTint()
+
+        const item = this.items[index]
+
+        // set the newly selected button to a green tint
+        item.setTint(0xabaaf3)
+
+        // move the hand cursor to the right edge
+        this.selector.x = item.x
+        this.selector.y = item.y
+
+        // store the new selected index
+        this.selectedButtonIndex = index
+    }
+    selectNextButton(change = 1)
+    {
+        let index = this.selectedButtonIndex + change
+
+        // wrap the index to the front or end of array
+        if (index >= this.items.length)
+        {
+            index = 0
+        }
+        else if (index < 0)
+        {
+            index = this.items.length - 1
+        }
+        this.selectButton(index)
+    }
     setEspacio(indexEspacio){
         console.log(this.espacio);
         (indexEspacio === 1)?this.espacioOcupadoUno = false:null;
@@ -283,6 +283,7 @@ export class Inventario{
         console.log(this.espacio)
     }
     cerrarMochila(){
+        sharedInstance.emit('abrir o cerrar la mochila', false)
         this.contenedor.x = this.ubicacionInicio.x;
         this.contenedor.y = this.ubicacionInicio.y;
         this.contenedor.visible = false;
@@ -292,6 +293,8 @@ export class Inventario{
     }
 
     abrirMochila(){
+        this.selectButton(0)
+        sharedInstance.emit('abrir o cerrar la mochila', true)
         this.sonidos.AbrirInventario.play()
         this.contenedor.visible = true;
         this.cruz.visible = true;
@@ -388,4 +391,24 @@ export class Item{
     ocultarTexto(){
         this.texto.setText('')
     }
+}
+
+export class Tecla{
+    constructor(props){
+        const {scene:scene, x:x, y:y, textura:textura, texto:texto, tamaño:tamaño, textoExplicativo:textoExplicativo} = props;
+
+        this.contenedor = scene.add.container(x, y)
+        this.img = scene.add.image(0, 0, textura)
+        this.texto = scene.add.text(0,0,texto, {color:'#000000', fontFamily:'asian', fontSize:tamaño}).setOrigin(.5)
+        this.textoExplicativo = scene.add.text(x+50,y-10,textoExplicativo, {color:'#000000', fontFamily:'asian', fontSize:'20px', wordWrap: { width: 300 },})
+        this.contenedor.add([this.img, this.texto])
+    }
+}
+
+export function CrearYPresioarTecla({scene:scene, teclaValor:teclaValor}){
+    let keyCreada = scene.input.keyboard.addKey(teclaValor);
+
+    const JustPressed = Phaser.Input.Keyboard.JustDown(keyCreada)
+
+    return JustPressed
 }

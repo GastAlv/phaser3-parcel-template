@@ -16,6 +16,7 @@ import VictoriaVikingo from './scenes/VictoriaVikingo'
 import Ui from './scenes/Ui'
 import Mochila from './js/mochilas'
 import Opciones from './scenes/Opciones'
+import Ayuda from './scenes/Ayuda'
 
 const config = {
 	type: Phaser.AUTO,
@@ -43,7 +44,7 @@ const config = {
 	audio: {
         disableWebAudio: true
     },
-	scene: [Preloads, MainMenu, Creditos, Opciones, SeleccionFaccion, SeleccionPersonaje, Ui, Mochila, BatallaPuente, BatallaBosque, BatallaCiudad, BatallaCastillo, BatallaCosta, VictoriaSamurai, VictoriaVikingo ]
+	scene: [Preloads, MainMenu, Creditos, Opciones, Ayuda, SeleccionFaccion, SeleccionPersonaje, Ui, Mochila, BatallaPuente, BatallaBosque, BatallaCiudad, BatallaCastillo, BatallaCosta, VictoriaSamurai, VictoriaVikingo ]
 }
 
 export default new Phaser.Game(config)

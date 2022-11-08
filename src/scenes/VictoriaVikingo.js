@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import {BotonSencillo, Button} from '../js/button';
-
+import {BotonSencillo} from '../js/button';
+import { getPhrase } from '../services/translations';
 
 // Manejador de eventos centralizados para comunicacion de componentes
 
@@ -22,17 +22,18 @@ export default class VictoriaVikingo extends Phaser.Scene
 	{
 		super('VictoriaVikingo')
 	}
-
+    init(data){
+        this.sonidos = data.sonidos
+        this.languaje = data.language
+    }
 
     create()
     {
+        this.sonidos.MainMenuSonido.pause()
         const victoriaVikingo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'victoriaVikingo');
         victoriaVikingo.setScale(1.25)
         
-
-
-        this.volverMenu = new BotonSencillo(this, 900, 670, 'botonMarco', 'VOLVER AL MENU', 40, () => this.scene.start('MainMenu'), 0.4);
- 
+        new BotonSencillo({scene:this, x:900, y:670, texture:'botonMarco', text:getPhrase('VOLVER AL MENU'), size:40,  callback:() => {this.scene.start('MainMenu'), {languaje: this.languaje, sonidos:this.sonidos}}, scale:0.4})
 
     }
 }

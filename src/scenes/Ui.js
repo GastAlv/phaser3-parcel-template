@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { BotonHabilidades } from '../js/button';
+import { BotonHabilidades,CrearYPresioarTecla} from '../js/button';
 import { sharedInstance } from './EventCenter';
 import { Random } from "random-js";
 import { getPhrase } from '../services/translations';
@@ -11,8 +11,6 @@ export default class Ui extends Phaser.Scene
     turnoIzquierda;
     block;
     cursors;
-    buttons = [];
-	selectedButtonIndex = 0;
     contar1 = null;
     contar2 = null;
     turnoAtacar = 0;
@@ -24,18 +22,20 @@ export default class Ui extends Phaser.Scene
     colorBarIzquierda;
     variableSuma = 0;
     combateNormal = true
-
     mochilaNormales = false;
     colorTituloTurno = '#5b5d5a';
     
     // colorEstatico = 0x3a3a3a;
     
+    buttons = [];
+	selectedButtonIndex = 0;
 	constructor()
 	{
         super({key :'Ui'});
 	}
     init(data){
-        // this.cursors = this.input.keyboard.createCursorKeys()
+        this.abrirMochila = false;
+        this.cursors = this.input.keyboard.createCursorKeys()
         this.jugadores = data.personajes;
         this.crearMochilas = data.crear;
         this.sonidos = data.sonidos;
@@ -48,8 +48,6 @@ export default class Ui extends Phaser.Scene
             return personaje.tipo === 'Vikingo'
         });
 
-        this.enterBase = this.input.keyboard;
-        this.enter = this.enterBase.addKey(13);
         this.sangradoVikingo = false
         this.sangradoSamurai = false
         this.contar1 = false;
@@ -57,28 +55,29 @@ export default class Ui extends Phaser.Scene
         this.turnoAtacar = 0;
         this.evaluaQueColor(this.personajeDerecha);
         this.evaluaQueColor(this.personajeIzquierda);
-        console.log(this.personajeDerecha.spriteSheet);
 
         
             
             // this.registry.events.emit('desactivar mochila', 'Samurai');
             // this.registry.events.emit('desactivar mochila', 'Vikingo');
 
-        this.botonIzquierda1  = new BotonHabilidades(this, 80, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info, 80, 500);      
-        this.botonIzquierda2  = new BotonHabilidades(this, 220, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info, 80, 500);
-        this.botonIzquierda3  = new BotonHabilidades(this, 360, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info, 80, 500);
-        this.botonIzquierda4 = new BotonHabilidades(this, 500, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info, 80, 500);
+        this.botonSamurai1  = new BotonHabilidades(this, 80, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info, 80, 500);      
+        this.botonSamurai2  = new BotonHabilidades(this, 220, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info, 80, 500);
+        this.botonSamurai3  = new BotonHabilidades(this, 360, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info, 80, 500);
+        this.botonSamurai4 = new BotonHabilidades(this, 500, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info, 80, 500);
 
-        this.botonDerecha1  = new BotonHabilidades(this, 1200, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder1'), this.cambiarTurno()}, 4, this.personajeDerecha.poderes[0].info, 760, 500);
-        this.botonDerecha2  = new BotonHabilidades(this, 1060, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5, this.personajeDerecha.poderes[1].info, 760, 500);
-        this.botonDerecha3  = new BotonHabilidades(this, 920, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6, this.personajeDerecha.poderes[2].info, 760, 500);
-        this.botonDerecha4 = new BotonHabilidades(this, 780, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info, 760, 500);
+        this.botonVikingo1  = new BotonHabilidades(this, 1200, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder1'), this.cambiarTurno()}, 4, this.personajeDerecha.poderes[0].info, 760, 500);
+        this.botonVikingo2  = new BotonHabilidades(this, 1060, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5, this.personajeDerecha.poderes[1].info, 760, 500);
+        this.botonVikingo3  = new BotonHabilidades(this, 920, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6, this.personajeDerecha.poderes[2].info, 760, 500);
+        this.botonVikingo4 = new BotonHabilidades(this, 780, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info, 760, 500);
+        this.buttons.push(this.botonSamurai1)
+        this.buttons.push(this.botonSamurai2)
+        this.buttons.push(this.botonSamurai3)
+        this.buttons.push(this.botonSamurai4)
 
-        console.log(this.botonIzquierda1);
         
-        // this.scene.moveAbove('Ui', 'Mochila');
-        // this.scene.launch('Mochila')
-        // (this.crearMochilas === true)?[this.scene.launch('Mochila'), console.log('se lanzo la escena'), this.crearMochilas = false]:[this.scene.run('Mochila'), console.log('se corre la escena')];
+        this.scene.moveAbove('Ui', 'Mochila');
+        (this.crearMochilas === true)?[this.scene.launch('Mochila'), console.log('se lanzo la escena'), this.crearMochilas = false]:[this.scene.run('Mochila'), console.log('se corre la escena')];
     }
     preload(){
         
@@ -100,21 +99,6 @@ export default class Ui extends Phaser.Scene
         this.modificaLasBarrasDeVidaDeInicio(this.personajeDerecha)
         this.modificaLasBarrasDeVidaDeInicio(this.personajeIzquierda)
         
-
-        // this.botonIzquierda1  = new BotonHabilidades(this, 80, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder1'), this.cambiarTurno()}, 0, this.personajeIzquierda.poderes[0].info, 80, 500);      
-        // this.botonIzquierda2  = new BotonHabilidades(this, 220, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder2'), this.cambiarTurno()}, 1, this.personajeIzquierda.poderes[1].info, 80, 500);
-        // this.botonIzquierda3  = new BotonHabilidades(this, 360, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder3'), this.cambiarTurno()}, 2, this.personajeIzquierda.poderes[2].info, 80, 500);
-        // this.botonIzquierda4 = new BotonHabilidades(this, 500, 640, this.personajeIzquierda.spriteSheet, ()=>{this.registry.events.emit('Samurai poder4'), this.cambiarTurno()}, 3, this.personajeIzquierda.poderes[3].info, 80, 500);
-        
-        console.log(this.personajeDerecha, this.personajeIzquierda);
-        // this.buttons.push(this.botonIzquierda1)
-        // this.buttons.push(this.botonIzquierda2)
-        // this.buttons.push(this.botonIzquierda3)
-        // this.buttons.push(this.botonIzquierda4)
-        // this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        // this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        // this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        // this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
         // this.botonIzquierda1.on('selected', () => {
         //     this.registry.events.emit('Samurai poder1');
@@ -142,7 +126,7 @@ export default class Ui extends Phaser.Scene
         // this.botonDerecha4 = new BotonHabilidades(this, 780, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info, 760, 500);
 
         //Cremos el Temporizadores
-        this.estiloCSS = {fontFamily:'asian', fontSize:35, backgroundColor: this.colorTituloTurno};
+        this.estiloCSS = {fontFamily:'asian', fontSize:'35px', backgroundColor: this.colorTituloTurno};
         this.tituloTemporizador = this.add.text((this.cameras.main.centerX ) , 520, '', this.estiloCSS).setOrigin(.5)
         this.tiempo = this.add.text(this.cameras.main.centerX, 560, this.numero, this.estiloCSS).setOrigin(.5)
 
@@ -156,16 +140,13 @@ export default class Ui extends Phaser.Scene
             this.actualVidaDerechaTexto = Math.round(vida);
             (vida <= 0)?this.actualVidaDerechaTexto = 0:null;
             // (this.actualVidaDerechaTexto>= this.personajeDerecha.vidaBase)?this.actualVidaDerechaTexto = this.personajeDerecha.vidaBase:this.actualVidaDerechaTexto = Math.round(vida);
-            
-
             this.vidaBarDerecha.width = this.reglaDeTres(vida, this.vidaDerechaWidht);
             
             (vida <= (this.personajeDerecha.vida*.5))?this.colorBarDerecha = 0xe6da00:null;
             (vida <= (this.personajeDerecha.vida*.25))?this.colorBarDerecha = 0xe51c1a:null;
-
             (vida <= 0)?this.vidaBarDerecha.width = this.reglaDeTres(0, this.vidaDerechaWidht):null;
             
-            // this.registry.events.emit('Evaluar vivos', vida, 'Samurai');
+            this.registry.events.emit('Evaluar vivos', vida, 'Samurai');
             // console.log(vida)
             // console.log('llego el mensaje', vida)
         });
@@ -176,26 +157,24 @@ export default class Ui extends Phaser.Scene
 
             this.vidaBarIzquierda.width = this.reglaDeTres(vida, this.vidaIzquierdaWidht);
 
-
             (vida <= (this.personajeIzquierda.vida*.5))?this.colorBarIzquierda = 0xe6da00:null;
             (vida <= (this.personajeIzquierda.vida*.25))?this.colorBarIzquierda = 0xe51c1a:null;
             (vida <= 0)?this.vidaBarIzquierda.width = this.reglaDeTres(0, this.vidaIzquierdaWidht):null;
-            // this.registry.events.emit('Evaluar vivos', vida, 'Vikingo');
+            
+            this.registry.events.emit('Evaluar vivos', vida, 'Vikingo');
             
         });
-        // this.registry.events.on('detener timer y todo los pads', ()=>{
-        //     this.timedEvent.paused = true;
-        //     this.turnoDerecha = false;
-        //     let intervalo = setTimeout(()=>{this.bloquearPad('derecha');
-        //     this.bloquearPad('izquierda');
-        //     this.registry.events.emit('desactivar mochila', 'Samurai');
-        //     this.registry.events.emit('desactivar mochila', 'Vikingo');
-        //     clearInterval(intervalo)
-        //     },1)
-        // });
+        this.registry.events.on('detener timer y todo los pads', ()=>{
+            this.timedEvent.paused = true;
+            // this.turnoDerecha = false;
+            let intervalo = setTimeout(()=>{this.bloquearPad('derecha');
+            this.bloquearPad('izquierda');
+            this.registry.events.emit('desactivar mochila', 'Samurai');
+            this.registry.events.emit('desactivar mochila', 'Vikingo');
+            clearInterval(intervalo)
+            },1)
+        });
         //---------------------------------------------------------------------
-        //cursor para el pad de los samurais
-        // this.buttonSelector = this.add.image(180, 525, 'block').setScale(.25)//.setOrigin(0).body.allowGravity = false;
        
         sharedInstance.on('turno vigente', (dano, tipo) => {
         (tipo === 'Samurai')?[this.contar1 = true]:this.contar2 = true;
@@ -203,9 +182,12 @@ export default class Ui extends Phaser.Scene
             this.dano = dano
             //
         })
-
+        this.buttonSelector = this.add.image(0, 0, 'marcoSelector')//.setOrigin(0.5)//.body.allowGravity = false;
+        
         //Eventos que Activan los temporizadores
         this.registry.events.on('temporizador izquierda',()=>{
+            // this.abrirMochila = false;
+            this.selectButton(0)
             this.turnoDerecha = true;
             this.turnoIzquierda = false;
             //Este if suma el primer turno y avanza al siquiente turno para el enemigo ya que lo vuelve true
@@ -275,12 +257,14 @@ export default class Ui extends Phaser.Scene
             }
             if(this.contar2 !== true)
             {
-            this.jugadorActual = getPhrase('TURNO VIKINGO')
-            this.tituloTemporizador.setText(this.jugadorActual)
-            this.desbloquearPad('derecha')
-            this.bloquearPad('izquierda')
+                this.jugadorActual = getPhrase('TURNO VIKINGO')
+                this.tituloTemporizador.setText(this.jugadorActual)
+                this.desbloquearPad('derecha')
+                this.bloquearPad('izquierda')
             }
             this.registry.events.emit('desactivar mochila', 'Samurai')
+            // Para que el selector samurai se inmovilice y el samurai no escoja en su turno
+            this.abrirMochila = true;
         });
         //-------------------------------------------------------
         sharedInstance.on('curar sangrado vikingo', ()=>{
@@ -354,7 +338,7 @@ export default class Ui extends Phaser.Scene
             this.registry.events.emit('temporizador derecha')
             console.log('empieza el vikingo')
         }
-        // this.selectButton(0)
+        
 
         //Vida que se actualiza
         this.textoVidaDerecha = this.add.text(this.cameras.main.centerX+(this.cameras.main.centerX/1.7), 50, `${this.personajeDerecha.vida}`, {fontFamily:'asian', fontSize:25});
@@ -367,7 +351,17 @@ export default class Ui extends Phaser.Scene
 
         this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero--,(this.numero === 0)? [this.cambiarTurno(), this.sonidos.Reloj.pause()]:null; (this.numero === 5)?[console.log('Alamra Poco tiempo'), this.sonidos.Reloj.play(), sharedInstance.emit('cambiar color titulo','#ff0100')]:null;}, loop:true});
         
- 
+        //cursor para el pad de los samurais
+        
+        // this.buttonSelector = this.add.image(0, 0, 'marcoSelector')//.setOrigin(0.5)//.body.allowGravity = false;
+        // console.log(this.buttonSelector.x, this.buttonSelector.y);
+        // this.selectButton(0)
+        // console.log(this.buttonSelector.x, this.buttonSelector.y);
+
+        sharedInstance.on('abrir o cerrar la mochila',(bValor)=>{
+            this.abrirMochila = bValor;
+            console.log(this.abrirMochila);
+        });
     }
     update(){
         //Actualizar numero de temporizador
@@ -386,40 +380,34 @@ export default class Ui extends Phaser.Scene
         this.textoVidaDerecha.setText(this.actualVidaDerechaTexto)
         
         this.textoVidaIzquierda.setText(this.actualVidaIzquierdaTexto)
-        
-        
-        
-
-        //controles con las flechitas
-        // const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
-		// const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down)
-        // const leftJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.left)
-		// const rightJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.right)
-		// const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space)
-        //controles con W-A-S-D
-		// const upJustPressed = Phaser.Input.Keyboard.JustDown(this.keyW)
-		// const downJustPressed = Phaser.Input.Keyboard.JustDown(this.keyS)
-        // const leftJustPressed = Phaser.Input.Keyboard.JustDown(this.keyA)
-		// const rightJustPressed = Phaser.Input.Keyboard.JustDown(this.keyD)
-		// const enterJustPressed = Phaser.Input.Keyboard.JustDown(this.enter)
-		// if (upJustPressed)
-		// {
-		// 	this.selectNextButton(-2)
-		// }
-		// else if (downJustPressed)
-		// {
-		// 	this.selectNextButton(2)
-		// }
-		// else if (enterJustPressed)
-		// {
-		// 	this.confirmSelection()
-		// }
-        // else if(leftJustPressed){
-        //     this.selectNextButton(-1)
-        // }
-        // else if(rightJustPressed){
-        //     this.selectNextButton(1)
-        // }
+    
+        if (CrearYPresioarTecla({scene:this, teclaValor:87})){
+            this.InmovilizarSelectorHabilidades({cuantoMover:-2});
+			// this.selectNextButton(-2)
+            this.MochilaAbiertaOCerrada({cuantoMover: -2});
+            // sharedInstance.emit('mover selector', -2)
+		}else if (CrearYPresioarTecla({scene:this, teclaValor:83})){
+            this.InmovilizarSelectorHabilidades({cuantoMover:2});
+			// this.selectNextButton(2)
+            // sharedInstance.emit('mover selector', 2)
+            this.MochilaAbiertaOCerrada({cuantoMover: 2});
+		}else if (CrearYPresioarTecla({scene:this, teclaValor:13})){
+			this.confirmSelection()
+		}else if(CrearYPresioarTecla({scene:this, teclaValor:65})){
+            this.InmovilizarSelectorHabilidades({cuantoMover:-1});
+            // this.selectNextButton(-1)
+            // sharedInstance.emit('mover selector', -1)
+            this.MochilaAbiertaOCerrada({cuantoMover: -1});
+        }else if(CrearYPresioarTecla({scene:this, teclaValor:68})){
+            this.InmovilizarSelectorHabilidades({cuantoMover:1});
+            // this.selectNextButton(1)
+            // sharedInstance.emit('mover selector', 1)
+            this.MochilaAbiertaOCerrada({cuantoMover: 1});
+        }else if(CrearYPresioarTecla({scene:this, teclaValor:81})){
+            this.registry.events.emit('abrir mochila samurai')
+        }else if(CrearYPresioarTecla({scene:this, teclaValor:69})){
+            this.registry.events.emit('cerrar mochila samurai')
+        }
     }
     suma(){
         return this.variableSuma++;
@@ -445,28 +433,28 @@ export default class Ui extends Phaser.Scene
     }
     bloquearPad(cual){
         if(cual === 'izquierda'){
-            this.botonIzquierda1.desactivarEntrada();
-            this.botonIzquierda2.desactivarEntrada();
-            this.botonIzquierda3.desactivarEntrada();
-            this.botonIzquierda4.desactivarEntrada();
+            this.botonSamurai1.desactivarEntrada();
+            this.botonSamurai2.desactivarEntrada();
+            this.botonSamurai3.desactivarEntrada();
+            this.botonSamurai4.desactivarEntrada();
         }else if(cual === 'derecha'){
-            this.botonDerecha1.desactivarEntrada();
-            this.botonDerecha2.desactivarEntrada();
-            this.botonDerecha3.desactivarEntrada();
-            this.botonDerecha4.desactivarEntrada();
+            this.botonVikingo1.desactivarEntrada();
+            this.botonVikingo2.desactivarEntrada();
+            this.botonVikingo3.desactivarEntrada();
+            this.botonVikingo4.desactivarEntrada();
         }
     }
     desbloquearPad(cual){
         if(cual === 'izquierda'){
-            this.botonIzquierda1.activarEntrada();
-            this.botonIzquierda2.activarEntrada();
-            this.botonIzquierda3.activarEntrada();
-            this.botonIzquierda4.activarEntrada();
+            this.botonSamurai1.activarEntrada();
+            this.botonSamurai2.activarEntrada();
+            this.botonSamurai3.activarEntrada();
+            this.botonSamurai4.activarEntrada();
         }else if(cual === 'derecha'){
-            this.botonDerecha1.activarEntrada();
-            this.botonDerecha2.activarEntrada();
-            this.botonDerecha3.activarEntrada();
-            this.botonDerecha4.activarEntrada();
+            this.botonVikingo1.activarEntrada();
+            this.botonVikingo2.activarEntrada();
+            this.botonVikingo3.activarEntrada();
+            this.botonVikingo4.activarEntrada();
         }
         
     }
@@ -475,16 +463,18 @@ export default class Ui extends Phaser.Scene
         const currentButton = this.buttons[this.selectedButtonIndex]
 
         // set the current selected button to a white tint
-        currentButton.setTint(0xffffff)
+        currentButton.img.clearTint()
+        currentButton.ocultarInformacion()
 
         const button = this.buttons[index]
 
         // set the newly selected button to a green tint
-        button.setTint(0x66ff7f)
+        button.img.setTint(0xabaaf3)
+        button.mostrarInformacion()
 
         // move the hand cursor to the right edge
-        this.buttonSelector.x = button.x + button.displayWidth * 0.5
-        this.buttonSelector.y = button.y + 10
+        this.buttonSelector.x = button.img.x //+ button.displayWidth * 0.5
+        this.buttonSelector.y = button.img.y //+ 10
 
         // store the new selected index
         this.selectedButtonIndex = index
@@ -502,7 +492,6 @@ export default class Ui extends Phaser.Scene
         {
             index = this.buttons.length - 1
         }
-
         this.selectButton(index)
     }
     confirmSelection()
@@ -523,5 +512,11 @@ export default class Ui extends Phaser.Scene
         (personaje.tipo === 'Samurai')?[this.actualVidaIzquierdaTexto = personaje.vida, this.vidaBarIzquierda.width = this.reglaDeTres(personaje.vida, this.vidaIzquierdaWidht)]:
         [this.actualVidaDerechaTexto = personaje.vida, this.vidaBarDerecha.width = this.reglaDeTres(personaje.vida, this.vidaDerechaWidht)];
         
+    }
+    MochilaAbiertaOCerrada({cuantoMover}){
+        (this.abrirMochila === true)?sharedInstance.emit('mover selector', cuantoMover):null;
+    }
+    InmovilizarSelectorHabilidades({cuantoMover}){
+        (this.abrirMochila === false)?this.selectNextButton(cuantoMover):null;
     }
 }

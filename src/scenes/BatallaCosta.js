@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Button, BotonSencillo } from "../js/button";
 import { Personaje, escuchaDeHabilidades, convertirClase } from "../js/Personaje";
-import { removerEscucha } from "../js/Personaje";
+import { sharedInstance } from "./EventCenter";
 
 export default class BatallaCosta extends Phaser.Scene
 {
@@ -17,6 +17,7 @@ export default class BatallaCosta extends Phaser.Scene
 
     init(data)
     {
+        this.sonidos = data.sonidos;
         this.personajes = data.personajes
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
@@ -30,8 +31,7 @@ export default class BatallaCosta extends Phaser.Scene
         console.log("ESTAS EN COSTA")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCosta').setScale(1.135)
-        // new BotonSencillo(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
-        
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCosta')}, scale:0.75})
         
         
         this.personajeDeIzquierda = new Personaje({
@@ -75,6 +75,11 @@ export default class BatallaCosta extends Phaser.Scene
         this.registry.events.on('Samurai poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
         })
+        sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
+            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+            this.habilidad = tipoDeHabilidad
+            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
+        })
 
         
         this.registry.events.on('Vikingo poder1', ()=>{
@@ -89,9 +94,20 @@ export default class BatallaCosta extends Phaser.Scene
         this.registry.events.on('Vikingo poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
+         //Evento solo para usar el inventario Vikingo
+         sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
+            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+            this.habilidad = tipoDeHabilidad
+            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
+        });
 
+        const objeto = {
+            personajes: this.personajes,
+            crear:false,
+            sonidos: this.sonidos,
+        };
         this.scene.moveAbove('BatallaCosta', 'Ui')
-        this.scene.run('Ui', this.personajes)
+        this.scene.run('Ui', objeto)
 
     }
 

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import { Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades, convertirClase, removerEscucha} from "../js/Personaje";
-import { sharedInstance as events } from './EventCenter'
+import { BotonSencillo } from "../js/button";
+import { Personaje, escuchaDeHabilidades, convertirClase} from "../js/Personaje";
+import { sharedInstance} from './EventCenter'
 
 export default class BatallaCiudad extends Phaser.Scene
 {
@@ -30,7 +30,7 @@ export default class BatallaCiudad extends Phaser.Scene
     create() {
         console.log("estas en ciudad")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        // new Button(this, 70, 60, 'botonVolver', '', 0,  () => this.scene.start('MainMenu'), 0.75)
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCiudad')}, scale:0.75})
 
         
         
@@ -46,7 +46,8 @@ export default class BatallaCiudad extends Phaser.Scene
             spriteSheet: this.personajeIzquierda.spriteSheet,
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
-            id: this.personajeIzquierda.id
+            id: this.personajeIzquierda.id,
+            clase:this.personajeIzquierda.clase
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -57,10 +58,11 @@ export default class BatallaCiudad extends Phaser.Scene
             poderes:  this.personajeDerecha.poderes,
             velocidad:  this.personajeDerecha.velocidad,
             defensa:  this.personajeDerecha.defensa,
-            spriteSheet: this.personajeIzquierda.spriteSheet,
+            spriteSheet: this.personajeDerecha.spriteSheet,
             estaVivo:  this.personajeDerecha.estaVivo,
             tipo:  this.personajeDerecha.tipo,
-            id:  this.personajeDerecha.id
+            id:  this.personajeDerecha.id,
+            clase:this.personajeDerecha.clase
         })
         
         this.registry.events.on('Samurai poder1', ()=>{
@@ -74,6 +76,11 @@ export default class BatallaCiudad extends Phaser.Scene
         })
         this.registry.events.on('Samurai poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
+        })
+        sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
+            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+            this.habilidad = tipoDeHabilidad
+            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
         })
 
         
@@ -89,10 +96,16 @@ export default class BatallaCiudad extends Phaser.Scene
         this.registry.events.on('Vikingo poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
+         //Evento solo para usar el inventario Vikingo
+         sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
+            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+            this.habilidad = tipoDeHabilidad
+            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
+        });
         
         const objeto = {
             personajes: this.personajes,
-            crear:true,
+            crear:false,
         };
         this.scene.moveAbove('BatallaCiudad', 'Ui')
         this.scene.run('Ui', objeto)

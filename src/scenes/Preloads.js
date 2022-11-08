@@ -15,19 +15,25 @@ export default class Preloads extends Phaser.Scene
 	}
 
     preload(){
-        var progress = this.add.graphics();
-        this.load.on('progress', (value)=>{
-            progress.clear();
-            progress.fillStyle(0xffffff, 1);
-            progress.fillRect(0, 270, 800 * value, 60);
-        });
+        this.load.image('barco', 'assets/interfaz/barcoPrecarga.png')
         
-        this.load.on('complete', function () {
-            progress.destroy();
-        });
+        // var progress = this.add.graphics();
+        // this.load.on('progress', (value)=>{
+            // progress.clear();
+            // progress.fillStyle(0xffffff, 1);
+            // progress.fillRect(0, 270, 800 * value, 60);
+            // barquito.setPosition(400*value, this.cameras.main.centerY)
+            // barquito.setX(value)
+        // });
+        
+        // this.load.on('complete', function () {
+            // progress.destroy();
+            // barquito.destroy();
+        // });
         loadFont("asian", "assets/fuentes/OPTIAsian.otf");
         this.#language = getLanguageConfig();
         console.log(this.#language);
+        
         //MENUS
         this.load.image('menuInicio', 'assets/images/menuInicio.png')
         this.load.image('elegirFaccion', 'assets/images/elegirFaccion.png')
@@ -42,6 +48,7 @@ export default class Preloads extends Phaser.Scene
         this.load.image('escenarioCiudad', 'assets/images/escenarioCiudad.png');
         this.load.image('escenarioCosta', 'assets/images/escenarioCosta.png');
         this.load.image('escenarioCastillo', 'assets/images/escenarioCastillo.png');
+        this.load.image('escenarioAyuda', 'assets/images/escenarioAyuda.png');
 
         //SPRITES SELECCION
         this.load.image('seleccionPeonSamurai', 'assets/images/spPeonSamurai.png')
@@ -73,13 +80,18 @@ export default class Preloads extends Phaser.Scene
         this.load.image('españolAR', 'assets/interfaz/esARIcono.png');
         this.load.image('inglesUK', 'assets/interfaz/enUKIcono.png');
         this.load.image('portuguezPR', 'assets/interfaz/ptPRIcono.png');
-
+        
         this.load.image('botonMarco', 'assets/interfaz/botonMarco.png');
         this.load.image('botonVolver', 'assets/interfaz/botonVolver.png');
         this.load.image('botonOpciones', 'assets/interfaz/botonOpciones.png')
         this.load.image('botonListo', 'assets/interfaz/botonListo.png')
         this.load.image('interfaz', 'assets/interfaz/interfaz.png')
         this.load.image('botonAtaque', 'assets/interfaz/botonAtaque.png')
+        
+        this.load.image('teclaIcono', 'assets/interfaz/teclaIcono.png');
+        this.load.image('ratonIcono', 'assets/interfaz/ratonIcono.png');
+        this.load.image('samuraiIcono', 'assets/interfaz/samuraiIcono.png');
+        this.load.image('vikingoIcono', 'assets/interfaz/vikingoIcono.png');
 
         this.load.image('FondoVida', 'assets/interfaz/fondoVida.png');
 
@@ -90,7 +102,7 @@ export default class Preloads extends Phaser.Scene
         this.load.image('empty', 'assets/interfaz/empty.png')
         this.load.spritesheet('lootUno', 'assets/interfaz/lootUno.png', { frameWidth: 40, frameHeight: 40});
 
-        this.load.image('block', 'assets/interfaz/cursor.png')
+        this.load.image('marcoSelector', 'assets/interfaz/marcoSeleccionSamurai.png')
         
         this.load.image('subirVolumen', 'assets/interfaz/subirVolumen.png')
         this.load.image('bajarVolumen', 'assets/interfaz/bajarVolumen.png')
@@ -136,6 +148,19 @@ export default class Preloads extends Phaser.Scene
     }
 
     create(){
+        var barquito = this.add.image(400, this.cameras.main.centerY,'barco')
+        this.load.on('progress', (value)=>{
+            // progress.clear();
+            // progress.fillStyle(0xffffff, 1);
+            // progress.fillRect(0, 270, 800 * value, 60);
+            barquito.setPosition(400*value, this.cameras.main.centerY)
+            // barquito.setX(value)
+        });
+        
+        this.load.on('complete', function () {
+            // progress.destroy();
+            // barquito.destroy();
+        });
 
         this.anims.create({
             key: `Animacion poderUnoPeonSamurai`,

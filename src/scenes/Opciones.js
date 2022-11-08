@@ -24,11 +24,13 @@ export default class Opciones extends Phaser.Scene
         new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu', { language: this.#language, sonidos:this.sonidos})}, scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
         var progress = this.add.rectangle(820, 220, this.volumenBarAncho *this.valor, 5, 0x676766)
         sharedInstance.on('subir volumen', (valor)=>{
+            console.log(this.valor,valor);
             this.valor += valor;
             (progress.width >= this.volumenBarAncho)?[console.log('El volumen es el maximo de phaser 3 :/'), progress.width = this.volumenBarAncho]:progress.width = this.volumenBarAncho*this.valor;
         })
         sharedInstance.on('bajar volumen', (valor)=>{
             this.valor -= valor;
+            console.log(this.valor,valor);
             (progress.width <= 0)?[console.log('El volumen es 0'), progress.width = 0]:progress.width = this.volumenBarAncho*this.valor;
 
         })

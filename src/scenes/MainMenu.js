@@ -37,7 +37,6 @@ export default class MainMenu extends Phaser.Scene
             
         this.sonidos.MainMenuSonido.play()
         
-
         const menuFondo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'menuInicio');
 
         const buttonJugar = new BotonSencillo({scene:this, x:750, y:205, texture:'botonMarco', text:getPhrase('JUGAR'), size:80, callback:() => {this.scene.start('SeleccionFaccion', {sonidos: this.sonidos, language:this.#language}), this.registry.events.emit('resetear listas para jugar de nuevo')}, scale:0.67, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}});

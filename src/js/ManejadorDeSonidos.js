@@ -5,8 +5,8 @@ export class ManejadorDeSonidos{
         const {scene:scene, volumen:volumen, loop:loop} = props;
         this.volumen = volumen;
         this.scene = scene;
-        this.MainMenuSonido = this.scene.sound.add('MainMenuSong', {loop:loop, volumen: this.volumen})
-        this.CombateSong = this.scene.sound.add('CombateSong', {loop:loop, volumen:this.volumen})
+        this.MainMenuSonido = this.scene.sound.add('MainMenuSong', {loop:true, volumen: this.volumen})
+        this.CombateSong = this.scene.sound.add('CombateSong', {loop:true, volumen:this.volumen})
         this.GuardarObjeto = this.scene.sound.add('GuardarObjetos', {loop:false, volumen:this.volumen})
         this.HoverBoton = this.scene.sound.add('HoverBoton', {loop:false, volumen:.5})
         this.Damage = this.scene.sound.add('Damage', {loop:false, volumen:.5})

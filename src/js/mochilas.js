@@ -20,7 +20,6 @@ export default class Mochila extends Phaser.Scene
     }
     init(){}
     create(){
-
         this.inventarioSamurai = new Inventario({scene:this, ubicacionInicio:{x:40,y:480}, ubicacionFinal:{x:450,y:300}, tipo:'Samurai'});
         
         this.inventarioVikingo = new Inventario({scene:this, ubicacionInicio:{x:1240,y:480}, ubicacionFinal:{x:850,y:300}, tipo:'Vikingo'});
@@ -31,6 +30,13 @@ export default class Mochila extends Phaser.Scene
         //prueba de un monoevento que evalua quien lo suelta. para no crear dos eventos 
         this.registry.events.on('botin soltado', (quienLoGana)=>{
             this.crearObjetos({deQuienEsLaMochila: quienLoGana, cuantosObjetosCrear:1})
+        });
+
+        this.registry.events.on('abrir mochila samurai', ()=>{
+            this.inventarioSamurai.abrirMochila()
+        });
+        this.registry.events.on('cerrar mochila samurai', ()=>{
+            this.inventarioSamurai.cerrarMochila()
         });
     }
     update(){}
