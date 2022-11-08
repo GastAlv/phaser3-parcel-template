@@ -66,10 +66,13 @@ export class Button
 }
 
 export class BotonHabilidades /*extends Phaser.GameObjects.Sprite*/ {
-    constructor(scene, x, y, texture, callback, indexDeSprite, infoHabilidad, xTexto, yTexto){
+    constructor(scene, x, y, texture, callback, indexDeSprite, infoHabilidad, xTexto, yTexto, handler){
         // super(scene, x, y, texture, callback)
+        let evento;
+        //({ useHandCursor: true }) agregar parametro para que sea false y el vikingo no le funcione el mouse/puntero
+        // (handler === false)? evento = handler:;
         this.img = scene.add.sprite(x, y, texture, indexDeSprite)
-        .setInteractive({ useHandCursor: true })
+        .setInteractive({ useHandCursor: handler })
         .on("pointerdown", () => callback())
         .on("pointerover", ()=> {this.img.setScale(1 + 0.08), this.mostrarInformacion()})
         .on("pointerout", ()=> {this.img.setScale(1), this.ocultarInformacion()})
@@ -80,22 +83,22 @@ export class BotonHabilidades /*extends Phaser.GameObjects.Sprite*/ {
         this.textoInformacion = scene.add.text(xTexto, yTexto, infoHabilidad,{
             fontSize: '25px',
             fontFamily: 'asian',
-            color: '#9c8fd2',
+            color: '#FFF',
             // align: 'center',
-            backgroundColor: '#434443',
+            // backgroundColor: '#434443',
             wordWrap: { width: 430 },
             // padding: {
             //     y: 10,
             //     x: 5
             // },
             // border: 5 ,
-            shadow: {
-                color: '#2916e9',
-                fill: true,
-                offsetX: 2,
-                offsetY: 2,
-                blur: 8
-            }
+            // shadow: {
+            //     color: '#2916e9',
+            //     fill: true,
+            //     offsetX: 2,
+            //     offsetY: 2,
+            //     blur: 8
+            // }
         })
         // this.contenedor.add([this.textoInformacion])
         this.textoInformacion.visible = false;
@@ -194,6 +197,7 @@ export class Inventario{
         sharedInstance.on('mover selector', (ADondeMover)=>{
             this.selectNextButton(ADondeMover);
         });
+        
 
         sharedInstance.on('actualizar notificacion', (notificacion, AQueMochila)=>{
             (AQueMochila === this.tipo)?this.notificacionObjetos.setText(notificacion):null;
