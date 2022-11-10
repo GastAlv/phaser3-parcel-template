@@ -29,7 +29,7 @@ export default class VictoriaSamurai extends Phaser.Scene
     }
     create()
     {
-        this.sonidos.MainMenuSonido.pause()
+        // this.sonidos.MainMenuSonido.pause()
         let victoriaSamurai = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'victoriaSamurai');
         victoriaSamurai.setScale(1.25)
 

@@ -30,7 +30,6 @@ export default class BatallaCiudad extends Phaser.Scene
     create() {
         console.log("estas en ciudad")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCiudad')}, scale:0.75})
 
         
         

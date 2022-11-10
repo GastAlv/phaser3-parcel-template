@@ -37,7 +37,6 @@ export default class BatallaBosque extends Phaser.Scene
     create() {
         console.log("estas en bosque")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioBosque').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaBosque')}, scale:0.75})
 
         
         
@@ -54,7 +53,7 @@ export default class BatallaBosque extends Phaser.Scene
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
             id: this.personajeIzquierda.id,
-            clase:this.personajeDerecha.clase
+            clase:this.personajeIzquierda.clase
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -135,19 +134,12 @@ export default class BatallaBosque extends Phaser.Scene
             
             this.registry.events.emit('detener timer y todo los pads')
             this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
-            
-            let timeOutParaSoltarBotin = setTimeout(()=>{
-                this.textGanador.setText(``);
-                this.registry.events.emit(`botin soltado` ,ganador);
-                this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY+(this.cameras.main.centerY/5),'Tienes 10s para guardar tu objeto'.toUpperCase(), {fontSize:50, color:'#eb000e', fontFamily: 'asian'})
-                clearTimeout(timeOutParaSoltarBotin)
-            },3000);
             console.log('llego el ganador');
             
             let timeOutParaSiguienteCombate = setTimeout(()=>{
                 this.registry.events.emit('siguiente combate', ganador)
                 clearTimeout(timeOutParaSiguienteCombate)
-            }, 6000);
+            }, 5000);
         });
         
     //     /*
@@ -198,45 +190,5 @@ export default class BatallaBosque extends Phaser.Scene
 
     update()
     {
-//         if(this.personajeDeIzquierda.estaVivo === false){
-//             //GANO EL VIKINGO
-//             let idSiguienteEscena = 3
-//             this.personajeDeDerecha.setGano(true)
-//             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha];
-//             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-//             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-//             this.scene.stop('Ui');
-//             // removerEscucha();
-//                         this.registry.events.removeListener('Samurai poder1')
-// this.registry.events.removeListener('Samurai poder2')
-// this.registry.events.removeListener('Samurai poder3')
-// this.registry.events.removeListener('Samurai poder4')
-// this.registry.events.removeListener('Vikingo poder1')
-// this.registry.events.removeListener('Vikingo poder2')
-// this.registry.events.removeListener('Vikingo poder3')
-// this.registry.events.removeListener('Vikingo poder4')
-//             // this.scene.stop('BatallaBosque')
-//             this.scene.start('SeleccionPersonaje')
-//         }
-//         if(this.personajeDeDerecha.estaVivo === false){
-//             //GANO EL SAMURAI
-//             let idSiguienteEscena = 5
-//             this.personajeDeIzquierda.setGano(true)
-//             //this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha]
-//             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-//             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-//             this.scene.stop('Ui');
-//             // removerEscucha();
-//                         this.registry.events.removeListener('Samurai poder1')
-// this.registry.events.removeListener('Samurai poder2')
-// this.registry.events.removeListener('Samurai poder3')
-// this.registry.events.removeListener('Samurai poder4')
-// this.registry.events.removeListener('Vikingo poder1')
-// this.registry.events.removeListener('Vikingo poder2')
-// this.registry.events.removeListener('Vikingo poder3')
-// this.registry.events.removeListener('Vikingo poder4')
-//             // this.scene.stop('BatallaBosque')
-//             this.scene.start('SeleccionPersonaje')
-//         }
     }
 }

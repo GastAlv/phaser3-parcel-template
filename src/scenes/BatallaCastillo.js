@@ -31,7 +31,6 @@ export default class BatallaCastillo extends Phaser.Scene
         console.log("estas en puente")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCastillo').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCastillo')}, scale:0.75})
         
         
         
@@ -47,7 +46,9 @@ export default class BatallaCastillo extends Phaser.Scene
             spriteSheet: this.personajeIzquierda.spriteSheet,
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
-            id: this.personajeIzquierda.id
+            id: this.personajeIzquierda.id,
+            clase:this.personajeIzquierda.clase
+
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -58,10 +59,12 @@ export default class BatallaCastillo extends Phaser.Scene
             poderes:  this.personajeDerecha.poderes,
             velocidad:  this.personajeDerecha.velocidad,
             defensa:  this.personajeDerecha.defensa,
-            spriteSheet: this.personajeIzquierda.spriteSheet,
+            spriteSheet: this.personajeDerecha.spriteSheet,
             estaVivo:  this.personajeDerecha.estaVivo,
             tipo:  this.personajeDerecha.tipo,
-            id:  this.personajeDerecha.id
+            id:  this.personajeDerecha.id,
+            clase:this.personajeDerecha.clase
+
         })
 
         this.registry.events.on('Samurai poder1', ()=>{

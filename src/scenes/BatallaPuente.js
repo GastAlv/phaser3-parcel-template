@@ -40,7 +40,6 @@ export default class BatallaPuente extends Phaser.Scene
         this.crearMochilas = this.datos.crear;
         console.log("estas en puente")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaPuente')}, scale:0.75})
 
         this.personajeDeIzquierda = new Personaje({
             scene: this,
@@ -137,17 +136,11 @@ export default class BatallaPuente extends Phaser.Scene
         this.registry.events.on('victoria de combate', (ganador)=>{
             this.registry.events.emit('detener timer y todo los pads')
             this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
-            let timeOutParaSoltarBotin = setTimeout(()=>{
-                this.textGanador.setText(``);
-                this.registry.events.emit(`botin soltado` ,ganador);
-                this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY+(this.cameras.main.centerY/5),'Tienes 10s para guardar tu objeto'.toUpperCase(), {fontSize:50, color:'#eb000e', fontFamily: 'asian'})
-                clearTimeout(timeOutParaSoltarBotin)
-            },3000);
             console.log('llego el ganador');
             let timeOutParaSiguienteCombate = setTimeout(()=>{
                 this.registry.events.emit('siguiente combate', ganador)
                 clearTimeout(timeOutParaSiguienteCombate)
-            }, 6000);
+            }, 5000);
         });
         
     //     /*

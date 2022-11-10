@@ -29,7 +29,7 @@ export default class VictoriaVikingo extends Phaser.Scene
 
     create()
     {
-        this.sonidos.MainMenuSonido.pause()
+        // this.sonidos.MainMenuSonido.pause()
         const victoriaVikingo = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'victoriaVikingo');
         victoriaVikingo.setScale(1.25)
         
