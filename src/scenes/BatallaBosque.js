@@ -110,7 +110,7 @@ export default class BatallaBosque extends Phaser.Scene
             }, 5000);
         });
        this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
-           (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+           (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
            console.log('Estoy en evaluar');
            this.registry.events.removeListener('Evaluar vivos');
         });

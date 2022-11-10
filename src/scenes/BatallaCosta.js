@@ -122,7 +122,7 @@ export default class BatallaCosta extends Phaser.Scene
     //     LOGICA DE QUIEN ESTA VIVO Y MUERTO PARA VER QUIEN GANA
     //     */
         this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
-            (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+            (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
             this.registry.events.removeListener('Evaluar vivos');
         });
 

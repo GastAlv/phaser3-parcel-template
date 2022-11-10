@@ -92,8 +92,8 @@ export default class Ui extends Phaser.Scene
             this.vidaBarDerecha.width = this.reglaDeTres(vida, this.vidaDerechaWidht);
             (vida <= (this.personajeDerecha.vida*.5))?this.colorBarDerecha = 0xe6da00:null;
             (vida <= (this.personajeDerecha.vida*.25))?this.colorBarDerecha = 0xe51c1a:null;
-            (vida < 1)?this.vidaBarDerecha.width = this.reglaDeTres(0, this.vidaDerechaWidht):null;
-            (vida < 1)?[console.log('LA vida V es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Samurai')]:null;
+            (Math.round(vida) < 0)?this.vidaBarDerecha.width = this.reglaDeTres(0, this.vidaDerechaWidht):null;
+            (Math.round(vida) < 0)?[console.log('LA vida V es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Samurai')]:null;
         });
         sharedInstance.on('actualiza Vida Samurai', (vida)=>{
             this.actualVidaIzquierdaTexto = Math.round(vida);
@@ -101,9 +101,9 @@ export default class Ui extends Phaser.Scene
             this.vidaBarIzquierda.width = this.reglaDeTres(vida, this.vidaIzquierdaWidht);
             (vida <= (this.personajeIzquierda.vida*.5))?this.colorBarIzquierda = 0xe6da00:null;
             (vida <= (this.personajeIzquierda.vida*.25))?this.colorBarIzquierda = 0xe51c1a:null;
-            (vida < 1)?this.vidaBarIzquierda.width = this.reglaDeTres(0, this.vidaIzquierdaWidht):null;
+            (Math.round(vida) < 0)?this.vidaBarIzquierda.width = this.reglaDeTres(0, this.vidaIzquierdaWidht):null;
 
-            (vida < 1)?[console.log('LA vida S es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Vikingo')]:null;
+            (Math.round(vida) < 0)?[console.log('LA vida S es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Vikingo')]:null;
         });
         this.registry.events.on('detener timer y todo los pads', ()=>{
             this.timedEvent.paused = true;
