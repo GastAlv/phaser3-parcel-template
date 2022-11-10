@@ -35,7 +35,6 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.img = this;
-        this.img.setScale(2);
         this.probabilidad = new Random();
         this.soloLaClaseDelPersonaje = this.sprite.slice(9);
         this.sonidos = new ManejadorDeSonidos({scene:scene, volumen:1, loop:false});
@@ -110,7 +109,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             this.estaVivo = false;
             this.vida = 0;
         }
-        let direccion
+        /*let direccion
         (this.tipo === 'Samurai')?[direccion=(this.x-50)]:[direccion=(this.x+50)];
         this.tweens = this.scene.tweens.add({
             targets: this.img,
@@ -124,7 +123,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             },
             onComplete: () =>{
             }
-        })
+        })*/
     }
     recibirCura(dano)
     {
