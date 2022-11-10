@@ -24,11 +24,11 @@ export default class BatallaPuente extends Phaser.Scene
         })
     }  
     create() {
+        console.log('estas en puente');
         this.sonidos.MainMenuSonido.pause()
         this.sonidos.CombateSong.play()
         this.crearMochilas = this.datos.crear;
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaPuente')}, scale:0.75})
         this.personajeDeIzquierda = new Personaje({
             scene: this,
             x: 450,
@@ -92,19 +92,23 @@ export default class BatallaPuente extends Phaser.Scene
         };
         this.scene.moveAbove('BatallaPuente', 'Ui');
         this.scene.launch('Ui', objeto);
+
         this.registry.events.on('victoria de combate', (ganador)=>{
             this.registry.events.emit('detener timer y todo los pads')
-            this.textGanador.setText(`${getPhrase('GANA')} ${getPhrase(ganador).toUpperCase()}`);
+            this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
             console.log('llego el ganador');
             let timeOutParaSiguienteCombate = setTimeout(()=>{
                 this.registry.events.emit('siguiente combate', ganador)
                 clearTimeout(timeOutParaSiguienteCombate)
-            }, 2000);
+            }, 5000);
         });
+
        this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
         console.log('batalla puente valuar');
            console.log(tipo, vida);
-           (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
+           (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+           console.log('Estoy en evaluar');
+           this.registry.events.removeListener('Evaluar vivos');
         });
         this.registry.events.on('siguiente combate', (ganador)=>{
             this.queEscenaSigue = {
@@ -123,7 +127,6 @@ export default class BatallaPuente extends Phaser.Scene
             this.registry.events.removeListener('Vikingo poder2');
             this.registry.events.removeListener('Vikingo poder3');
             this.registry.events.removeListener('Vikingo poder4');
-            this.registry.events.removeListener('Evaluar vivos');
             this.registry.events.removeListener('siguiente combate');
             this.registry.events.removeListener('victoria de combate');
             this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje:this.languaje});

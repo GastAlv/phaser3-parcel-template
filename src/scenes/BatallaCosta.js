@@ -33,7 +33,6 @@ export default class BatallaCosta extends Phaser.Scene
         console.log("ESTAS EN COSTA")
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCosta').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCosta')}, scale:0.75, callbackHover:()=>{}, callbackOut:()=>{} })
         
         
         this.personajeDeIzquierda = new Personaje({
@@ -48,7 +47,9 @@ export default class BatallaCosta extends Phaser.Scene
             spriteSheet: this.personajeIzquierda.spriteSheet,
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
-            id: this.personajeIzquierda.id
+            id: this.personajeIzquierda.id,
+            clase:this.personajeIzquierda.clase
+
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -62,7 +63,8 @@ export default class BatallaCosta extends Phaser.Scene
             spriteSheet: this.personajeDerecha.spriteSheet,
             estaVivo:  this.personajeDerecha.estaVivo,
             tipo:  this.personajeDerecha.tipo,
-            id:  this.personajeDerecha.id
+            id:  this.personajeDerecha.id,
+            clase:this.personajeDerecha.clase
         })
 
         this.registry.events.on('Samurai poder1', ()=>{
@@ -118,7 +120,8 @@ export default class BatallaCosta extends Phaser.Scene
     //     LOGICA DE QUIEN ESTA VIVO Y MUERTO PARA VER QUIEN GANA
     //     */
         this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
-            (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
+            (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+            this.registry.events.removeListener('Evaluar vivos');
         });
 
         this.registry.events.on('victoria de combate', (ganador)=>{
@@ -158,15 +161,12 @@ export default class BatallaCosta extends Phaser.Scene
             this.registry.events.removeListener('Samurai poder2');
             this.registry.events.removeListener('Samurai poder3');
             this.registry.events.removeListener('Samurai poder4');
-            sharedInstance.removeListener('Samurai usar objeto');
             
             this.registry.events.removeListener('Vikingo poder1');
             this.registry.events.removeListener('Vikingo poder2');
             this.registry.events.removeListener('Vikingo poder3');
             this.registry.events.removeListener('Vikingo poder4');
-            sharedInstance.removeListener('Vikingo usar objeto');
 
-            this.registry.events.removeListener('Evaluar vivos');
             this.registry.events.removeListener('siguiente combate');
             this.registry.events.removeListener('victoria de combate');
         });

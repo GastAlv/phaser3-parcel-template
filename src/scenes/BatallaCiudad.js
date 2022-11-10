@@ -33,7 +33,6 @@ export default class BatallaCiudad extends Phaser.Scene
     create() {
         console.log("estas en ciudad")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCiudad')}, scale:0.75, callbackHover:()=>{}, callbackOut:()=>{} })
 
         
         
@@ -121,7 +120,9 @@ export default class BatallaCiudad extends Phaser.Scene
         //     */
         this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
             console.log(tipo, vida);
-            (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
+            (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+            console.log('Estoy en evaluar');
+            this.registry.events.removeListener('Evaluar vivos');
         });
         this.registry.events.on('victoria de combate', (ganador)=>{
             this.registry.events.emit('detener timer y todo los pads')
@@ -155,7 +156,6 @@ export default class BatallaCiudad extends Phaser.Scene
             // this.scene.pause('Mochila');
             this.scene.stop('BatallaCiudad');
             //Se inicia la seleccion
-            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje: this.lenguaje});
             // (ganador === 'Samurai')?sharedInstance.emit('que samurai sigue', 'ESCOGE TU FICHA SAMURAI'):sharedInstance.emit('que vikingo sigue', 'ESCOGE TU FICHA VIKINGA');
             //Se remueven los eventos escucha
             this.registry.events.removeListener('Samurai poder1');
@@ -169,10 +169,9 @@ export default class BatallaCiudad extends Phaser.Scene
             this.registry.events.removeListener('Vikingo poder3');
             this.registry.events.removeListener('Vikingo poder4');
             sharedInstance.removeListener('Vikingo usar objeto');
-
-            this.registry.events.removeListener('Evaluar vivos');
             this.registry.events.removeListener('siguiente combate');
             this.registry.events.removeListener('victoria de combate');
+            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje: this.languaje});
         });
 
     }

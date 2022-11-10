@@ -24,8 +24,11 @@ export default class BatallaBosque extends Phaser.Scene
         }) 
     }  
     create() {
+        console.log('estas en bosque');
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioBosque').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaBosque')}, scale:0.75, callbackHover: ()=>{}, callbackOut: ()=>{}})
+
+        
+        
         this.personajeDeIzquierda = new Personaje({
             scene: this,
             x: 450,
@@ -39,7 +42,7 @@ export default class BatallaBosque extends Phaser.Scene
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
             id: this.personajeIzquierda.id,
-            clase:this.personajeDerecha.clase
+            clase:this.personajeIzquierda.clase
         });
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -97,14 +100,18 @@ export default class BatallaBosque extends Phaser.Scene
         this.scene.launch('Ui', objeto);
         this.registry.events.on('victoria de combate', (ganador)=>{
             this.registry.events.emit('detener timer y todo los pads')
-            this.textGanador.setText(`${getPhrase('GANA')} ${getPhrase(ganador).toUpperCase()}`);
+            this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
+            console.log('llego el ganador');
+            
             let timeOutParaSiguienteCombate = setTimeout(()=>{
                 this.registry.events.emit('siguiente combate', ganador)
                 clearTimeout(timeOutParaSiguienteCombate)
-            }, 2000);
+            }, 5000);
         });
        this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
-           (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
+           (vida < 1)?this.registry.events.emit('victoria de combate', tipo):null;
+           console.log('Estoy en evaluar');
+           this.registry.events.removeListener('Evaluar vivos');
         });
         this.registry.events.on('siguiente combate', (ganador)=>{
             this.queEscenaSigue = {
@@ -115,7 +122,6 @@ export default class BatallaBosque extends Phaser.Scene
             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, this.queEscenaSigue[ganador]);
             this.scene.stop('Ui');
             this.scene.stop('BatallaBosque');
-            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje: this.languaje});
             this.registry.events.removeListener('Samurai poder1');
             this.registry.events.removeListener('Samurai poder2');
             this.registry.events.removeListener('Samurai poder3');
@@ -124,12 +130,16 @@ export default class BatallaBosque extends Phaser.Scene
             this.registry.events.removeListener('Vikingo poder2');
             this.registry.events.removeListener('Vikingo poder3');
             this.registry.events.removeListener('Vikingo poder4');
-            this.registry.events.removeListener('Evaluar vivos');
+            
             this.registry.events.removeListener('siguiente combate');
             this.registry.events.removeListener('victoria de combate');
+            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje: this.languaje});
         });
 
 
     }
 
+    update()
+    {
+    }
 }

@@ -8,7 +8,9 @@ const random = new Random()
 //Setter como funcion/metodo y los getters con GET antes de la funcion
 export class Personaje extends Phaser.Physics.Arcade.Sprite
 {
+    SoloLaClaseDelPersonaje;
     #defensa;
+    #contador = 0;
     constructor(props){
         const {scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true, clase} = props
         super(scene, x, y, sprite, 0)
@@ -35,8 +37,10 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.img = this;
+        this.img.setScale(1);
         this.probabilidad = new Random();
-        this.soloLaClaseDelPersonaje = this.sprite.slice(9);
+        this.soloLaClaseyElTipoDelPersonaje = this.sprite.slice(9);
+        this.quePersonajeSeCura();
         this.sonidos = new ManejadorDeSonidos({scene:scene, volumen:1, loop:false});
         
         
@@ -127,13 +131,19 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
     }
     recibirCura(dano)
     {
+        
+       console.log('Estas en cura');
         this.vidaCheck = this.vida+dano;
         this.vidaCheck2 = this.vida+(this.vida * (dano/3));
-        if(this.quePersonajeSeCura() === 'Caballo'){
-            (this.vida >= (this.vidaBase*.5))? this.vida :null;
-            (this.vida < (this.vidaBase*.5))? this.vida = (this.vidaBase*0.75)  :null;
-            this.emitirEvento()
-        }else if(this.quePersonajeSeCura() === 'Reyna'){
+        let vidaCheckAlfil = this.vida+(this.vida*0.45)
+
+        
+        if(this.SoloLaClaseDelPersonaje === 'Caballo'){
+            console.log('Estas en cura de caballo');
+            if(this.vida < (this.vidaBase*.5)) return console.log('LLego con menos del 50%',this.vida), this.vida = (this.vidaBase*0.75), this.emitirEvento();
+            if(this.vida >= (this.vidaBase*.5)) return console.log('LLego con mas del 50%',this.vida),this.vida, this.emitirEvento();
+            
+        }else if(this.SoloLaClaseDelPersonaje === 'Reyna'){
             if(this.vida >= this.vidaBase)
             {
                 this.vida = this.vidaBase;
@@ -147,8 +157,19 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         } else if(this.vida <= 0)
         {
             this.estaVivo = false;
-            this.vida = 0
+            this.vida = 0;
+            this.#contador = 0;
             return
+        }else if(this.SoloLaClaseDelPersonaje === 'Alfil'){
+            this.#contador++;
+            if(this.#contador >= 4)return this.emitirEvento();
+
+            if(this.vida >=this.vidaBase){return this.vida, this.emitirEvento()}
+            if(vidaCheckAlfil > this.vidaBase){this.vida = this.vidaBase, this.emitirEvento()}
+            else{
+                this.vida+=this.vida*0.45;
+                this.emitirEvento();
+            }
         }else if(this.vida === this.vidaBase){
             return
         }else if(this.vidaCheck > this.vidaBase){
@@ -228,14 +249,14 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         (this.tipo === 'Samurai')?sharedInstance.emit('sangra Vikingo',dano, this.tipo):sharedInstance.emit('sangra Samurai',dano, this.tipo);
     }
     quePersonajeSeCura(){
-        this.ubicacionDeLaPalabraqueSeElimina = this.soloLaClaseDelPersonaje.indexOf(this.tipo)
-        this.soloLaClaseDelPersonaje = this.soloLaClaseDelPersonaje.slice(0, this.ubicacionDeLaPalabraqueSeElimina)
-        return this.soloLaClaseDelPersonaje
+        this.ubicacionDeLaPalabraqueSeElimina = this.soloLaClaseyElTipoDelPersonaje.indexOf(this.tipo)
+        this.soloLaClaseyElTipoDelPersonaje = this.soloLaClaseyElTipoDelPersonaje.slice(0, this.ubicacionDeLaPalabraqueSeElimina)
+        return this.SoloLaClaseDelPersonaje = this.soloLaClaseyElTipoDelPersonaje
     }
 }
     export function convertirClase(Clase){
         return {
-        vida: Clase.vida,
+        vida: Math.round(Clase.vida),
         sprite: Clase.sprite,
         poderes: Clase.poderes,
         spriteSheet: Clase.spriteSheet,
@@ -301,7 +322,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                     Alfil:Datos(Math.round(random.integer(60, 68)), [
                         crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(10, 16))), 1,getPhrase('Ataca al enemigo con un daño: min:10 a max:16').toUpperCase()),
                         crearPoder(`sangrado`,10, 9,getPhrase('Causa daño:10 en cada turno al enemigo').toUpperCase()),
-                        crearPoder(`curacion`, 0.45, 6, getPhrase('Se cura un 45% HP').toUpperCase()),
+                        crearPoder(`curacion`, null, 6, getPhrase('Se cura un 45% HP').toUpperCase()),
                         crearPoder(`cantoMotivador`, null, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase())
                     ], random.integer(6,7), false, clase, tipo),
                     Torre:Datos(Math.round(random.integer(85, 95)), [

@@ -29,6 +29,7 @@ export default class Ui extends Phaser.Scene
         super({key :'Ui'});
 	}
     init(data){
+        this.cursors = this.input.keyboard.createCursorKeys()
         this.jugadores = data.personajes;
         this.crearMochilas = data.crear;
         this.sonidos = data.sonidos;
@@ -54,6 +55,7 @@ export default class Ui extends Phaser.Scene
         this.botonVikingo2  = new BotonHabilidades(this, 1060, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder2'), this.cambiarTurno()}, 5, this.personajeDerecha.poderes[1].info, 760, 500, true);
         this.botonVikingo3  = new BotonHabilidades(this, 920, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder3'), this.cambiarTurno()}, 6, this.personajeDerecha.poderes[2].info, 760, 500, true);
         this.botonVikingo4 = new BotonHabilidades(this, 780, 640, this.personajeDerecha.spriteSheet, ()=>{this.registry.events.emit('Vikingo poder4'), this.cambiarTurno()}, 7, this.personajeDerecha.poderes[3].info, 760, 500, true);
+
     }
     preload(){
         
@@ -72,7 +74,10 @@ export default class Ui extends Phaser.Scene
         this.vidaBarIzquierda = new Phaser.Geom.Rectangle((this.cameras.main.centerX / 1.2), 50, this.vidaIzquierdaWidht, 30);
         this.modificaLasBarrasDeVidaDeInicio(this.personajeDerecha)
         this.modificaLasBarrasDeVidaDeInicio(this.personajeIzquierda)
-        
+
+    
+
+        //Cremos el Temporizadores
         this.estiloCSS = {fontFamily:'asian', fontSize:'35px', backgroundColor: this.colorTituloTurno};
         this.tituloTemporizador = this.add.text((this.cameras.main.centerX ) , 520, '', this.estiloCSS).setOrigin(.5)
         this.tiempo = this.add.text(this.cameras.main.centerX, 560, this.numero, this.estiloCSS).setOrigin(.5)
@@ -88,7 +93,7 @@ export default class Ui extends Phaser.Scene
             (vida <= (this.personajeDerecha.vida*.5))?this.colorBarDerecha = 0xe6da00:null;
             (vida <= (this.personajeDerecha.vida*.25))?this.colorBarDerecha = 0xe51c1a:null;
             (vida < 1)?this.vidaBarDerecha.width = this.reglaDeTres(0, this.vidaDerechaWidht):null;
-            (vida < 1)?[this.registry.events.emit('Evaluar vivos', vida, 'Samurai')]:null;
+            (vida < 1)?[console.log('LA vida V es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Samurai')]:null;
         });
         sharedInstance.on('actualiza Vida Samurai', (vida)=>{
             this.actualVidaIzquierdaTexto = Math.round(vida);
@@ -97,17 +102,15 @@ export default class Ui extends Phaser.Scene
             (vida <= (this.personajeIzquierda.vida*.5))?this.colorBarIzquierda = 0xe6da00:null;
             (vida <= (this.personajeIzquierda.vida*.25))?this.colorBarIzquierda = 0xe51c1a:null;
             (vida < 1)?this.vidaBarIzquierda.width = this.reglaDeTres(0, this.vidaIzquierdaWidht):null;
-            (vida < 1)?[this.registry.events.emit('Evaluar vivos', vida, 'Vikingo')]:null;
+
+            (vida < 1)?[console.log('LA vida S es',vida), this.registry.events.emit('Evaluar vivos', vida, 'Vikingo')]:null;
         });
         this.registry.events.on('detener timer y todo los pads', ()=>{
             this.timedEvent.paused = true;
             // this.turnoDerecha = false;
-            let intervalo = setTimeout(()=>{
-                this.bloquearPad('derecha');
-                this.bloquearPad('izquierda');
-                // this.registry.events.emit('desactivar mochila', 'Samurai');
-                // this.registry.events.emit('desactivar mochila', 'Vikingo');
-                clearInterval(intervalo)
+            let intervalo = setTimeout(()=>{this.bloquearPad('derecha');
+            this.bloquearPad('izquierda');
+            clearInterval(intervalo)
             },1)
         });
         sharedInstance.on('turno vigente', (dano, tipo) => {
@@ -116,7 +119,10 @@ export default class Ui extends Phaser.Scene
             this.dano = dano
             //
         })
+        
+        //Eventos que Activan los temporizadores
         this.registry.events.on('temporizador izquierda',()=>{
+            // this.abrirMochila = false;
             this.turnoDerecha = true;
             this.turnoIzquierda = false;
             if(this.contar1 === true){
@@ -232,11 +238,15 @@ export default class Ui extends Phaser.Scene
         this.textoVidaIzquierda = this.add.text(this.cameras.main.centerX/2.5, 50,  `${this.personajeIzquierda.vida}`, {fontFamily:'asian', fontSize:25});
         this.textoVidaDerechaTotal = this.add.text(this.cameras.main.centerX+(this.cameras.main.centerX/1.55), 50, `/${this.personajeDerecha.vida}`, {fontFamily:'asian', fontSize:20});
         this.textoVidaIzquierdaTotal = this.add.text(this.cameras.main.centerX/2.2, 50, `/${this.personajeIzquierda.vida}`, {fontFamily:'asian', fontSize:20});
-        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero--,(this.numero === 0)? [this.cambiarTurno(), this.sonidos.Reloj.pause()]:null; (this.numero === 5)?[console.log('Alamra Poco tiempo'), this.sonidos.Reloj.play(), sharedInstance.emit('cambiar color titulo','#ff0100')]:null;}, loop:true});
-        sharedInstance.on('abrir o cerrar la mochila',(bValor)=>{
-            this.abrirMochila = bValor;
-            console.log(this.abrirMochila);
-        });
+
+        this.timedEvent = this.time.addEvent({delay:1000, callback: ()=>{this.numero--,(this.numero === 0)? [this.cambiarTurno()]:null; (this.numero === 5)?[console.log('Alamra Poco tiempo'), sharedInstance.emit('cambiar color titulo','#ff0100')]:null;}, loop:true});
+        
+        //cursor para el pad de los samurais
+        
+        // this.buttonSelector = this.add.image(0, 0, 'marcoSelector')//.setOrigin(0.5)//.body.allowGravity = false;
+        // console.log(this.buttonSelector.x, this.buttonSelector.y);
+        // this.selectButton(0)
+        // console.log(this.buttonSelector.x, this.buttonSelector.y);
     }
     update(){
         //Actualizar numero de temporizador
@@ -255,24 +265,6 @@ export default class Ui extends Phaser.Scene
         this.textoVidaDerecha.setText(this.actualVidaDerechaTexto)
         
         this.textoVidaIzquierda.setText(this.actualVidaIzquierdaTexto)
-    
-        // if (CrearYPresioarTecla({scene:this, teclaValor:87})){
-        //     // this.InmovilizarSelectorHabilidades({cuantoMover:-2});
-        //     this.MochilaAbiertaOCerrada({cuantoMover: -2});
-		// }else if (CrearYPresioarTecla({scene:this, teclaValor:83})){
-        //     // this.InmovilizarSelectorHabilidades({cuantoMover:2});
-        //     this.MochilaAbiertaOCerrada({cuantoMover: 2});
-		// }else if (CrearYPresioarTecla({scene:this, teclaValor:13})){
-		// 	this.confirmSelection()
-		// }else if(CrearYPresioarTecla({scene:this, teclaValor:65})){
-        //     // this.InmovilizarSelectorHabilidades({cuantoMover:-1});
-        //     this.MochilaAbiertaOCerrada({cuantoMover: -1});
-        // }else if(CrearYPresioarTecla({scene:this, teclaValor:68})){
-        //     // this.InmovilizarSelectorHabilidades({cuantoMover:1});
-        //     this.MochilaAbiertaOCerrada({cuantoMover: 1});
-        // }else if(CrearYPresioarTecla({scene:this, teclaValor:32})){
-        //     this.confirmSelection()
-        // }
     }
     suma(){
         return this.variableSuma++;
@@ -323,51 +315,6 @@ export default class Ui extends Phaser.Scene
         }
         
     }
-    selectButton(index)
-    {
-        const currentButton = this.buttons[this.selectedButtonIndex]
-
-        // set the current selected button to a white tint
-        currentButton.img.clearTint()
-        currentButton.ocultarInformacion()
-
-        const button = this.buttons[index]
-
-        // set the newly selected button to a green tint
-        button.img.setTint(0xabaaf3)
-        button.mostrarInformacion()
-
-        // move the hand cursor to the right edge
-        this.buttonSelector.x = button.img.x //+ button.displayWidth * 0.5
-        this.buttonSelector.y = button.img.y //+ 10
-
-        // store the new selected index
-        this.selectedButtonIndex = index
-    }
-    selectNextButton(change = 1)
-    {
-        let index = this.selectedButtonIndex + change
-
-        // wrap the index to the front or end of array
-        if (index >= this.buttons.length)
-        {
-            index = 0
-        }
-        else if (index < 0)
-        {
-            index = this.buttons.length - 1
-        }
-        this.selectButton(index)
-    }
-    confirmSelection()
-    {
-        // get the currently selected button
-        const button = this.buttons[this.selectedButtonIndex];
-        
-        (this.abrirMochila === true)?[]:[];
-        // emit the 'selected' event
-        button.img.emit('pointerdown')
-    }
     evaluaQueColor(personaje){
         (personaje.vida > (personaje.vidaBase * 0.5))?[(personaje.tipo === 'Samurai')?this.colorBarIzquierda = 0x009B5C:this.colorBarDerecha = 0x009B5C]:null;
         (personaje.vida <= (personaje.vidaBase * 0.5))?[(personaje.tipo === 'Samurai')?this.colorBarIzquierda = 0xe6da00:this.colorBarDerecha = 0xe6da00]:null;
@@ -378,11 +325,5 @@ export default class Ui extends Phaser.Scene
         (personaje.tipo === 'Samurai')?[this.actualVidaIzquierdaTexto = personaje.vida, this.vidaBarIzquierda.width = this.reglaDeTres(personaje.vida, this.vidaIzquierdaWidht)]:
         [this.actualVidaDerechaTexto = personaje.vida, this.vidaBarDerecha.width = this.reglaDeTres(personaje.vida, this.vidaDerechaWidht)];
         
-    }
-    MochilaAbiertaOCerrada({cuantoMover}){
-        (this.abrirMochila === true)?sharedInstance.emit('mover selector', cuantoMover):this.selectNextButton(cuantoMover);
-    }
-    InmovilizarSelectorHabilidades({cuantoMover}){
-        (this.abrirMochila === false)?this.selectNextButton(cuantoMover):null;
     }
 }

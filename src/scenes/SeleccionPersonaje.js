@@ -90,9 +90,9 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.#samuraiReina = CrearPersonaje('Samurai', 'Reyna');
         this.#samuraiAlfil = CrearPersonaje('Samurai', 'Alfil');
         this.#samuraiTorre = CrearPersonaje('Samurai', 'Torre');
-        this.zoomSeleccionSamurai = this.add.image(380, 200, this.spriteI).setScale(.6)
+        this.zoomSeleccionSamurai = this.add.image(380, 200, this.spriteI).setScale(.63)
         this.infoSeleccionSamurai = this.add.text(80, 325, '',style);
-        this.zoomSeleccionVikingo = this.add.image(900, 200, this.spriteD).setScale(.6)
+        this.zoomSeleccionVikingo = this.add.image(900, 200, this.spriteD).setScale(.63)
         this.infoSeleccionVikingo = this.add.text(800, 325, '', style);
         sharedInstance.on('zoom seleccion izquierda', (sprite, texto)=>{
             this.spriteI = (sprite + 'Zoom')
@@ -135,15 +135,15 @@ export default class SeleccionPersonaje extends Phaser.Scene
             };
             (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto), this.siguienteEscena = 0]:null;
             switch(this.siguienteEscena){
-                case 1 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto), this.siguienteEscena = 0]
+                case 1 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
                 break
-                case 2 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto), this.siguienteEscena = 0]
+                case 2 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
                 break
-                case 3 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto), this.siguienteEscena = 0]
+                case 3 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
                 break
-                case 4 : [this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto), this.siguienteEscena = 0]
+                case 4 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
                 break
-                case 5 : [this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto), this.siguienteEscena = 0]
+                case 5 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
                 break
             }
         });

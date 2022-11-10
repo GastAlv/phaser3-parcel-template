@@ -83,16 +83,22 @@ export default class Preloads extends Phaser.Scene
         this.load.spritesheet(`botonesAtaqueReyna`, 'assets/interfaz/newBotonReyna.png', { frameWidth: 120, frameHeight: 120});
         this.load.spritesheet(`botonesAtaqueAlfil`, 'assets/interfaz/newBotonAlfil.png', { frameWidth: 120, frameHeight: 120});
         this.load.spritesheet(`botonesAtaqueTorre`, 'assets/interfaz/newBotonTorre.png', { frameWidth: 120, frameHeight: 120});
+
         this.load.spritesheet(`personajePeonSamurai`, 'assets/spriteSheet/peonSamuraiSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeCaballoSamurai`, 'assets/spriteSheet/caballoSamuraiSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeReynaSamurai`, 'assets/spriteSheet/reynaSamuraiSheet.png', { frameWidth: 400, frameHeight: 324});
-        this.load.spritesheet(`personajeAlfilSamurai`, 'assets/spriteSheet/alfilSamuraiSheet.png', { frameWidth: 400, frameHeight: 324});
-        this.load.spritesheet(`personajeTorreSamurai`, 'assets/spriteSheet/torreSamuraiSheet.png', { frameWidth: 400, frameHeight: 324});
+        this.load.spritesheet(`personajeAlfilSamurai`, 'assets/spriteSheet/alfilSamuraiSheet.png', { frameWidth: 400, frameHeight:  324});
+        this.load.spritesheet(`personajeTorreSamurai`, 'assets/spriteSheet/torreSamuraiSheet.png', { frameWidth: 400, frameHeight:  324});
+
         this.load.spritesheet(`personajePeonVikingo`, 'assets/spriteSheet/peonVikingoSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeCaballoVikingo`, 'assets/spriteSheet/caballoVikingoSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeReynaVikingo`, 'assets/spriteSheet/reynaVikingoSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeAlfilVikingo`, 'assets/spriteSheet/alfilVikingoSheet.png', { frameWidth: 400, frameHeight: 324});
         this.load.spritesheet(`personajeTorreVikingo`, 'assets/spriteSheet/torreVikingoSheet.png', { frameWidth: 400, frameHeight: 324});
+
+
+        //AUDIO
+        
         this.load.audio('MainMenuSong', 'assets/sonidos/mainMenuSong.ogg');
         this.load.audio('CombateSong', 'assets/sonidos/combatSong.ogg');
         this.load.audio('GuardarObjetos', 'assets/sonidos/guardarObjeto.mp3');
