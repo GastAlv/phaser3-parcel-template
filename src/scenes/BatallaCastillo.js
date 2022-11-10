@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BotonSencillo, Button } from "../js/button";
-import { Personaje, escuchaDeHabilidades, convertirClase } from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, convertirClase, removerEscuchas } from "../js/Personaje";
 import { sharedInstance } from "./EventCenter";
 import { getPhrase } from "../services/translations";
 
@@ -31,6 +31,7 @@ export default class BatallaCastillo extends Phaser.Scene
     }  
     create() {
         console.log("estas en puente")
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {removerEscuchas({scene:this, idEscena: this.scene.key}), this.scene.start('MainMenu', { lenguaje: this.lenguaje, sonidos:this.sonidos})}, scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
 
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCastillo').setScale(1.135)
         
@@ -106,7 +107,7 @@ export default class BatallaCastillo extends Phaser.Scene
         //     this.habilidad = tipoDeHabilidad
         //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
         // });
-        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#686cd6', fontFamily:'asian'});
+        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#bfb70a', fontFamily:'asian'});
 
         const objeto = {
             personajes: this.personajes,

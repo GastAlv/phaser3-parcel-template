@@ -4,7 +4,7 @@ import { loadFont } from "../js/button";
 import { ManejadorDeSonidos } from "../js/ManejadorDeSonidos";
 export default class Preloads extends Phaser.Scene
 {
-    #language;
+    #lenguaje;
 	constructor()
 	{
 		super('Preloads')
@@ -21,7 +21,7 @@ export default class Preloads extends Phaser.Scene
             progress.destroy();
         });
         loadFont("asian", "assets/fuentes/OPTIAsian.otf");
-        this.#language = getLanguageConfig();
+        this.#lenguaje = getLanguageConfig();
         this.load.image('menuInicio', 'assets/images/menuInicio.png')
         this.load.image('elegirFaccion', 'assets/images/elegirFaccion.png')
         this.load.image('creditos', 'assets/images/creditos.png')
@@ -165,8 +165,8 @@ export default class Preloads extends Phaser.Scene
         });
         const sonidos = new ManejadorDeSonidos({scene:this, volumen:.5, loop:true});
         getTranslations(
-            this.#language,
-            ()=> {this.scene.start('MainMenu', { language: this.#language, sonidos:sonidos })}
+            this.#lenguaje,
+            ()=> {this.scene.start('MainMenu', { lenguaje: this.#lenguaje, sonidos:sonidos })}
         )
     }
 }

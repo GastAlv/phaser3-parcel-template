@@ -38,9 +38,9 @@ export class Button
         
         this.obj = objeto
         this.informacion = [
-            `${getPhrase(this.obj.clase).toUpperCase()} ${getPhrase(this.obj.tipo).toUpperCase()}`+
-            `❤️ ${getPhrase('VIDA')}: `+ this.obj.vida+
-            `⚡ ${getPhrase('VELOCIDAD')}:`+ this.obj.velocidad
+            `${getPhrase(this.obj.clase).toUpperCase()} ${getPhrase(this.obj.tipo).toUpperCase()} `+
+            ` ❤️ ${getPhrase('VIDA')}: `+ this.obj.vida+
+            ` ⚡ ${getPhrase('VELOCIDAD')}:`+ this.obj.velocidad
         ];
         this.scale = scale;
         this.texture = texture;

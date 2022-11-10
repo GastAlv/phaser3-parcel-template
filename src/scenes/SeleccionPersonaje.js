@@ -16,7 +16,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
     #vikingoCaballo;
     #vikingoReina;
     #vikingoAlfil;
-    #vikingoTorre 
+    #vikingoTorre;
     per1;
     per2;
     peleadores = [];
@@ -37,7 +37,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
         super('SeleccionPersonaje')
     }
     init(data){
-        this.sonidos = data.sonidos
+        this.sonidos = data.sonidos;
+        this.lenguaje = data.lenguaje;
         this.registry.events.on('resetear listas para jugar de nuevo', ()=>{
             this.peleadores = [];
             this.personajesActuales = [];
@@ -93,7 +94,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.zoomSeleccionSamurai = this.add.image(380, 200, this.spriteI).setScale(.63)
         this.infoSeleccionSamurai = this.add.text(80, 325, '',style);
         this.zoomSeleccionVikingo = this.add.image(900, 200, this.spriteD).setScale(.63)
-        this.infoSeleccionVikingo = this.add.text(800, 325, '', style);
+        this.infoSeleccionVikingo = this.add.text(680, 325, '', style);
         sharedInstance.on('zoom seleccion izquierda', (sprite, texto)=>{
             this.spriteI = (sprite + 'Zoom')
             this.infoSeleccionSamurai.setText(texto)
@@ -104,12 +105,12 @@ export default class SeleccionPersonaje extends Phaser.Scene
             this.infoSeleccionVikingo.setText(texto)
             this.infoSeleccionVikingo.setStyle({color:'#FFF'})
         });
-        this.botonPeonVikingo = new Button(this, 731, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.#vikingoPeon), this.botonListo1 = true}, 1, this.#vikingoPeon, 'zoom seleccion derecha')
+        this.botonPeonVikingo = new Button(this, 728, 542, 'seleccionPeonVikingo', "", 0, () => {this.peleadores.push(this.#vikingoPeon), this.botonListo1 = true}, 1, this.#vikingoPeon, 'zoom seleccion derecha')
         this.botonCaballoVikingo = new Button(this, 840, 542, 'seleccionCaballoVikingo', '', 0, () => {this.peleadores.push(this.#vikingoCaballo),  this.botonListo1 = true}, 1, this.#vikingoCaballo, 'zoom seleccion derecha')
         this.botonReinaVikingo = new Button(this, 975, 542, 'seleccionReinaVikingo', '', 0, () => {this.peleadores.push(this.#vikingoReina), this.botonListo1 = true}, 1, this.#vikingoReina, 'zoom seleccion derecha')
         this.botonAlfilVikingo = new Button(this, 1110, 542, 'seleccionAlfilVikingo', '', 0, () => {this.peleadores.push(this.#vikingoAlfil), this.botonListo1 = true}, 1, this.#vikingoAlfil, 'zoom seleccion derecha')
         this.botonTorreVikingo = new Button(this, 1245, 542, 'seleccionTorreVikingo', '', 0, () => {this.peleadores.push(this.#vikingoTorre), this.botonListo1 = true}, 1, this.#vikingoTorre, 'zoom seleccion derecha')
-        this.botonPeonSamurai = new Button(this, 540, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.#samuraiPeon),  this.botonListo2 = true}, 1, this.#samuraiPeon, 'zoom seleccion izquierda')
+        this.botonPeonSamurai = new Button(this, 546, 542, 'seleccionPeonSamurai', "", 0, () => {this.peleadores.push(this.#samuraiPeon),  this.botonListo2 = true}, 1, this.#samuraiPeon, 'zoom seleccion izquierda')
         this.botonCaballoSamurai = new Button(this, 440, 542, 'seleccionCaballoSamurai', '', 0, () => {this.peleadores.push(this.#samuraiCaballo),  this.botonListo2 = true}, 1, this.#samuraiCaballo, 'zoom seleccion izquierda')
         this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => {this.peleadores.push(this.#samuraiReina), this.botonListo2 = true}, 1, this.#samuraiReina, 'zoom seleccion izquierda')
         this.botonAlfilSamurai = new Button(this, 165, 542, 'seleccionAlfilSamurai', '', 0, () => {this.peleadores.push(this.#samuraiAlfil), this.botonListo2 = true}, 1, this.#samuraiAlfil, 'zoom seleccion izquierda')
@@ -132,6 +133,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             const objeto = {
                 personajes: this.peleadores,
                 sonidos:this.sonidos,
+                lenguaje : this.lenguaje
             };
             (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto), this.siguienteEscena = 0]:null;
             switch(this.siguienteEscena){

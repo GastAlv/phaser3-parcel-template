@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { BotonSencillo} from "../js/button";
-import { convertirClase, escuchaDeHabilidades, Personaje } from "../js/Personaje";
+import { convertirClase, escuchaDeHabilidades, Personaje, removerEscuchas } from "../js/Personaje";
 import { getPhrase } from "../services/translations";
 export default class BatallaPuente extends Phaser.Scene
 {
@@ -15,7 +15,7 @@ export default class BatallaPuente extends Phaser.Scene
         this.datos = data;
         this.personajes = data.personajes;
         this.sonidos = data.sonidos;
-        this.languaje = data.language;
+        this.lenguaje = data.lenguaje;
         this.personajeIzquierda = this.personajes.find((personaje)=>{
             return personaje.tipo == 'Samurai'
         })
@@ -25,14 +25,18 @@ export default class BatallaPuente extends Phaser.Scene
     }  
     create() {
         console.log('estas en puente');
+        console.log(this.scene.key);
+
         this.sonidos.MainMenuSonido.pause()
         this.sonidos.CombateSong.play()
         this.crearMochilas = this.datos.crear;
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioPuente').setScale(1.135)
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {removerEscuchas({scene:this, idEscena: this.scene.key}), this.scene.start('MainMenu', { lenguaje: this.lenguaje, sonidos:this.sonidos})}, scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
+
         this.personajeDeIzquierda = new Personaje({
             scene: this,
-            x: 450,
-            y: 240,
+            x:420,
+            y: 230,
             vida: this.personajeIzquierda.vida,
             sprite: this.personajeIzquierda.sprite,
             poderes: this.personajeIzquierda.poderes,
@@ -47,8 +51,8 @@ export default class BatallaPuente extends Phaser.Scene
         console.log(this.personajeDeIzquierda.clase)
         this.personajeDeDerecha = new Personaje({
             scene: this,
-            x: 750,
-            y: 240,
+            x: 850,
+            y: 220,
             vida:  this.personajeDerecha.vida,
             sprite:  this.personajeDerecha.sprite,
             poderes:  this.personajeDerecha.poderes,
@@ -85,7 +89,7 @@ export default class BatallaPuente extends Phaser.Scene
         this.registry.events.on('Vikingo poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda);
         })
-        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#686cd6', fontFamily:'asian'});
+        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#bfb70a', fontFamily:'asian'});
         const objeto = {
             personajes: this.personajes,
             sonidos: this.sonidos,
@@ -95,7 +99,7 @@ export default class BatallaPuente extends Phaser.Scene
 
         this.registry.events.on('victoria de combate', (ganador)=>{
             this.registry.events.emit('detener timer y todo los pads')
-            this.textGanador.setText(`Gana ${ganador}`.toUpperCase());
+            this.textGanador.setText(`${getPhrase('GANA')} ${getPhrase(ganador).toUpperCase()}`);
             console.log('llego el ganador');
             let timeOutParaSiguienteCombate = setTimeout(()=>{
                 this.registry.events.emit('siguiente combate', ganador)
@@ -129,7 +133,7 @@ export default class BatallaPuente extends Phaser.Scene
             this.registry.events.removeListener('Vikingo poder4');
             this.registry.events.removeListener('siguiente combate');
             this.registry.events.removeListener('victoria de combate');
-            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje:this.languaje});
+            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje:this.lenguaje});
         });
     }
 }

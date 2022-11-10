@@ -1,8 +1,7 @@
 import Phaser from "phaser";
 import { Button, BotonSencillo } from "../js/button";
-import { Personaje, escuchaDeHabilidades, convertirClase } from "../js/Personaje";
+import { Personaje, escuchaDeHabilidades, convertirClase, removerEscuchas } from "../js/Personaje";
 import { getPhrase } from "../services/translations";
-import { sharedInstance } from "./EventCenter";
 
 export default class BatallaCosta extends Phaser.Scene
 {
@@ -31,8 +30,11 @@ export default class BatallaCosta extends Phaser.Scene
     }  
     create() {
         console.log("ESTAS EN COSTA")
-
+        
+        
+        
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCosta').setScale(1.135)
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {removerEscuchas({scene:this, idEscena: this.scene.key}), this.scene.start('MainMenu', { lenguaje: this.lenguaje, sonidos:this.sonidos})}, scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
         
         
         this.personajeDeIzquierda = new Personaje({
@@ -104,7 +106,7 @@ export default class BatallaCosta extends Phaser.Scene
         //     this.habilidad = tipoDeHabilidad
         //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
         // });
-        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#686cd6', fontFamily:'asian'});
+        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#bfb70a', fontFamily:'asian'});
 
 
         const objeto = {
@@ -216,4 +218,23 @@ export default class BatallaCosta extends Phaser.Scene
 //             this.scene.start('VictoriaSamurai')
 //         }
     }
+    
 }
+// export function removerEscuchas(idEscena){
+//     console.log(idEscena);
+//     this.scene.stop('Ui');
+//     this.scene.stop(idEscena);
+//     this.registry.events.removeListener('Samurai poder1');
+//     this.registry.events.removeListener('Samurai poder2');
+//     this.registry.events.removeListener('Samurai poder3');
+//     this.registry.events.removeListener('Samurai poder4');
+    
+//     this.registry.events.removeListener('Vikingo poder1');
+//     this.registry.events.removeListener('Vikingo poder2');
+//     this.registry.events.removeListener('Vikingo poder3');
+//     this.registry.events.removeListener('Vikingo poder4');
+
+//     this.registry.events.removeListener('siguiente combate');
+//     this.registry.events.removeListener('victoria de combate');
+//     this.registry.events.removeListener('Evaluar vivos');
+// }

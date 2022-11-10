@@ -37,7 +37,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.img = this;
-        this.img.setScale(1);
+        this.img.setScale(.9);
         this.probabilidad = new Random();
         this.soloLaClaseyElTipoDelPersonaje = this.sprite.slice(9);
         this.quePersonajeSeCura();
@@ -136,6 +136,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         this.vidaCheck = this.vida+dano;
         this.vidaCheck2 = this.vida+(this.vida * (dano/3));
         let vidaCheckAlfil = this.vida+(this.vida*0.45)
+        let vidaCheckReyna = this.vida+dano
 
         
         if(this.SoloLaClaseDelPersonaje === 'Caballo'){
@@ -144,16 +145,20 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
             if(this.vida >= (this.vidaBase*.5)) return console.log('LLego con mas del 50%',this.vida),this.vida, this.emitirEvento();
             
         }else if(this.SoloLaClaseDelPersonaje === 'Reyna'){
+            console.log('Cura Reyna');
             if(this.vida >= this.vidaBase)
             {
                 this.vida = this.vidaBase;
+                return this.emitirEvento()
+                
+            }else if(vidaCheckReyna >= this.vidaBase) {return this.vida = this.vidaBase, this.emitirEvento()
+            }else{
+                this.vida += dano
                 this.emitirEvento()
-                return
             }
-            (this.vida >= (this.vidaBase*.5))? this.vida += (this.vida * (dano/3)) :null;
-            (this.vida <  (this.vidaBase*.5))? this.vida += (this.vidaBase*dano)    :null;
-            
-            this.emitirEvento()
+            // (this.vida >= (this.vidaBase*.5))? this.vida += (this.vida * (dano/3)) :null;
+            // (this.vida <  (this.vidaBase*.5))? this.vida += (this.vidaBase*dano)    :null;
+            // this.emitirEvento()
         } else if(this.vida <= 0)
         {
             this.estaVivo = false;
@@ -226,7 +231,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         enemigo.recibirDano(this.poderes[indexDelDano].dano);
         this.cantidadVida = this.poderes[indexDelDano].dano * 0.75
         this.recibirCura(this.cantidadVida)
-        this.emitirEvento()
+        // this.emitirEvento()
     }
     robarTurno(enemigo){
         enemigo.recibirDano(10)
@@ -322,7 +327,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
                     Alfil:Datos(Math.round(random.integer(60, 68)), [
                         crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(10, 16))), 1,getPhrase('Ataca al enemigo con un daño: min:10 a max:16').toUpperCase()),
                         crearPoder(`sangrado`,10, 9,getPhrase('Causa daño:10 en cada turno al enemigo').toUpperCase()),
-                        crearPoder(`curacion`, null, 6, getPhrase('Se cura un 45% HP').toUpperCase()),
+                        crearPoder(`curacion`, null, 6, getPhrase('Se cura un 45% HP, hasta un maximo de tre veces').toUpperCase()),
                         crearPoder(`cantoMotivador`, null, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase())
                     ], random.integer(6,7), false, clase, tipo),
                     Torre:Datos(Math.round(random.integer(85, 95)), [
@@ -393,3 +398,22 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
 
     *
     */
+
+    export function removerEscuchas({scene, idEscena}){
+        console.log(idEscena);
+        scene.scene.stop('Ui');
+        scene.scene.stop(idEscena);
+        scene.registry.events.removeListener('Samurai poder1');
+        scene.registry.events.removeListener('Samurai poder2');
+        scene.registry.events.removeListener('Samurai poder3');
+        scene.registry.events.removeListener('Samurai poder4');
+        scene
+        scene.registry.events.removeListener('Vikingo poder1');
+        scene.registry.events.removeListener('Vikingo poder2');
+        scene.registry.events.removeListener('Vikingo poder3');
+        scene.registry.events.removeListener('Vikingo poder4');
+    
+        scene.registry.events.removeListener('siguiente combate');
+        scene.registry.events.removeListener('victoria de combate');
+        scene.registry.events.removeListener('Evaluar vivos');
+    }

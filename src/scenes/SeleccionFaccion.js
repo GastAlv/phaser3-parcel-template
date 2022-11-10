@@ -4,7 +4,7 @@ import { getPhrase } from "../services/translations";
 
 export default class SeleccionFaccion extends Phaser.Scene
 {
-    #languaje;
+    #lenguaje;
     listo1;
     listo2;
     constructor(){
@@ -13,7 +13,7 @@ export default class SeleccionFaccion extends Phaser.Scene
 
     init(data){
         this.sonidos = data.sonidos
-        this.#languaje = data.language
+        this.#lenguaje = data.lenguaje
     }
     create() {
         let style = {
@@ -33,7 +33,7 @@ export default class SeleccionFaccion extends Phaser.Scene
         //ELIGE TU facción
         this.add.text(this.cameras.main.centerX, 70, getPhrase('ELIGE TU FACCIÓN'), style).setStyle({fontSize: '70px', fontDamily: 'asian'}).setOrigin(.5)
 
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('MainMenu', {sonidos:this.sonidos, languaje:this.#languaje}), scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => this.scene.start('MainMenu', {sonidos:this.sonidos, languaje:this.#lenguaje}), scale:0.75, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
 
         new BotonSencillo({scene:this, x:330, y:630, texture:'botonListo', text:getPhrase('LISTO'), size:50,  callback:() => {this.listo1 = true, this.revisarListos()}, scale:0.70, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
         new BotonSencillo({scene:this, x:950, y:630, texture:'botonListo', text:getPhrase('LISTO'), size:50,  callback:() => {this.listo2 = true, this.revisarListos()}, scale:0.70, callbackHover:()=>{this.sonidos.HoverBoton.play()}, callbackOut:()=>{this.sonidos.HoverBoton.pause()}})
@@ -43,6 +43,6 @@ export default class SeleccionFaccion extends Phaser.Scene
         this.revisarListos()
     }
     revisarListos(){
-        (this.listo1 && this.listo2 === true)?[this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, languaje:this.#languaje})]:null;
+        (this.listo1 && this.listo2 === true)?[this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje:this.#lenguaje})]:null;
     }
 }

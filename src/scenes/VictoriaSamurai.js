@@ -33,7 +33,10 @@ export default class VictoriaSamurai extends Phaser.Scene
         let victoriaSamurai = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'victoriaSamurai');
         victoriaSamurai.setScale(1.25)
 
-        new BotonSencillo({scene:this, x:900, y:600, texture:'botonMarco', text:getPhrase('VOLVER AL MENU'), size:40,  callback:() => {this.scene.start('MainMenu'), {languaje: this.languaje, sonidos:this.sonidos}}, scale:0.4, callbackHover:()=>{}, callbackOut:()=>{}})
+        new BotonSencillo({scene:this, x:900, y:600, texture:'botonMarco', text:getPhrase('VOLVER AL MENU'), size:40,  callback:() => {
+            this.sonidos.MainMenuSonido.stop(), 
+            this.scene.start('MainMenu'),{languaje: this.languaje, sonidos:this.sonidos}
+        }, scale:0.4, callbackHover:()=>{}, callbackOut:()=>{}})
 
     }
 }
