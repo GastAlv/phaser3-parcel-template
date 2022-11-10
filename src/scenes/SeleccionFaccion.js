@@ -40,6 +40,7 @@ export default class SeleccionFaccion extends Phaser.Scene
     
     }
     update(){
+        this.revisarListos()
     }
     revisarListos(){
         (this.listo1 && this.listo2 === true)?[this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, languaje:this.#languaje})]:null;

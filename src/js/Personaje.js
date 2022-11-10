@@ -35,7 +35,6 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
         this.img = this;
-        this.img.setScale(2);
         this.probabilidad = new Random();
         this.soloLaClaseDelPersonaje = this.sprite.slice(9);
         this.sonidos = new ManejadorDeSonidos({scene:scene, volumen:1, loop:false});

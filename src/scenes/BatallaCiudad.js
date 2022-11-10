@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { BotonSencillo } from "../js/button";
 import { Personaje, escuchaDeHabilidades, convertirClase} from "../js/Personaje";
 import { sharedInstance} from './EventCenter'
+import { getPhrase } from "../services/translations";
 
 export default class BatallaCiudad extends Phaser.Scene
 {
@@ -17,7 +18,9 @@ export default class BatallaCiudad extends Phaser.Scene
 
     init(data)
     {
+        this.languaje = data.language;
         this.personajes = data.personajes
+        this.sonidos = data.sonidos
         console.log(this.personajes)
 
         this.personajeIzquierda = this.personajes.find((personaje)=>{
@@ -30,7 +33,7 @@ export default class BatallaCiudad extends Phaser.Scene
     create() {
         console.log("estas en ciudad")
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'escenarioCiudad').setScale(1.135)
-        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCiudad')}, scale:0.75})
+        new BotonSencillo({scene:this, x:70, y:60, texture:'botonVolver', text:'', size:0,  callback:() => {this.scene.start('MainMenu'), this.scene.stop('Ui'), this.scene.pause('Mochila'), this.scene.stop('BatallaCiudad')}, scale:0.75, callbackHover:()=>{}, callbackOut:()=>{} })
 
         
         
@@ -77,11 +80,11 @@ export default class BatallaCiudad extends Phaser.Scene
         this.registry.events.on('Samurai poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha)
         })
-        sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
-            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
-            this.habilidad = tipoDeHabilidad
-            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
-        })
+        // sharedInstance.on('Samurai usar objeto', (tipoDeHabilidad, index = null)=>{
+        //     //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+        //     this.habilidad = tipoDeHabilidad
+        //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
+        // })
 
         
         this.registry.events.on('Vikingo poder1', ()=>{
@@ -97,66 +100,128 @@ export default class BatallaCiudad extends Phaser.Scene
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[3].tipo, 3, this.personajeDeDerecha, this.personajeDeIzquierda)
         })
          //Evento solo para usar el inventario Vikingo
-         sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
-            //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
-            this.habilidad = tipoDeHabilidad
-            escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
-        });
+        //  sharedInstance.on('Vikingo usar objeto', (tipoDeHabilidad, index = null)=>{
+        //     //index=null ya que los objetos por ahora no se les envia el index del poder que modifican
+        //     this.habilidad = tipoDeHabilidad
+        //     escuchaDeHabilidades(tipoDeHabilidad, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
+        // });
+
+        this.textGanador = this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY/2, '', {fontSize:'100px', color:'#686cd6', fontFamily:'asian'});
         
         const objeto = {
             personajes: this.personajes,
-            crear:false,
+            // crear:false,
+            sonidos:this.sonidos
         };
         this.scene.moveAbove('BatallaCiudad', 'Ui')
         this.scene.run('Ui', objeto)
+
+            //     /*
+        //     LOGICA DE QUIEN ESTA VIVO Y MUERTO PARA VER QUIEN GANA
+        //     */
+        this.registry.events.on('Evaluar vivos', (vida, tipo)=>{
+            console.log(tipo, vida);
+            (vida <= 0)?this.registry.events.emit('victoria de combate', tipo):null;
+        });
+        this.registry.events.on('victoria de combate', (ganador)=>{
+            this.registry.events.emit('detener timer y todo los pads')
+            this.textGanador.setText(`${getPhrase('GANA')} ${getPhrase(ganador).toUpperCase()}`);
+            // let timeOutParaSoltarBotin = setTimeout(()=>{
+            //     this.textGanador.setText(``);
+            //     // this.registry.events.emit(`botin soltado` ,ganador);
+            //     // this.add.text(this.cameras.main.centerX/1.5, this.cameras.main.centerY+(this.cameras.main.centerY/5),'Tienes 10s para guardar tu objeto'.toUpperCase(), {fontSize:50, color:'#eb000e', fontFamily: 'asian'})
+            //     clearTimeout(timeOutParaSoltarBotin)
+            // },3000);
+            console.log('llego el ganador');
+            let timeOutParaSiguienteCombate = setTimeout(()=>{
+                this.registry.events.emit('siguiente combate', ganador)
+                clearTimeout(timeOutParaSiguienteCombate)
+            }, 5000);
+        });
+
+        //Evento que cambia de escena, vuelve a seleccionPersonaje para seguie en los otros combates
+        this.registry.events.on('siguiente combate', (ganador)=>{
+            //dependiendo quien sea el ganador se enviara el id de la siguiente escena/batalla
+            this.queEscenaSigue = {
+                Vikingo:1,
+                Samurai:3,
+            };
+            //Se crea un array de objetos, que possen los datos de los personajes
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)];
+            //Se envia un evento para actualizar la seleccionPersonaje(los personajes: vencedor, vencido) y el id de la siguiente escena
+            this.registry.events.emit('pruebaEnvio1', this.personajesActuales, this.queEscenaSigue[ganador]);
+            //Se paran las escenas necesarias
+            this.scene.stop('Ui');
+            // this.scene.pause('Mochila');
+            this.scene.stop('BatallaCiudad');
+            //Se inicia la seleccion
+            this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje: this.lenguaje});
+            // (ganador === 'Samurai')?sharedInstance.emit('que samurai sigue', 'ESCOGE TU FICHA SAMURAI'):sharedInstance.emit('que vikingo sigue', 'ESCOGE TU FICHA VIKINGA');
+            //Se remueven los eventos escucha
+            this.registry.events.removeListener('Samurai poder1');
+            this.registry.events.removeListener('Samurai poder2');
+            this.registry.events.removeListener('Samurai poder3');
+            this.registry.events.removeListener('Samurai poder4');
+            sharedInstance.removeListener('Samurai usar objeto');
+            
+            this.registry.events.removeListener('Vikingo poder1');
+            this.registry.events.removeListener('Vikingo poder2');
+            this.registry.events.removeListener('Vikingo poder3');
+            this.registry.events.removeListener('Vikingo poder4');
+            sharedInstance.removeListener('Vikingo usar objeto');
+
+            this.registry.events.removeListener('Evaluar vivos');
+            this.registry.events.removeListener('siguiente combate');
+            this.registry.events.removeListener('victoria de combate');
+        });
 
     }
 
     update()
     {
-        if(this.personajeDeIzquierda.estaVivo === false){
-            //GANO EL VIKINGO
-            let idSiguienteEscena = 1
-            this.personajeDeDerecha.setGano(true)
-            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-            console.log(this.personajesActuales)
-            this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.stop('Ui')
-            // removerEscucha();
-            this.registry.events.removeListener('Samurai poder1')
-this.registry.events.removeListener('Samurai poder2')
-this.registry.events.removeListener('Samurai poder3')
-this.registry.events.removeListener('Samurai poder4')
-this.registry.events.removeListener('Vikingo poder1')
-this.registry.events.removeListener('Vikingo poder2')
-this.registry.events.removeListener('Vikingo poder3')
-this.registry.events.removeListener('Vikingo poder4')
+//         if(this.personajeDeIzquierda.estaVivo === false){
+//             //GANO EL VIKINGO
+//             let idSiguienteEscena = 1
+//             this.personajeDeDerecha.setGano(true)
+//             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
+//             console.log(this.personajesActuales)
+//             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
+//             this.scene.stop('Ui')
+//             // removerEscucha();
+//             this.registry.events.removeListener('Samurai poder1')
+// this.registry.events.removeListener('Samurai poder2')
+// this.registry.events.removeListener('Samurai poder3')
+// this.registry.events.removeListener('Samurai poder4')
+// this.registry.events.removeListener('Vikingo poder1')
+// this.registry.events.removeListener('Vikingo poder2')
+// this.registry.events.removeListener('Vikingo poder3')
+// this.registry.events.removeListener('Vikingo poder4')
 
-            // this.registry.events.emit('resetear-ui')
-            // this.scene.stop('BatallaCiudad')
-            this.scene.start('SeleccionPersonaje')
-        }
-        if(this.personajeDeDerecha.estaVivo === false){
-            //GANO EL SAMURAI
-            let idSiguienteEscena = 3
-            this.personajeDeIzquierda.setGano(true)
-            this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
-            console.log(this.personajesActuales)
-            this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
-            this.scene.stop('Ui')
-            // removerEscucha();
-            this.registry.events.removeListener('Samurai poder1')
-this.registry.events.removeListener('Samurai poder2')
-this.registry.events.removeListener('Samurai poder3')
-this.registry.events.removeListener('Samurai poder4')
-this.registry.events.removeListener('Vikingo poder1')
-this.registry.events.removeListener('Vikingo poder2')
-this.registry.events.removeListener('Vikingo poder3')
-this.registry.events.removeListener('Vikingo poder4')
+//             // this.registry.events.emit('resetear-ui')
+//             // this.scene.stop('BatallaCiudad')
+//             this.scene.start('SeleccionPersonaje')
+//         }
+//         if(this.personajeDeDerecha.estaVivo === false){
+//             //GANO EL SAMURAI
+//             let idSiguienteEscena = 3
+//             this.personajeDeIzquierda.setGano(true)
+//             this.personajesActuales = [convertirClase(this.personajeDeIzquierda),convertirClase(this.personajeDeDerecha)]
+//             console.log(this.personajesActuales)
+//             this.registry.events.emit('pruebaEnvio1', this.personajesActuales, idSiguienteEscena)
+//             this.scene.stop('Ui')
+//             // removerEscucha();
+//             this.registry.events.removeListener('Samurai poder1')
+// this.registry.events.removeListener('Samurai poder2')
+// this.registry.events.removeListener('Samurai poder3')
+// this.registry.events.removeListener('Samurai poder4')
+// this.registry.events.removeListener('Vikingo poder1')
+// this.registry.events.removeListener('Vikingo poder2')
+// this.registry.events.removeListener('Vikingo poder3')
+// this.registry.events.removeListener('Vikingo poder4')
 
-            // this.registry.events.emit('resetear-ui')
-            // this.scene.stop('BatallaCiudad')
-            this.scene.start('SeleccionPersonaje')
-        }
+//             // this.registry.events.emit('resetear-ui')
+//             // this.scene.stop('BatallaCiudad')
+//             this.scene.start('SeleccionPersonaje')
+//         }
     }
 }
