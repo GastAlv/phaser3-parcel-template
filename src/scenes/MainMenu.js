@@ -4,7 +4,6 @@ import { getPhrase } from '../services/translations'
 export default class MainMenu extends Phaser.Scene
 {
     #lenguaje
-    Primera = true;
 	constructor()
 	{
 		super('MainMenu')
@@ -15,7 +14,6 @@ export default class MainMenu extends Phaser.Scene
     }
     create()
     {
-        console.log(Math.round(.49))
         this.cameras.main.fadeIn(2000);
         this.sonidos.MainMenuSonido.play()
         this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , 'menuInicio');

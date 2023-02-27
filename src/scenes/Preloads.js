@@ -10,7 +10,6 @@ export default class Preloads extends Phaser.Scene
 		super('Preloads')
 	}
     preload(){
-        this.load.image('barco', 'assets/interfaz/barcoPrecarga.png')
         var progress = this.add.graphics();
         this.load.on('progress', (value)=>{
             progress.clear();
@@ -26,7 +25,7 @@ export default class Preloads extends Phaser.Scene
         this.load.image('elegirFaccion', 'assets/images/elegirFaccion.png')
         this.load.image('creditos', 'assets/images/creditos.png')
         this.load.image('seleccionpersonajes', 'assets/images/seleccionpersonaje.png')
-        this.load.image('pta', 'assets/images/seleccionPersonaje.png')
+        this.load.image('selectionBackground', 'assets/images/seleccionPersonaje.png')
         this.load.image('victoriaVikingo', 'assets/images/victoriaVikingo.png')
         this.load.image('victoriaSamurai', 'assets/images/victoriaSamurai.png')
         this.load.image('escenarioBosque', 'assets/images/escenarioBosque.png')
@@ -74,10 +73,10 @@ export default class Preloads extends Phaser.Scene
         this.load.image('mochilaCerrada', 'assets/interfaz/mochilaCerrada.png')
         this.load.image('crus', 'assets/interfaz/crus.png')
         this.load.image('empty', 'assets/interfaz/empty.png')
-        this.load.spritesheet('lootUno', 'assets/interfaz/lootUno.png', { frameWidth: 40, frameHeight: 40});
         this.load.image('marcoSelector', 'assets/interfaz/marcoSeleccionSamurai.png')
         this.load.image('subirVolumen', 'assets/interfaz/subirVolumen.png')
         this.load.image('bajarVolumen', 'assets/interfaz/bajarVolumen.png')
+        this.load.spritesheet('lootUno', 'assets/interfaz/lootUno.png', { frameWidth: 40, frameHeight: 40});
         this.load.spritesheet(`botonesAtaquePeon`, 'assets/interfaz/newBotonPeon.png', { frameWidth: 120, frameHeight: 120});
         this.load.spritesheet(`botonesAtaqueCaballo`, 'assets/interfaz/newBotonCaballo.png', { frameWidth: 120, frameHeight: 120});
         this.load.spritesheet(`botonesAtaqueReyna`, 'assets/interfaz/newBotonReyna.png', { frameWidth: 120, frameHeight: 120});
