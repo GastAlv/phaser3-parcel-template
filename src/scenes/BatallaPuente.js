@@ -66,7 +66,6 @@ export default class BatallaPuente extends Phaser.Scene
         })
         this.registry.events.on('Samurai poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[0].tipo, 0, this.personajeDeIzquierda, this.personajeDeDerecha);
-            
         })
         this.registry.events.on('Samurai poder2', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[1].tipo, 1, this.personajeDeIzquierda, this.personajeDeDerecha);
@@ -77,6 +76,7 @@ export default class BatallaPuente extends Phaser.Scene
         this.registry.events.on('Samurai poder4', ()=>{
             escuchaDeHabilidades(this.personajeDeIzquierda.poderes[3].tipo, 3, this.personajeDeIzquierda, this.personajeDeDerecha);
         })
+        
         this.registry.events.on('Vikingo poder1', ()=>{
             escuchaDeHabilidades(this.personajeDeDerecha.poderes[0].tipo, 0, this.personajeDeDerecha, this.personajeDeIzquierda);
         })

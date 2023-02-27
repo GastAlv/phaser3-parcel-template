@@ -56,6 +56,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
             this.actualizarPersonajes = true
             this.cambiarEscena = true
             this.siguienteEscena = idSiguienteEscena
+            console.log(idSiguienteEscena);
             this.nuevoMuerto = personajes.find((personaje)=>{
                 return personaje.estaVivo === false
             });
@@ -72,6 +73,7 @@ export default class SeleccionPersonaje extends Phaser.Scene
     }
 
     create() {
+        // this.siguienteEscena = 3;
         this.cameras.main.fadeIn(1000);
         let style = {
             fontSize: '30px',
@@ -127,27 +129,40 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.arrayBotonesVikingo.push(this.botonTorreVikingo);
         this.add.text(this.cameras.main.centerX, 100, this.quienPerdio, style).setStyle({fontSize: '40px', fontDamily: 'asian'}).setOrigin(.5)
         this.add.text(this.cameras.main.centerX, 35, getPhrase('ELIGE TU HEROE'), style).setStyle({fontSize: '60px', fontDamily: 'asian'}).setOrigin(.5)
+
         this.registry.events.on('manejador de combates', ()=>{
-            this.botonListo1 = false
-            this.botonListo2 = false
+            console.log("evento manejador")
+            // this.botonListo1 = false;
+            // this.botonListo2 = false;
+            
+
             const objeto = {
                 personajes: this.peleadores,
                 sonidos:this.sonidos,
-                lenguaje : this.lenguaje
+                lenguaje: this.lenguaje,
+                escenarioId: this.siguienteEscena,
             };
-            (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto), this.siguienteEscena = 0]:null;
-            switch(this.siguienteEscena){
-                case 1 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
-                break
-                case 2 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
-                break
-                case 3 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
-                break
-                case 4 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
-                break
-                case 5 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
-                break
-            }
+            console.log(objeto);
+            (this.primerEscena === true)?
+            [objeto.escenarioId = 3, this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start("renderTest01", objeto), this.registry.events.removeListener('manejador de combates')]
+            :[this.registry.events.removeListener('manejador de combates'),  this.scene.stop('SeleccionPersonaje'), this.scene.start("renderTest01", objeto)];
+            console.log(objeto);
+            
+
+            // this.scene.start("renderTest01", objeto);
+            // (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto), this.siguienteEscena = 0]:null;
+            // switch(this.siguienteEscena){
+            //     case 1 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
+            //     break
+            //     case 2 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
+            //     break
+            //     case 3 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
+            //     break
+            //     case 4 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
+            //     break
+            //     case 5 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
+            //     break
+            // }
         });
         this.registry.events.on('actualizar Botones Y Personajes', ()=>{
             const indice = {
@@ -183,7 +198,8 @@ export default class SeleccionPersonaje extends Phaser.Scene
         this.actualizarBotonesYPersonajes()
     }
     revisarListos(){
-        (this.botonListo1 && this.botonListo2 === true)?[this.registry.events.emit('manejador de combates')]:null;
+        (this.botonListo1 && this.botonListo2 === true)?[this.botonListo1 = false, this.botonListo2 = false, this.registry.events.emit('manejador de combates')]:null;
+        
     }
     actualizarBotonesYPersonajes(){
         (this.actualizarPersonajes === true)?[this.actualizarPersonajes = false, this.registry.events.emit('actualizar Botones Y Personajes')]:null;
