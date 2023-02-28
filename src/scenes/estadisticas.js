@@ -1,63 +1,61 @@
-import Phaser from 'phaser'
-import { findMatch, saveMatch } from '../firebaseDB/saveMatch';
-import { getIp } from '../ipApi/ipApiConfig';
-import {BotonSencillo} from '../js/button';
-import { getPhrase } from '../services/translations';
+import Phaser from "phaser";
+import { findMatch, saveMatch } from "../firebaseDB/saveMatch";
+import { getIp } from "../ipApi/ipApiConfig";
+export class shape {
+    constructor({ props }) {
+        const { scene: scene, x: x, y: y, text: text, style: style, cols: cols, rows: match = {}, titles = [] } = props;
+        this.scene = scene;
+        scene;
+        x;
+        y;
+        text;
+        style;
+        cols;
+        match;
+        titles;
+        // scene.add.existing(this);
+        this.scene.add.text(text);
+        for (let index = 0; index < titles.length; index++) {
+            let title = titles[index];
+            let tableContentHead = {
+                x: x,
+                y: y,
+                text: title.toUpperCase(),
+                style: style
+            };
+            this.scene.make.text(tableContentHead)
+            for (let index = 0; index < match.length; index++) {
+                let content = match[index];
+                let tableContentBody = {
+                    x: x,
+                    y: y,
+                    text: content.toUpperCase(),
+                    style: style
+                };
+                this.scene.make.text(tableContentBody);
+            }
 
-
-// Manejador de eventos centralizados para comunicacion de componentes
-
-// Importacion
-//import { sharedInstance as events } from './EventCenter'
-
-// Emisor de mensaje de difusion
-// Recibe el nombre del mensaje y los valores de parametro
-// events.emit('health-changed', this.health)
-
-// Receptor de mensaje, por ejemplo escena de UI
-// Recibe el nombre del mensaje y una funcion callback a ejecutar
-// events.on('health-changed', this.handleHealthChanged, this)
-
-
-export default class VictoriaSamurai extends Phaser.Scene
-{
+        }
+    }
+}
+export default class Estadisticas extends Phaser.Scene {
     #ip;
     matchData;
-	constructor()
-	{
-		super('VictoriaSamurai')
-	}
-    init(data){
-        this.sonidos = data.sonidos
-        this.languaje = data.language
-
+    constructor() {
+        super('Estadisticas')
+    }
+    init(data) {
         this.#ip = getIp().toString()
 
-        this.match = data.match;
-        saveMatch(this.match);
+        let match = data.match;
+        saveMatch(match);
         findMatch().then((data) => {
             this.matchData = data;
             // console.log(match);
         });
     }
-    create()
-    {
-        let key;
-        (this.match.winner === "Samurais")?[key = 1]:[key = 2];
-        
-        console.log(key);
-        let backgroundKeys ={
-            1: 'victoriaSamurai',
-            2: 'victoriaVikingo',
-        }
-        // this.sonidos.MainMenuSonido.pause()
-        let victoriaSamurai = this.add.image( this.cameras.main.centerX , this.cameras.main.centerY , backgroundKeys[key]);
-        victoriaSamurai.setScale(1.25)
-
-        new BotonSencillo({scene:this, x:900, y:600, texture:'botonMarco', text:getPhrase('VOLVER AL MENU'), size:40,  callback:() => {
-            this.sonidos.MainMenuSonido.stop(), 
-            this.scene.start('MainMenu'),{languaje: this.languaje, sonidos:this.sonidos}
-        }, scale:0.4, callbackHover:()=>{}, callbackOut:()=>{}})
+    create() {
+        this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'menuInicio').setScale(1.135);
         let style = {
             fontSize: '20px',
             fontFamily: 'Asian',
@@ -106,13 +104,13 @@ export default class VictoriaSamurai extends Phaser.Scene
                     let objLength = data
 
 
-                    let claves = ["winner", "loser", "mvp", "mvpKilss"]
+                    let claves = ["winner", "loser", "MVP", "MVPKilss"]
 
                     setTimeout(() => {
 
                         let i = 0;
 
-                        // console.log(objLength.winner);
+                        console.log(objLength.winner);
                         for (let index = 0; index <= 3; index++) {
                             let content;
                             for(const [clave, valor] of Object.entries(objLength)) {(clave === claves[i])?[content = valor]:[null]}
@@ -133,6 +131,8 @@ export default class VictoriaSamurai extends Phaser.Scene
             }
         };
         let tableStat = table();
+    }
+    update() {
 
     }
 }

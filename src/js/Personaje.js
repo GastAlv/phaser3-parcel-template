@@ -10,8 +10,9 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite {
     SoloLaClaseDelPersonaje;
     #defensa;
     #contador = 0;
+    #kills;
     constructor(props) {
-        const { scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true, clase } = props
+        const { scene, x, y, vida, tiempo, sprite, poderes = [], velocidad, defensa, spriteSheet, tipo, id, estaVivo = true, clase , kills: kills} = props
         super(scene, x, y, sprite, 0)
         this.scene = scene;
         this.vidaBase = vida;
@@ -32,6 +33,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite {
         this.ladronVikingo = true;
         this.probabilidad = 0;
         this.multiplicadorDeAtaque = 0;
+        (kills != null)?[ this.#kills = kills]:[ this.#kills = 0];
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.allowGravity = false;
@@ -81,6 +83,13 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite {
         this.sonidos.AtaqueCargadoCargando.play();
         this.dano = this.poderes[indexDelDano].dano
         sharedInstance.emit('turno vigente', this.dano, this.tipo)
+    }
+    setKills(){
+        //agrega 1 kill para participar como MVP
+        this.#kills = this.#kills+1;
+    }
+    get getKills(){
+        return this.#kills;
     }
 
     //no utilizado por ahora
@@ -261,7 +270,8 @@ export function convertirClase(Clase) {
         estaVivo: Clase.estaVivo,
         id: Clase.id,
         vidaBase: Clase.vidaBase,
-        clase: Clase.clase
+        clase: Clase.clase,
+        kills: Clase.getKills,
     }
 }
 export function Datos(vida, poderes, velocidad, defensa, clase, tipo) {

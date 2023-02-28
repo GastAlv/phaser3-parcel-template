@@ -16,8 +16,6 @@ export default class SeleccionPersonaje extends Phaser.Scene {
     #vikingoReina;
     #vikingoAlfil;
     #vikingoTorre;
-    per1;
-    per2;
     peleadores = [];
     personajesActuales = [];
     listMuertos = [];
@@ -32,10 +30,14 @@ export default class SeleccionPersonaje extends Phaser.Scene {
     zoomSeleccionSamurai;
     actualizarPersonajes = false;
     quienPerdio;
+    MVPList = [];
+    match = {winner:"", loser:"", mvp:"", mvpKilss:""};
     constructor() {
         super('SeleccionPersonaje')
     }
     init(data) {
+        this.scene.stop('Ui');
+        this.scene.stop('renderTest01');
         this.sonidos = data.sonidos;
         this.lenguaje = data.lenguaje;
         this.registry.events.on('resetear listas para jugar de nuevo', () => {
@@ -48,9 +50,11 @@ export default class SeleccionPersonaje extends Phaser.Scene {
             this.primerEscena = true;
             this.actualizarPersonajes = false;
             this.siguienteEscena = null;
+            this.match = {winner:"", loser:"", mvp:"", mvpKilss:""};
+            this.MVPList = [];
         });
         this.actualizacionPersonajes = data.personaje
-        this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena) => {
+        this.registry.events.on('pruebaEnvio1', (personajes, idSiguienteEscena, matchData) => {
             this.primerEscena = false;
             this.actualizarPersonajes = true
             this.cambiarEscena = true
@@ -60,18 +64,40 @@ export default class SeleccionPersonaje extends Phaser.Scene {
                 return personaje.estaVivo === false
             });
             this.peleadores = personajes.filter((personaje) => {
+                this.MVPList.push(personaje)
                 return personaje.estaVivo === true
             })
             this.pushearMuertos = true;
             (this.nuevoMuerto.tipo === 'Samurai') ? [this.quienPerdio = `${getPhrase(`ELIGE TU FICHA, `)}${getPhrase('Samurai').toUpperCase()}`] : [this.quienPerdio = `${getPhrase(`ELIGE TU FICHA, `)}${getPhrase('Vikingo').toUpperCase()}`];
+            this.match = matchData;
+            console.log(this.match);
+            this.match = {
+                winner: "",
+                loser: "",
+                mvp: this.match.mvp,
+                mvpKilss: this.match.mvpKilss ,
+            };
         });
+
         (this.pushearMuertos === true) ? [(this.nuevoMuerto.tipo === 'Samurai') ? this.muertosSamurais.push(this.nuevoMuerto) : this.muertosVikingos.push(this.nuevoMuerto), this.pushearMuertos = false] : null;
-        (this.muertosVikingos.length === 5) ? this.scene.start('VictoriaSamurai') : null;
-        (this.muertosSamurais.length === 5) ? this.scene.start('VictoriaVikingo') : null;
+        (this.muertosVikingos.length === 5) ? [this.match.winner = "Samurais", this.match.loser = "Vikingos",  this.scene.start('VictoriaSamurai', { sonidos: this.sonidos, lenguaje: this.lenguaje, match: this.match })]: null;
+        (this.muertosSamurais.length === 5) ? [this.match.winner = "Vikingos", this.match.loser = "Samurais",  this.scene.start('VictoriaSamurai', { sonidos: this.sonidos, lenguaje: this.lenguaje, match: this.match })] : null;
         (this.nuevoMuerto != undefined) ? this.listMuertos.push(this.nuevoMuerto) : null;
     }
-
     create() {
+        let clasesTipo = {
+            tipo: {
+                1: "Vikingo",
+                2: "Samurai"
+            },
+            clases: {
+                1: "Peon",
+                2: "Caballo",
+                3: "Reina",
+                4: "Alfil",
+                5: "Torre",
+            }
+        }
         this.cameras.main.fadeIn(1000);
         let style = {
             fontSize: '30px',
@@ -115,82 +141,37 @@ export default class SeleccionPersonaje extends Phaser.Scene {
         this.botonReinaSamurai = new Button(this, 300, 542, 'seleccionReinaSamurai', '', 0, () => { this.peleadores.push(this.#samuraiReina), this.botonListo2 = true }, 1, this.#samuraiReina, 'zoom seleccion izquierda')
         this.botonAlfilSamurai = new Button(this, 165, 542, 'seleccionAlfilSamurai', '', 0, () => { this.peleadores.push(this.#samuraiAlfil), this.botonListo2 = true }, 1, this.#samuraiAlfil, 'zoom seleccion izquierda')
         this.botonTorreSamurai = new Button(this, 30, 542, 'seleccionTorreSamurai', '', 0, () => { this.peleadores.push(this.#samuraiTorre), this.botonListo2 = true }, 1, this.#samuraiTorre, 'zoom seleccion izquierda')
-        let clasesTipo = {
-            tipo: {
-                1: "Vikingo",
-                2: "Samurai"
-            },
-            clases:{
-                1: "Peon",
-                2: "Caballo",
-                3: "Reina",
-                4: "Alfil",
-                5: "Torre",
-            }
-        }
-
-        // let tipos;
         for (let n = 1; n <= 5; ++n) {
-            // (n >= 6)?[tipos = 2]:[tipos = 1];
-            this.arrayBotonesVikingo.push(eval("this.boton"+clasesTipo.clases[n]+"Vikingo"));
-            // console.log(eval("this.boton"+clasesTipo.clases[n]+clasesTipo.tipo[1]), tipos);
-            console.log(this.arrayBotonesVikingo);
+            this.arrayBotonesVikingo.push(eval("this.boton" + clasesTipo.clases[n] + clasesTipo.tipo[1]));
         }
         for (let n = 1; n <= 5; ++n) {
-            // (n >= 6)?[tipos = 2]:[tipos = 1];
-            this.arrayBotonesSamurai.push(eval("this.boton"+clasesTipo.clases[n]+"Samurai"));
-            // console.log(eval("this.boton"+clasesTipo.clases[n]+clasesTipo.tipo[2]), tipos);
-            console.log(this.arrayBotonesSamurai);
+            this.arrayBotonesSamurai.push(eval("this.boton" + clasesTipo.clases[n] + clasesTipo.tipo[2]));
         }
-
-        // for (let n = 1; n <= 10; ++n) {
-        //     (n >= 6)?[tipos = 2]:[tipos = 1];
-        //     eval("this.arrayBotones"+"clasesTipo[tipos].push"+"(this.boton"+"clasesTipo.clases[n]"+ "clasesTipo.tipo[tipos])");
-        //     // this.arrayBotonesSamurai.push(eval("this.boton"+clasesTipo.clases[n]+clasesTipo.tipo[tipos]));
-        //     console.log(eval("this.boton"+clasesTipo.clases[n]+clasesTipo.tipo[tipos]), tipos);
-        //     // console.log(this.arrayBotonesSamurai);
-        // }
-
-        //YA ESTA RESUMIDO
-        // this.arrayBotonesSamurai.push(this.botonPeonSamurai);
-        // this.arrayBotonesSamurai.push(this.botonCaballoSamurai);
-        // this.arrayBotonesSamurai.push(this.botonReinaSamurai);
-        // this.arrayBotonesSamurai.push(this.botonAlfilSamurai);
-        // this.arrayBotonesSamurai.push(this.botonTorreSamurai);
-        // this.arrayBotonesVikingo.push(this.botonPeonVikingo);
-        // this.arrayBotonesVikingo.push(this.botonCaballoVikingo);
-        // this.arrayBotonesVikingo.push(this.botonReinaVikingo);
-        // this.arrayBotonesVikingo.push(this.botonAlfilVikingo);
-        // this.arrayBotonesVikingo.push(this.botonTorreVikingo);
 
         this.add.text(this.cameras.main.centerX, 100, this.quienPerdio, style).setStyle({ fontSize: '40px', fontDamily: 'asian' }).setOrigin(.5)
         this.add.text(this.cameras.main.centerX, 35, getPhrase('ELIGE TU HEROE'), style).setStyle({ fontSize: '60px', fontDamily: 'asian' }).setOrigin(.5)
+
+        sharedInstance.on('MVP', (mvpData) => {
+            console.log(mvpData);
+            this.match = {
+                winner:"",
+                loser:"",
+                mvp: (mvpData.mvp.tipo + " " + mvpData.mvp.clase).toString(),
+
+                mvpKilss: mvpData.mvpKills
+            }
+        })
         this.registry.events.on('manejador de combates', () => {
             const objeto = {
                 personajes: this.peleadores,
                 sonidos: this.sonidos,
                 lenguaje: this.lenguaje,
                 escenarioId: this.siguienteEscena,
+                match: this.match,
             };
             (this.primerEscena === true) ?
                 [objeto.escenarioId = 3, this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start("renderTest01", objeto), this.registry.events.removeListener('manejador de combates')]
                 : [this.registry.events.removeListener('manejador de combates'), this.scene.stop('SeleccionPersonaje'), this.scene.start("renderTest01", objeto)];
-
-
-            // this.scene.start("renderTest01", objeto);
-            // (this.primerEscena === true)?[this.primerEscena = false, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaPuente', objeto), this.siguienteEscena = 0]:null;
-            // switch(this.siguienteEscena){
-            //     case 1 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCastillo', objeto)]
-            //     break
-            //     case 2 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaCiudad", objeto)]
-            //     break
-            //     case 3 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaPuente", objeto)]
-            //     break
-            //     case 4 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start("BatallaBosque", objeto)]
-            //     break
-            //     case 5 : [this.siguienteEscena = 0, this.scene.stop('SeleccionPersonaje'), this.scene.start('BatallaCosta', objeto)]
-            //     break
-            // }
         });
         this.registry.events.on('actualizar Botones Y Personajes', () => {
             const indice = {
@@ -224,13 +205,29 @@ export default class SeleccionPersonaje extends Phaser.Scene {
         this.zoomSeleccionSamurai.setTexture(this.spriteI)
         this.revisarListos()
         this.actualizarBotonesYPersonajes()
+        this.mvpReview(this, this.MVPList)
     }
     revisarListos() {
         (this.botonListo1 && this.botonListo2 === true) ? [this.botonListo1 = false, this.botonListo2 = false, this.registry.events.emit('manejador de combates')] : null;
-
     }
     actualizarBotonesYPersonajes() {
         (this.actualizarPersonajes === true) ? [this.actualizarPersonajes = false, this.registry.events.emit('actualizar Botones Y Personajes')] : null;
     }
-}
+    mvpReview(scene, array) {
+        let killDB = []
+        let maxKills = null;
+        array.forEach(element => {
+            killDB.push(element.kills)
+        });
+        let arrayEmoty = [""];
+        (array != arrayEmoty) ? [maxKills = Math.max.apply(null, killDB)] : [];
+        if (maxKills != null) {
+            // console.log(maxKills);
+            let mvpObject
+            array.forEach(element => {
 
+                (element.kills === maxKills) ? [mvpObject = { mvp: { clase: element.clase, tipo: element.tipo }, mvpKills: maxKills }, sharedInstance.emit('MVP', mvpObject)] : [null];
+            });
+        }
+    }
+}

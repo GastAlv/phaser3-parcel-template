@@ -1,13 +1,5 @@
-/* receive data
-objet{
-    data:,
-    personajes:,
-    sonidos:,
-    lenguaje:,
-}
-*/
-
 import Phaser from "phaser";
+import { saveMatch} from "../firebaseDB/saveWinner";
 import { BotonSencillo } from "../js/button";
 import { convertirClase, escuchaDeHabilidades, Personaje, removerEscuchas } from "../js/Personaje";
 import { getPhrase } from "../services/translations";
@@ -20,6 +12,8 @@ export default class renderTest01 extends Phaser.Scene {
         this.personajes = data.personajes;
         this.sonidos = data.sonidos;
         this.lenguaje = data.lenguaje;
+        this.match = data.match;
+        console.log(this.match);
 
         this.escenarioId = data.escenarioId;
 
@@ -76,11 +70,9 @@ export default class renderTest01 extends Phaser.Scene {
         };
         this.sonidos.MainMenuSonido.pause()
         this.sonidos.CombateSong.play()
-
         //que imagen segun el nivel/escenario
         this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, backgroundAndUbi[this.escenarioId].id).setScale(1.135);
         new BotonSencillo({ scene: this, x: 70, y: 60, texture: 'botonVolver', text: '', size: 0, callback: () => { removerEscuchas({ scene: this, idEscena: this.scene.key }), this.scene.start('MainMenu', { lenguaje: this.lenguaje, sonidos: this.sonidos }) }, scale: 0.75, callbackHover: () => { this.sonidos.HoverBoton.play() }, callbackOut: () => { this.sonidos.HoverBoton.pause() } });
-
         this.personajeDeIzquierda = new Personaje({
             scene: this,
             x: backgroundAndUbi[this.escenarioId].ubi.xLeft,
@@ -94,8 +86,10 @@ export default class renderTest01 extends Phaser.Scene {
             estaVivo: this.personajeIzquierda.estaVivo,
             tipo: this.personajeIzquierda.tipo,
             id: this.personajeIzquierda.id,
-            clase: this.personajeIzquierda.clase
+            clase: this.personajeIzquierda.clase,
+            kills: this.personajeIzquierda.kills
         });
+        console.log(this.personajeIzquierda.kill);
 
         this.personajeDeDerecha = new Personaje({
             scene: this,
@@ -110,9 +104,10 @@ export default class renderTest01 extends Phaser.Scene {
             estaVivo: this.personajeDerecha.estaVivo,
             tipo: this.personajeDerecha.tipo,
             id: this.personajeDerecha.id,
-            clase: this.personajeDerecha.clase
+            clase: this.personajeDerecha.clase,
+            kills: this.personajeDerecha.kills
         });
-
+        console.log(this.personajeDerecha.kill);
 
 
         for (let numberPower = 0; numberPower <= 3; numberPower++) {
@@ -120,7 +115,7 @@ export default class renderTest01 extends Phaser.Scene {
             this.registry.events.on(namePower, () => {
                 escuchaDeHabilidades(this.personajeDeDerecha.poderes[numberPower].tipo, numberPower, this.personajeDeDerecha, this.personajeDeIzquierda);
                 console.log("el evento" + namePower + "escucho");
-            }); 
+            });
         }
         for (let numberPower = 0; numberPower <= 3; numberPower++) {
             let namePower = (this.personajeDeIzquierda.tipo + " poder" + (numberPower.toString()));
@@ -154,14 +149,18 @@ export default class renderTest01 extends Phaser.Scene {
             console.log('Estoy en evaluar');
             this.registry.events.removeListener('Evaluar vivos');
         });
-
         this.registry.events.on('siguiente combate', (ganador) => {
 
             let escenarioSuiguienteId;
             ganador === "Vikingo" ? [escenarioSuiguienteId = this.escenarioId - 1] : [escenarioSuiguienteId = this.escenarioId + 1];
-            this.personajesActuales = [convertirClase(this.personajeDeIzquierda), convertirClase(this.personajeDeDerecha)];
-            // this.registry.events.emit('pruebaEnvio1', this.personajesActuales, escenarioSuiguienteId);
+            this.personajesActuales = [this.personajeDeIzquierda, this.personajeDeDerecha];
 
+            //logica mvpdata kills
+            this.personajesActuales.forEach((personaje) => {
+                (personaje.estaVivo === true) ? [console.log(personaje), personaje.setKills(), console.log(personaje.getKills)] : [null];
+            })
+            this.personajesActuales = [convertirClase(this.personajeDeIzquierda), convertirClase(this.personajeDeDerecha)];
+            console.log(this.personajesActuales);
             for (let numberPower = 0; numberPower <= 3; numberPower++) {
                 let namePower = (this.personajeDeDerecha.tipo + " poder" + (numberPower.toString()));
                 this.registry.events.removeListener(namePower);
@@ -172,14 +171,26 @@ export default class renderTest01 extends Phaser.Scene {
             }
             this.registry.events.removeListener('victoria de combate');
             this.registry.events.removeListener('siguiente combate');
+
+
+            let match;
+            escenarioSuiguienteId === 6 ? [match = {
+                winner: "Samurais",
+                loser: "Vikingos",
+                MVP: this.match.mvp,
+                MVPKilss: this.match.mvpKilss,
+            }, this.scene.start("VictoriaSamurai", { sonidos: this.sonidos, lenguaje: this.lenguaje, match: match })] :
+                [
+                    escenarioSuiguienteId === 0 ? [match = {
+                        winner: "Vikingos",
+                        loser: "Samurais",
+                        MVP: this.match.mvp,
+                        MVPKilss: this.match.mvpKilss,
+                    }, this.scene.start("VictoriaSamurai", { sonidos: this.sonidos, lenguaje: this.lenguaje, match: match })] :
+                        [this.scene.start('SeleccionPersonaje', { sonidos: this.sonidos, lenguaje: this.lenguaje}), this.registry.events.emit('pruebaEnvio1', this.personajesActuales, escenarioSuiguienteId, this.match)]
+                ];
             this.scene.stop('Ui');
             this.scene.stop('renderTest01');
-            escenarioSuiguienteId === 6 ? [this.scene.start("VictoriaSamurai", { sonidos: this.sonidos, lenguaje: this.lenguaje })] :
-            [
-                escenarioSuiguienteId === 0 ? [this.scene.start("VictoriaVikingo", { sonidos: this.sonidos, lenguaje: this.lenguaje })] :
-                [this.scene.start('SeleccionPersonaje', { sonidos: this.sonidos, lenguaje: this.lenguaje }), this.registry.events.emit('pruebaEnvio1', this.personajesActuales, escenarioSuiguienteId)]
-            ];
-            // this.scene.start('SeleccionPersonaje', {sonidos:this.sonidos, lenguaje:this.lenguaje});
         });
     }
     update() { }

@@ -11,6 +11,7 @@ import Ui from './scenes/Ui'
 import Opciones from './scenes/Opciones'
 import Ayuda from './scenes/Ayuda'
 import renderTest01 from './js/levelRenderer'
+import Estadisticas from './scenes/estadisticas'
 
 const config = {
 	type: Phaser.AUTO,
@@ -38,7 +39,7 @@ const config = {
 	audio: {
         disableWebAudio: true
     },
-	scene: [Preloads, MainMenu, Creditos, Opciones, Ayuda, SeleccionFaccion, SeleccionPersonaje, Ui, renderTest01, VictoriaSamurai, VictoriaVikingo ]
+	scene: [Preloads, Estadisticas, MainMenu, Creditos, Opciones, Ayuda, SeleccionFaccion, SeleccionPersonaje, Ui, renderTest01, VictoriaSamurai, VictoriaVikingo ]
 }
 
 export default new Phaser.Game(config)
