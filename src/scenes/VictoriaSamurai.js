@@ -34,6 +34,7 @@ export default class VictoriaSamurai extends Phaser.Scene
         this.#ip = getIp().toString()
 
         this.match = data.match;
+        console.log(this.match);
         saveMatch(this.match);
         findMatch().then((data) => {
             this.matchData = data;
@@ -106,7 +107,7 @@ export default class VictoriaSamurai extends Phaser.Scene
                     let objLength = data
 
 
-                    let claves = ["winner", "loser", "mvp", "mvpKilss"]
+                    let claves = ["winner", "loser", "MVP", "MVPKilss"]
 
                     setTimeout(() => {
 
@@ -115,7 +116,8 @@ export default class VictoriaSamurai extends Phaser.Scene
                         // console.log(objLength.winner);
                         for (let index = 0; index <= 3; index++) {
                             let content;
-                            for(const [clave, valor] of Object.entries(objLength)) {(clave === claves[i])?[content = valor]:[null]}
+                            for(const [clave, valor] of Object.entries(objLength)) {(clave === claves[index])?[content = valor]:[null]}
+                            console.log(content);
                             let tableContentBody = {
                                 x: xBody,
                                 y: yBody,
@@ -124,7 +126,6 @@ export default class VictoriaSamurai extends Phaser.Scene
                             };
                             this.make.text(tableContentBody);
                             xBody += 125;
-                            i++;
                         }
                     }, 1000)
                 });

@@ -15,12 +15,12 @@ const matchRef = async () => {
   idUser = await getIp();
   return db.collection('users').doc(idUser).collection('games').doc('game')
 }
-let match = {
-  winner: "hola",
-  loser: "aaa",
-  MVP: "aaa",
-  MVPKilss: 4,
-}
+// let match = {
+//   winner: "hola",
+//   loser: "aaa",
+//   MVP: "aaa",
+//   MVPKilss: 4,
+// }
 // export const saveMatch = async (match) => {
 //   try {
 //     setDoc(matchRef, match);

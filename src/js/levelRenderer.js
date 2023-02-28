@@ -177,15 +177,15 @@ export default class renderTest01 extends Phaser.Scene {
             escenarioSuiguienteId === 6 ? [match = {
                 winner: "Samurais",
                 loser: "Vikingos",
-                MVP: this.match.mvp,
-                MVPKilss: this.match.mvpKilss,
+                MVP: this.match.MVP,
+                MVPKilss: this.match.MVPKilss,
             }, this.scene.start("VictoriaSamurai", { sonidos: this.sonidos, lenguaje: this.lenguaje, match: match })] :
                 [
                     escenarioSuiguienteId === 0 ? [match = {
                         winner: "Vikingos",
                         loser: "Samurais",
-                        MVP: this.match.mvp,
-                        MVPKilss: this.match.mvpKilss,
+                        MVP: this.match.MVP,
+                        MVPKilss: this.match.MVPKilss,
                     }, this.scene.start("VictoriaSamurai", { sonidos: this.sonidos, lenguaje: this.lenguaje, match: match })] :
                         [this.scene.start('SeleccionPersonaje', { sonidos: this.sonidos, lenguaje: this.lenguaje}), this.registry.events.emit('pruebaEnvio1', this.personajesActuales, escenarioSuiguienteId, this.match)]
                 ];

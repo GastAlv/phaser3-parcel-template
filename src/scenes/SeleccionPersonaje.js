@@ -31,7 +31,7 @@ export default class SeleccionPersonaje extends Phaser.Scene {
     actualizarPersonajes = false;
     quienPerdio;
     MVPList = [];
-    match = {winner:"", loser:"", mvp:"", mvpKilss:""};
+    match = {winner:"", loser:"", MVP:"", MVPKilss:""};
     constructor() {
         super('SeleccionPersonaje')
     }
@@ -50,7 +50,7 @@ export default class SeleccionPersonaje extends Phaser.Scene {
             this.primerEscena = true;
             this.actualizarPersonajes = false;
             this.siguienteEscena = null;
-            this.match = {winner:"", loser:"", mvp:"", mvpKilss:""};
+            this.match = {winner:"", loser:"", MVP:"", MVPKilss:""};
             this.MVPList = [];
         });
         this.actualizacionPersonajes = data.personaje
@@ -74,8 +74,8 @@ export default class SeleccionPersonaje extends Phaser.Scene {
             this.match = {
                 winner: "",
                 loser: "",
-                mvp: this.match.mvp,
-                mvpKilss: this.match.mvpKilss ,
+                MVP: this.match.MVP,
+                MVPKilss: this.match.MVPKilss ,
             };
         });
 
@@ -156,9 +156,9 @@ export default class SeleccionPersonaje extends Phaser.Scene {
             this.match = {
                 winner:"",
                 loser:"",
-                mvp: (mvpData.mvp.tipo + " " + mvpData.mvp.clase).toString(),
+                MVP: (mvpData.MVP.tipo + " " + mvpData.MVP.clase).toString(),
 
-                mvpKilss: mvpData.mvpKills
+                MVPKilss: mvpData.MVPKills
             }
         })
         this.registry.events.on('manejador de combates', () => {
@@ -226,7 +226,7 @@ export default class SeleccionPersonaje extends Phaser.Scene {
             let mvpObject
             array.forEach(element => {
 
-                (element.kills === maxKills) ? [mvpObject = { mvp: { clase: element.clase, tipo: element.tipo }, mvpKills: maxKills }, sharedInstance.emit('MVP', mvpObject)] : [null];
+                (element.kills === maxKills) ? [mvpObject = { MVP: { clase: element.clase, tipo: element.tipo }, MVPKills: maxKills }, sharedInstance.emit('MVP', mvpObject)] : [null];
             });
         }
     }
