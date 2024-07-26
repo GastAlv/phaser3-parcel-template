@@ -31,8 +31,8 @@ export class ManejadorDeSonidos{
     //falta controlar un poco mas los porcentajes de cada sonido. Que no todos suban
     controlarVolumen({bajarOsubir}){
         (bajarOsubir === 'subir')?this.volumen += 0.1:this.volumen -= 0.1;
-        (this.volumen <= 0)?console.log('LLEGO AL VOLUMEN 0 :/'):null;
-        (this.volumen >= 1)?console.log('LLEGO AL VOLUMEN MAXIMO DE PHASER :/'):null;
+        (this.volumen <= 0)?[console.log('LLEGO AL VOLUMEN 0 :/'), this.volumen = 0]:null;
+        (this.volumen >= 1)?[console.log('LLEGO AL VOLUMEN MAXIMO DE PHASER :/'), this.volumen = 1]:null;
         this.MainMenuSonido.setVolume(this.volumen)
         this.MainMenuSonido.setVolume(this.volumen)
         this.CombateSong.setVolume(this.volumen)
