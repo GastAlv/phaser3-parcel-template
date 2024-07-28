@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import Button, { BotonSencillo } from "../js/button";
 import { getPhrase } from "../services/translations";
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
 
 
 export default class Creditos extends Phaser.Scene

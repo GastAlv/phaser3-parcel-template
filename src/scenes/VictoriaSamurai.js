@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import { findMatch, saveMatch } from '../firebaseDB/saveMatch';
 import { getIp } from '../ipApi/ipApiConfig';
-import {BotonSencillo} from '../js/button';
 import { getPhrase } from '../services/translations';
+import { BotonSencillo } from '../js/Buttons/BotonSencillo';
 
 
 // Manejador de eventos centralizados para comunicacion de componentes

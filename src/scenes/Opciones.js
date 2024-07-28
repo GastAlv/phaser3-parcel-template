@@ -1,8 +1,9 @@
 import Phaser from "phaser";
-import { BotonSencillo } from "../js/button";
 import { sharedInstance } from "./EventCenter";
 import { FETCHED, FETCHING, READY, TODO } from '../enums/status'
 import { getTranslations, getPhrase } from '../services/translations'
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
+
 export default class Opciones extends Phaser.Scene
 {
     #lenguaje

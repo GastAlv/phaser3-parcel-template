@@ -43,10 +43,3 @@ export class EntidadBase{
     */
 
 }
-export function curarSangrado({quienSeCura:quienSeCura}){
-    (quienSeCura === 'Samurai')?sharedInstance.emit('curar sangrado samurai'):sharedInstance.emit('curar sangrado vikingo');
-};
-export function rebote({usuario:usuario, enemigo:enemigo, indexDelPoder:indexDelPoder}){
-    usuario.setDefensa()
-    enemigo.recibirDano(enemigo.poderes[indexDelPoder].dano)
-};

@@ -1,8 +1,10 @@
 import Phaser from "phaser";
-import { BotonSencillo, Button } from "../js/button";
-import { CrearPersonaje } from "../js/Personaje";
 import { getPhrase } from "../services/translations";
 import { sharedInstance } from "./EventCenter";
+import { CrearPersonaje } from "../js/Funciones/CrearPersonaje";
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
+import { Button } from "../js/Buttons/Button";
+
 export default class SeleccionPersonaje extends Phaser.Scene {
     botonListo1;
     botonListo2;
@@ -152,7 +154,7 @@ export default class SeleccionPersonaje extends Phaser.Scene {
         this.add.text(this.cameras.main.centerX, 35, getPhrase('ELIGE TU HEROE'), style).setStyle({ fontSize: '60px', fontDamily: 'asian' }).setOrigin(.5)
 
         sharedInstance.on('MVP', (mvpData) => {
-            console.log(mvpData);
+            // console.log(mvpData);//E
             this.match = {
                 winner:"",
                 loser:"",

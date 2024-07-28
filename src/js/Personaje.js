@@ -1,9 +1,9 @@
 import Phaser from "phaser";
 import { sharedInstance } from "../scenes/EventCenter";
 import { Random } from "random-js";
-import { curarSangrado, rebote } from "./objetos";
 import { ManejadorDeSonidos } from "./ManejadorDeSonidos";
 import { getPhrase } from "../services/translations";
+import { Datos } from "./Datos";
 const random = new Random()
 //Setter como funcion/metodo y los getters con GET antes de la funcion
 export class Personaje extends Phaser.Physics.Arcade.Sprite {
@@ -258,51 +258,7 @@ export class Personaje extends Phaser.Physics.Arcade.Sprite {
         return this.SoloLaClaseDelPersonaje = this.soloLaClaseyElTipoDelPersonaje
     }
 }
-export function convertirClase(Clase) {
-    return {
-        vida: Math.round(Clase.vida),
-        sprite: Clase.sprite,
-        poderes: Clase.poderes,
-        spriteSheet: Clase.spriteSheet,
-        velocidad: Clase.velocidad,
-        defensa: Clase.defensa,
-        tipo: Clase.tipo,
-        estaVivo: Clase.estaVivo,
-        id: Clase.id,
-        vidaBase: Clase.vidaBase,
-        clase: Clase.clase,
-        kills: Clase.getKills,
-    }
-}
-export function Datos(vida, poderes, velocidad, defensa, clase, tipo) {
-    let id = 0;
 
-    (tipo === 'Samurai' && clase === 'Peon') ? id = 11 : null;
-    (tipo === 'Samurai' && clase === 'Caballo') ? id = 22 : null;
-    (tipo === 'Samurai' && clase === 'Reyna') ? id = 33 : null;
-    (tipo === 'Samurai' && clase === 'Alfil') ? id = 44 : null;
-    (tipo === 'Samurai' && clase === 'Torre') ? id = 55 : null;
-
-
-    (tipo === 'Vikingo' && clase === 'Peon') ? id = 1 : null;
-    (tipo === 'Vikingo' && clase === 'Caballo') ? id = 2 : null;
-    (tipo === 'Vikingo' && clase === 'Reyna') ? id = 3 : null;
-    (tipo === 'Vikingo' && clase === 'Alfil') ? id = 4 : null;
-    (tipo === 'Vikingo' && clase === 'Torre') ? id = 5 : null;
-    return {
-        vida: vida,
-        sprite: `${'personaje'}${clase}${tipo}`,
-        poderes: poderes,
-        spriteSheet: `${`botonesAtaque`}${clase}`,
-        velocidad: velocidad,
-        defensa: defensa,
-        tipo: tipo,
-        estaVivo: true,
-        id: id,
-        vidaBase: vida,
-        clase: clase
-    }
-}
 
 /*
 1=daño/damage
@@ -316,104 +272,5 @@ export function Datos(vida, poderes, velocidad, defensa, clase, tipo) {
 9=sangrado
 */
 
-export function CrearPersonaje(tipo, clase) {
-    const clases = {
-        Peon: Datos(Math.round(random.integer(60, 68)), [
-            crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(11, 14))), 1, getPhrase('Ataca al enemigo con un daño: min:11 a max:14').toUpperCase()),
-            crearPoder(`ataqueEstandar`, (Math.round(random.integer(9, 15))), 1, getPhrase('Ataca al enemigo con un daño: min:9 a max:15').toUpperCase()),
-            crearPoder(`momentoHisteria`, 0.3, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase()),
-            crearPoder(`gritoDeGuerra`, (Math.round(random.integer(0.2, 0.3))), 3, getPhrase(`Intimida al enemigo reduciendo el dano recibido en un min:20% y max:30%`).toUpperCase()),
-        ], random.integer(4, 6), false, clase, tipo),
-        Alfil: Datos(Math.round(random.integer(60, 68)), [
-            crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(10, 16))), 1, getPhrase('Ataca al enemigo con un daño: min:10 a max:16').toUpperCase()),
-            crearPoder(`sangrado`, 10, 9, getPhrase('Causa daño:10 en cada turno al enemigo').toUpperCase()),
-            crearPoder(`curacion`, null, 6, getPhrase('Se cura un 45% HP, hasta un maximo de tre veces').toUpperCase()),
-            crearPoder(`cantoMotivador`, null, 2, getPhrase('Aumenta el daño base en un 30%').toUpperCase())
-        ], random.integer(6, 7), false, clase, tipo),
-        Torre: Datos(Math.round(random.integer(85, 95)), [
-            crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(18, 22))), 1, getPhrase('Ataca al enemigo con un daño: min:18 a max:22').toUpperCase()),
-            crearPoder(`ataqueCargado`, (Math.round(random.integer(60, 65))), 7, getPhrase('Se carga el ataque y al tercer turno hace daño: min:60 a max:65').toUpperCase()),
-            crearPoder(`arrollar`, 10, 8, getPhrase('Paraliza al enemigo por un turno').toUpperCase()),
-            crearPoder(`refuerzo`, (Math.round(random.integer(0.40, 0.50))), 3, getPhrase('Reduce el daño recibido un 45% del daño').toUpperCase())
-        ], random.integer(2, 3), false, clase, tipo),
-        Caballo: Datos(Math.round(random.integer(65, 75)), [
-            crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(17, 20))), 1, getPhrase('Ataca al enemigo con un daño: min:17 a max:20').toUpperCase()),
-            crearPoder(`ataqueEstandar`, (Math.round(random.integer(13, 15))), 1, getPhrase('Ataca al enemigo con un daño: min:13 y max:15').toUpperCase()),
-            crearPoder(`estampida`, 8, 5, getPhrase('Se ataca un numero repetida de veces con un daño menor al normal').toUpperCase()),
-            crearPoder(`relinchar`, null, 6, getPhrase('Se cura un hasta un 75% HP cuando tiene menos de 50% de HP').toUpperCase())
-        ], random.integer(7, 8), false, clase, tipo),
-        Reyna: Datos(Math.round(random.integer(75, 85)), [
-            crearPoder(`Animacion poderUno${clase}${tipo}`, (Math.round(random.integer(17, 25))), 1, getPhrase('Ataca al enemigo con un daño: min:17 a max:25').toUpperCase()),
-            crearPoder(`boostCritico`, 0.80, 2, getPhrase('Aumenta el ataque en un 80% por un turno').toUpperCase()),
-            crearPoder(`roboDeVida`, (Math.round(random.integer(10, 15))), 4, getPhrase('Se cura entre min:10% y max:15% del daño realizado').toUpperCase()),
-            crearPoder(`esquiva`, 1, 3, getPhrase('Esquiva el siguiente ataque enemigo').toUpperCase())
-        ], random.integer(8, 9), false, clase, tipo)
-    }
-    return clases[clase]
-}
-function crearPoder(nombre, dano, tipo, info) {
-    return {
-        nombre: nombre,
-        dano: dano,
-        tipo: tipo,
-        info: info.toUpperCase()
-    }
-}
-// funcion que evalua que metodo/funcion usar para la habilidad
-export function escuchaDeHabilidades(tipo, index, atacante, enemigo) {
-    console.log(tipo);
-    (tipo === 1) ? atacante.atacar(index, enemigo) : null;
-    (tipo === 2) ? atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo) : null;
-    (tipo === 3) ? atacante.setDefensa(true) : null;
-    (tipo === 4) ? atacante.robarVida(index, enemigo) : null;
-    (tipo === 5) ? atacante.multipleAtaque(index, enemigo) : null;
-    (tipo === 6) ? atacante.recibirCura(atacante.poderes[index].dano) : null;
-    (tipo === 7) ? atacante.cargarAtaque(index) : null;
-    (tipo === 8) ? atacante.robarTurno(enemigo) : null;
-    (tipo === 9) ? atacante.danoPorTurno(atacante.poderes[index].dano) : null;
-    (tipo === 'CurarSangrado') ? curarSangrado({ quienSeCura: atacante.tipo }) : null;
-    (tipo === 'Rebote') ? rebote({ usuario: atacante, enemigo: enemigo, indexDelPoder: null }) : null;
-    (tipo === 'Atacar') ? console.log('Atacar') : null;
-    (tipo === 'Revivir') ? console.log('Revivir') : null;
-    (tipo === 'Escudo divino') ? console.log('Escudo divino') : null;
-    // const queHabilidadUsar = {
-    //     1:atacante.atacar(index, enemigo),
-    //     2:atacante.doparHabilidad(0, atacante.poderes[index].dano, enemigo),
-    //     3:atacante.setDefensa(true),
-    //     4:atacante.robarVida(index, enemigo),
-    //     5:atacante.multipleAtaque(index, enemigo),
-    //     6:atacante.recibirCura(atacante.poderes[index].dano),
-    //     7:atacante.cargarAtaque(index),
-    //     8:atacante.robarTurno(enemigo),
-    //     9:atacante.danoPorTurno(atacante.poderes[index].dano),
-    // }
-    // queHabilidadUsar[tipo];
-};
-/*
-A modificar para las funciones en los ataque 
 
-*DOPAR HABILIDAD: ver de que no se hardcodee el poder que dopa en, porque es el index:0 siempre y ver si el usuario puede eleguir cual potenciar, 
-sino potencia su ataque 0 siempre. porque  habria que cambiarlos en todos los personajes para que decidan que poder dopar y se tendria que llamar dopar habilidad
-(Aumenta las estadisticas del poder seleccionado)
 
-*
-*/
-
-export function removerEscuchas({ scene, idEscena }) {
-    console.log(idEscena);
-    scene.scene.stop('Ui');
-    scene.scene.stop(idEscena);
-    scene.registry.events.removeListener('Samurai poder1');
-    scene.registry.events.removeListener('Samurai poder2');
-    scene.registry.events.removeListener('Samurai poder3');
-    scene.registry.events.removeListener('Samurai poder4');
-    scene
-    scene.registry.events.removeListener('Vikingo poder1');
-    scene.registry.events.removeListener('Vikingo poder2');
-    scene.registry.events.removeListener('Vikingo poder3');
-    scene.registry.events.removeListener('Vikingo poder4');
-
-    scene.registry.events.removeListener('siguiente combate');
-    scene.registry.events.removeListener('victoria de combate');
-    scene.registry.events.removeListener('Evaluar vivos');
-}

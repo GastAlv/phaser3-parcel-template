@@ -1,8 +1,10 @@
 import Phaser from 'phaser'
 import { sharedInstance } from '../scenes/EventCenter'
-import {Inventario, Item } from './button'
 import { Random } from "random-js";
+import { Inventario } from './Inventario';
+import { Item } from './Item';
 const random = new Random()
+
 export default class Mochila extends Phaser.Scene
 {
     objetosDelVikingo = [];

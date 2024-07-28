@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import { BotonHabilidades} from '../js/button';
 import { sharedInstance } from './EventCenter';
 import { Random } from "random-js";
 import { getPhrase } from '../services/translations';
+import { BotonHabilidades } from '../js/Buttons/BotonHabilidades';
 const random = new Random()
 export default class Ui extends Phaser.Scene
 {

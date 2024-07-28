@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import {BotonSencillo} from '../js/button';
 import { getPhrase } from '../services/translations';
+import { BotonSencillo } from '../js/Buttons/BotonSencillo';
 
 // Manejador de eventos centralizados para comunicacion de componentes
 

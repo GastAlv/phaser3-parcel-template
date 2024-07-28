@@ -1,7 +1,8 @@
 import Phaser from "phaser";
 import { getLanguageConfig, getTranslations } from "../services/translations";
-import { loadFont } from "../js/button";
 import { ManejadorDeSonidos } from "../js/ManejadorDeSonidos";
+import { loadFont } from "../js/Funciones/LoadFont";
+
 export default class Preloads extends Phaser.Scene
 {
     #lenguaje;

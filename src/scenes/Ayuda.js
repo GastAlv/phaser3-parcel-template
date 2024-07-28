@@ -1,6 +1,7 @@
 import Phaser from "phaser";
-import { BotonSencillo, Tecla } from "../js/button";
 import { getPhrase } from '../services/translations'
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
+import { Tecla } from "../js/Tecla";
 
 export default class Ayuda extends Phaser.Scene
 {

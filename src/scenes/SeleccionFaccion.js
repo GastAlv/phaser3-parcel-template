@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import {BotonSencillo} from "../js/button";
 import { getPhrase } from "../services/translations";
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
 
 export default class SeleccionFaccion extends Phaser.Scene
 {

@@ -1,7 +1,10 @@
 import Phaser from "phaser";
-import { convertirClase, Personaje, escuchaDeHabilidades, removerEscuchas} from "../js/Personaje";
-import { BotonSencillo } from "../js/button";
+import {Personaje} from "../js/Personaje";
+import {convertirClase}from "../js/Funciones/ConvertirClase"
 import { getPhrase } from "../services/translations";
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
+import { escuchaDeHabilidades } from "../js/Funciones/EscuchaDeHabilidades";
+import { removerEscuchas } from "../js/Funciones/RemoverEscuchas";
 export default class BatallaBosque extends Phaser.Scene
 {
     jugador1;

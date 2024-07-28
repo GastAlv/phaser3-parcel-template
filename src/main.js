@@ -10,8 +10,8 @@ import VictoriaVikingo from './scenes/VictoriaVikingo'
 import Ui from './scenes/Ui'
 import Opciones from './scenes/Opciones'
 import Ayuda from './scenes/Ayuda'
-import renderTest01 from './js/levelRenderer'
-import Estadisticas from './scenes/estadisticas'
+import renderTest01 from './scenes/levelRenderer'
+import Estadisticas from './js/estadisticas'
 
 const config = {
 	type: Phaser.AUTO,
@@ -21,8 +21,8 @@ const config = {
 		mode: Phaser.Scale.FIT,
 		autoCenter: Phaser.Scale.CENTER_BOTH,
 		min: {
-			width: 800,
-			height: 600,
+			width: 260,
+			height: 280,
 		},
 		max: {
 			width: 1600,

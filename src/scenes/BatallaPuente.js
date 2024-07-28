@@ -1,7 +1,11 @@
 import Phaser from "phaser";
-import { BotonSencillo} from "../js/button";
-import { convertirClase, escuchaDeHabilidades, Personaje, removerEscuchas } from "../js/Personaje";
+import {Personaje} from "../js/Personaje";
+import {convertirClase}from "../js/Funciones/ConvertirClase"
 import { getPhrase } from "../services/translations";
+import { removerEscuchas } from "../js/Funciones/RemoverEscuchas";
+import { BotonSencillo } from "../js/Buttons/BotonSencillo";
+import { escuchaDeHabilidades } from "../js/Funciones/EscuchaDeHabilidades";
+
 export default class BatallaPuente extends Phaser.Scene
 {
     jugador1;
