@@ -24,4 +24,4 @@ Pasos para desarrollar / Steps to start development
 ### For run build in Disk folder
 ```npm run build```
 
-Play the Game 😉 [FichasdeHonor](https://fichasdehonor2024.netlify.app/)
+## ***Play the Game 😉 [FichasdeHonor](https://fichasdehonor2024.netlify.app/)***
